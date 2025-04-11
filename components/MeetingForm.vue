@@ -197,7 +197,7 @@ function getCurrentDoctorItem(index: number, field: 'lastName' | 'firstName' | '
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-6" @submit="onSubmit">
+  <UForm :schema="schema" :state="state" class="space-y-6 pt-8" @submit="onSubmit">
     <!-- Basic Information -->
     <UCard>
       <template #header>
