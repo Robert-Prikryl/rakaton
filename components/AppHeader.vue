@@ -19,6 +19,7 @@
           </NuxtLink>
           <NuxtLink
             @click="handleLogout"
+            class="px-4 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
           >
             Logout
           </NuxtLink>
@@ -47,6 +48,7 @@
           </NuxtLink>
           <NuxtLink
             @click="handleLogout"
+            class="px-4 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
           >
             Logout
           </NuxtLink>
