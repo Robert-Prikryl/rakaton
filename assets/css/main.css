@@ -1,2 +1,17 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+@theme static {
+    --color-seagull-50: #f3f9fc;
+    --color-seagull-100: #e6f2f8;
+    --color-seagull-200: #c8e3ef;
+    --color-seagull-300: #98cee1;
+    --color-seagull-400: #7dc1d7;
+    --color-seagull-500: #3d9bba;
+    --color-seagull-600: #2d7d9c;
+    --color-seagull-700: #25657f;
+    --color-seagull-800: #22566a;
+    --color-seagull-900: #214859;
+    --color-seagull-950: #162e3b;
+    --color-seagull-DEFAULT: #3d9bba;
+  }
