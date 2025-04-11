@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: colors.blue
+        primary: '#3B82F6'
       }
     }
   }
