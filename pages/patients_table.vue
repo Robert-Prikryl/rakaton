@@ -144,6 +144,9 @@
     }
   ])
   
+  definePageMeta({
+    colorMode: "light",
+  });
   // Helper functions
   function getInitials(name: string) {
     return name

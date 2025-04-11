@@ -145,7 +145,9 @@ function handleSubmit(data: Patient) {
   
   // Close modal and reset state
   closeModal()
-  
+  definePageMeta({
+    colorMode: "light",
+    });
   // Show success toast
   const toast = useToast()
   toast.add({

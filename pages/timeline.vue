@@ -12,4 +12,7 @@ onMounted(() => {
     const recordsStore = useRecordsStore();
     pushSeeds(recordsStore);
 });
+definePageMeta({
+  colorMode: "light",
+});
 </script>

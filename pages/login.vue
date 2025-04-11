@@ -29,7 +29,8 @@
 import * as v from 'valibot'
 
 definePageMeta({
-  layout: false
+    colorMode: "light",
+    layout: false
 })
 
 const schema = v.object({

@@ -67,12 +67,12 @@ onBeforeMount(() => {
   if (role === 'doctor') {
         navigationItems = [
             { name: 'Patients', path: '/patients' },
-            { name: 'Meetings', path: '/meetings' }
+            { name: 'Meetings', path: '/meeting' }
         ]
     } else if (role === 'manager') {
         navigationItems = [
             { name: 'Patients', path: '/patients' },
-            { name: 'Meetings', path: '/meetings' }
+            { name: 'Meetings', path: '/meeting' }
         ]
     } else if (role === 'admin') { 
         navigationItems = [
