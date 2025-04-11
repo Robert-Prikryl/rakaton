@@ -14,16 +14,13 @@
       </div>
     </div>
     
-    <!-- Add Patient Button -->
-    <div class="mb-8">
-      <UButton 
-        color="primary" 
-        icon="i-heroicons-user-plus"
-        @click="openAddModal"
-      >
-        Add New Patient
-      </UButton>
-    </div>
+    <UModal title="Modal with title">
+      <UButton label="Open" color="neutral" variant="subtle" />
+
+      <template #body>
+        <Placeholder class="h-48" />
+      </template>
+    </UModal>
 
     <!-- Patients Table -->
     <UTable
@@ -52,27 +49,6 @@
       </template>
     </UTable>
   </div>
-
-  <!-- Patient Modal - Moved outside main container -->
-   
-  <UModal v-model="isOpen" :ui="{ width: 'sm:max-w-md' }">
-    <UCard>
-      <template #header>
-        <div class="flex justify-between items-center">
-          <h3 class="text-lg font-semibold">My Modal</h3>
-          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark" @click="isOpen = false" />
-        </div>
-      </template>
-
-      <p>This is some modal content!</p>
-
-      <template #footer>
-        <div class="flex justify-end">
-          <UButton color="primary" @click="isOpen = false">Close</UButton>
-        </div>
-      </template>
-    </UCard>
-  </UModal>
 </template>
 
 <script setup lang="ts">

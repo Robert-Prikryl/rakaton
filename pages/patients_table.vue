@@ -1,29 +1,30 @@
 <template>
     <div class="container mx-auto p-8">
       <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Patients</h1>
+        <h1 class="text-3xl font-bold">Pacienti</h1>
         
         <!-- Search Bar -->
         <div class="w-72">
           <UInput
             v-model="searchQuery"
             icon="i-heroicons-magnifying-glass"
-            placeholder="Search patients..."
-            color="gray"
+            placeholder="Hledat pacienty..."
+            color="neutral"
           />
         </div>
       </div>
-      
-      <!-- Add Patient Button -->
-      <div class="mb-8">
-        <UButton 
-          color="primary" 
-          icon="i-heroicons-user-plus"
-          @click="isModalOpen = true"
-        >
-          Add New Patient
-        </UButton>
-      </div>
+
+      <UModal title="Přidat nového pacienta">
+        <UButton label="Přidat nového pacienta" color="primary" 
+        icon="i-heroicons-user-plus" />
+
+        <template #body>
+          <PatientForm 
+            :initial-data="selectedPatient"
+            @submit="handleSubmit"
+          />
+        </template>
+      </UModal>
   
       <!-- Patients Table -->
       <UTable
@@ -62,14 +63,14 @@
               @click="editPatient(row)"
             />
             <UButton
-              color="red"
+              color="error"
               variant="ghost"
               icon="i-heroicons-trash"
               size="xs"
               @click="deletePatient(row.id)"
             />
             <UButton
-              color="gray"
+              color="neutral"
               variant="ghost"
               icon="i-heroicons-eye"
               size="xs"
@@ -78,21 +79,7 @@
           </div>
         </template>
       </UTable>
-  
-      <!-- Add/Edit Patient Modal -->
-      <UModal v-model="isModalOpen">
-        <UCard>
-          <template #header>
-            <h3 class="text-xl font-semibold">
-              {{ isEditing ? 'Edit Patient' : 'Add New Patient' }}
-            </h3>
-          </template>
-          <PatientForm 
-            :initial-data="selectedPatient"
-            @submit="handleSubmit"
-          />
-        </UCard>
-      </UModal>
+
     </div>
   </template>
   
@@ -109,7 +96,7 @@
   const columns = [
     {
       key: 'name',
-      label: 'Name',
+      label: 'Jméno',
       sortable: true,
       id: 'name'
     },
@@ -121,18 +108,18 @@
     },
     {
       key: 'phone',
-      label: 'Phone',
+      label: 'Telefon',
       id: 'phone'
     },
     {
       key: 'dateOfBirth',
-      label: 'Date of Birth',
+      label: 'Datum narození',
       sortable: true,
       id: 'dateOfBirth'
     },
     {
       key: 'actions',
-      label: 'Actions',
+      label: 'Akce',
       sortable: false,
       id: 'actions'
     }
@@ -142,17 +129,17 @@
   const patients = ref([
     {
       id: 1,
-      name: 'John Doe',
-      email: 'john@example.com',
-      phone: '+421 123 456 789',
+      name: 'Jan Novák',
+      email: 'jan@example.com',
+      phone: '+420 123 456 789',
       dateOfBirth: '1990-01-01',
       avatar: ''
     },
     {
       id: 2,
-      name: 'Jane Smith',
-      email: 'jane@example.com',
-      phone: '+421 987 654 321',
+      name: 'Marie Svobodová',
+      email: 'marie@example.com',
+      phone: '+420 987 654 321',
       dateOfBirth: '1985-05-15',
       avatar: ''
     }
@@ -168,7 +155,7 @@
   }
   
   function formatDate(date: string) {
-    return new Date(date).toLocaleDateString('en-GB', {
+    return new Date(date).toLocaleDateString('cs-CZ', {
       day: '2-digit',
       month: 'short',
       year: 'numeric'
@@ -176,12 +163,12 @@
   }
   
   function handleSelect(rows: Patient[]) {
-    console.log('Selected rows:', rows)
+    console.log('Vybrané řádky:', rows)
   }
   
   function viewPatientDetails(patient: Patient) {
     // Implement view details logic
-    console.log('View patient details:', patient)
+    console.log('Zobrazit detaily pacienta:', patient)
   }
   
   function editPatient(patient: Patient) {
@@ -191,7 +178,7 @@
   }
   
   function deletePatient(id: number) {
-    if (confirm('Are you sure you want to delete this patient?')) {
+    if (confirm('Opravdu chcete smazat tohoto pacienta?')) {
       patients.value = patients.value.filter(p => p.id !== id)
     }
   }
@@ -220,15 +207,15 @@
       
       const toast = useToast()
       toast.add({
-        title: 'Success',
-        description: isEditing.value ? 'Patient updated successfully' : 'Patient added successfully',
+        title: 'Úspěch',
+        description: isEditing.value ? 'Pacient byl úspěšně aktualizován' : 'Pacient byl úspěšně přidán',
         color: 'success'
       })
     } catch (error) {
       const toast = useToast()
       toast.add({
-        title: 'Error',
-        description: 'Failed to save patient data',
+        title: 'Chyba',
+        description: 'Nepodařilo se uložit data pacienta',
         color: 'error'
       })
     } finally {
