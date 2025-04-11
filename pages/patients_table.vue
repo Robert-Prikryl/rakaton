@@ -14,10 +14,13 @@
         </div>
       </div>
 
-      <UModal title="Přidat nového pacienta">
-        <UButton label="Přidat nového pacienta" color="primary" 
-        icon="i-heroicons-user-plus" />
-
+      <UModal v-model="isModalOpen" :title="isEditing ? 'Upravit pacienta' : 'Přidat nového pacienta'">
+        <UButton 
+          label="Přidat nového pacienta" 
+          color="primary" 
+          icon="i-heroicons-user-plus"
+          @click="openAddPatientModal"
+        />
         <template #body>
           <PatientForm 
             :initial-data="selectedPatient"
@@ -28,10 +31,8 @@
   
       <!-- Patients Table -->
       <UTable
-        :rows="patients"
+        :data="patients"
         :columns="columns"
-        :search="searchQuery"
-        :sort="{ column: 'name', direction: 'asc' }"
         :loading="loading"
         @select="handleSelect"
       >
@@ -79,7 +80,6 @@
           </div>
         </template>
       </UTable>
-
     </div>
   </template>
   
@@ -120,13 +120,12 @@
     {
       key: 'actions',
       label: 'Akce',
-      sortable: false,
       id: 'actions'
     }
   ]
   
   // Example data with more realistic content
-  const patients = ref([
+  const patients = ref<Patient[]>([
     {
       id: 1,
       name: 'Jan Novák',
@@ -162,12 +161,11 @@
     })
   }
   
-  function handleSelect(rows: Patient[]) {
-    console.log('Vybrané řádky:', rows)
+  function handleSelect(row: any) {
+    console.log('Vybraný řádek:', row)
   }
   
   function viewPatientDetails(patient: Patient) {
-    // Implement view details logic
     console.log('Zobrazit detaily pacienta:', patient)
   }
   
@@ -182,11 +180,17 @@
       patients.value = patients.value.filter(p => p.id !== id)
     }
   }
+
+  function openAddPatientModal() {
+    selectedPatient.value = null
+    isEditing.value = false
+    isModalOpen.value = true
+  }
   
   async function handleSubmit(data: Patient) {
     loading.value = true
     try {
-      if (isEditing.value) {
+      if (isEditing.value && selectedPatient.value) {
         // Update existing patient
         const index = patients.value.findIndex(p => p.id === selectedPatient.value?.id)
         if (index !== -1) {
@@ -194,11 +198,12 @@
         }
       } else {
         // Add new patient
-        patients.value.push({
+        const newPatient: Patient = {
           id: Date.now(),
           ...data,
           avatar: ''
-        })
+        }
+        patients.value.push(newPatient)
       }
       
       isModalOpen.value = false
