@@ -87,7 +87,7 @@ function removeTeamMember(index: number) {
 
       <div class="space-y-4">
         <UFormField label="Datum a čas začátku" name="startDateTime">
-          <UInput v-model="state.startDateTime" type="datetime-local" />
+          <UInput v-model="state.startDateTime" type="datetime-local" class="w-full" />
         </UFormField>
 
         <UFormField label="Název týmu" name="teamName">
@@ -95,6 +95,7 @@ function removeTeamMember(index: number) {
             v-model="state.teamName"
             :options="teamTypes"
             placeholder="Vyberte typ týmu"
+            class="w-full"
           />
         </UFormField>
 
@@ -103,6 +104,7 @@ function removeTeamMember(index: number) {
             v-model="state.location"
             :rows="2"
             placeholder="Zadejte místo setkání"
+            class="w-full"
           />
         </UFormField>
 
@@ -112,6 +114,7 @@ function removeTeamMember(index: number) {
             type="number"
             :min="1"
             :max="72"
+            class="w-full"
           />
         </UFormField>
 
@@ -121,6 +124,7 @@ function removeTeamMember(index: number) {
             v-model="state.notes"
             :rows="3"
             placeholder="Zadejte poznámky"
+            class="w-full"
           />
         </UFormField>
       </div>
@@ -157,27 +161,27 @@ function removeTeamMember(index: number) {
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <UFormField label="Příjmení" :name="`teamMembers.${index}.lastName`">
-              <UInput v-model="member.lastName" />
+              <UInput v-model="member.lastName" class="w-full" />
             </UFormField>
 
             <UFormField label="Jméno" :name="`teamMembers.${index}.firstName`">
-              <UInput v-model="member.firstName" />
+              <UInput v-model="member.firstName" class="w-full" />
             </UFormField>
 
             <UFormField label="Email" :name="`teamMembers.${index}.email`">
-              <UInput v-model="member.email" type="email" />
+              <UInput v-model="member.email" type="email" class="w-full" />
             </UFormField>
 
             <UFormField label="Telefon" :name="`teamMembers.${index}.phone`">
-              <UInput v-model="member.phone" type="tel" />
+              <UInput v-model="member.phone" type="tel" class="w-full" />
             </UFormField>
 
             <UFormField label="Odbornost" :name="`teamMembers.${index}.specialization`">
-              <UInput v-model="member.specialization" />
+              <UInput v-model="member.specialization" class="w-full" />
             </UFormField>
 
             <UFormField label="Poznámka (Volitelné)" :name="`teamMembers.${index}.note`">
-              <UTextarea v-model="member.note" :rows="2" />
+              <UTextarea v-model="member.note" :rows="2" class="w-full" />
             </UFormField>
           </div>
         </div>
