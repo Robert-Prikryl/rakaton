@@ -287,6 +287,7 @@ function getCurrentDoctorItem(index: number, field: 'lastName' | 'firstName' | '
                 @update:search="(value: string) => handleSearchUpdate(value, index, 'lastName')"
                 @select="(doctor: DoctorItem) => handleDoctorSelect(doctor, index)"
                 class="w-full"
+                placeholder="Zadejte příjmení"
               >
                 <template #item="{ item }">
                   <div class="flex items-center gap-2">
@@ -307,6 +308,7 @@ function getCurrentDoctorItem(index: number, field: 'lastName' | 'firstName' | '
                 @update:search="(value: string) => handleSearchUpdate(value, index, 'firstName')"
                 @select="(doctor: DoctorItem) => handleDoctorSelect(doctor, index)"
                 class="w-full"
+                placeholder="Zadejte jméno"
               >
                 <template #item="{ item }">
                   <div class="flex items-center gap-2">
@@ -320,11 +322,11 @@ function getCurrentDoctorItem(index: number, field: 'lastName' | 'firstName' | '
             </UFormField>
 
             <UFormField label="Email" :name="`teamMembers.${index}.email`">
-              <UInput v-model="member.email" type="email" class="w-full" />
+              <UInput v-model="member.email" type="email" class="w-full" placeholder="Zadejte email" />
             </UFormField>
 
             <UFormField label="Telefon" :name="`teamMembers.${index}.phone`">
-              <UInput v-model="member.phone" type="tel" class="w-full" />
+              <UInput v-model="member.phone" type="tel" class="w-full" placeholder="Zadejte telefon" />
             </UFormField>
 
             <UFormField label="Odbornost" :name="`teamMembers.${index}.specialization`">
@@ -335,6 +337,7 @@ function getCurrentDoctorItem(index: number, field: 'lastName' | 'firstName' | '
                 @update:search="(value: string) => handleSearchUpdate(value, index, 'specialization')"
                 @select="(doctor: DoctorItem) => handleDoctorSelect(doctor, index)"
                 class="w-full"
+                placeholder="Zadejte odbornost"
               >
                 <template #item="{ item }">
                   <div class="flex items-center gap-2">
@@ -348,7 +351,7 @@ function getCurrentDoctorItem(index: number, field: 'lastName' | 'firstName' | '
             </UFormField>
 
             <UFormField label="Poznámka (Volitelné)" :name="`teamMembers.${index}.note`">
-              <UTextarea v-model="member.note" :rows="2" class="w-full" />
+              <UTextarea v-model="member.note" :rows="2" class="w-full" placeholder="Zadejte poznámku" />
             </UFormField>
           </div>
         </div>
