@@ -16,13 +16,14 @@ export enum MeetingType {
 
 export interface Meeting {
     id: string;
-    name: MeetingType;
+    name: string;
     place: string;
     description: string;
     doctors: Doctor[];
     date: Date;
     notification: number;
-    notes: string[];
+    notes: string;
     patientRecords: PatientRecord[];
     reports?: string[];
+    isTeplate: boolean;
 }

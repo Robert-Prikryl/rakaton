@@ -217,7 +217,7 @@ export const seedMeetings = () => {
       ],
       date: new Date('2025-04-15T10:00:00'),
       notification: 24, // 24 hours before meeting
-      notes: ['Přinést výsledky posledních vyšetření', 'Diskuze nových léčebných postupů'],
+      notes: 'Přinést výsledky posledních vyšetření \nDiskuze nových léčebných postupů',
       patientRecords: [dummyPatientRecords[1]], // Marie Svobodová
       reports: []
     },
@@ -241,7 +241,7 @@ export const seedMeetings = () => {
       ],
       date: new Date('2025-04-20T14:30:00'),
       notification: 12, // 12 hours before meeting
-      notes: ['Kontrola RTG snímků', 'Plánování dalších vyšetření'],
+      notes: 'Kontrola RTG snímků\nPlánování dalších vyšetření',
       patientRecords: [dummyPatientRecords[0]], // Josef Novák
       reports: []
     },
@@ -276,7 +276,7 @@ export const seedMeetings = () => {
       ],
       date: new Date('2024-04-25T09:00:00'),
       notification: 48, // 48 hours before meeting
-      notes: ['Příprava dokumentace pro nové pacienty'],
+      notes: 'Příprava dokumentace pro nové pacienty',
       patientRecords: [],
       reports: []
     },
@@ -311,7 +311,7 @@ export const seedMeetings = () => {
       ],
       date: new Date('2025-04-10T11:00:00'), // Past meeting (2 days before today)
       notification: 24,
-      notes: ['Projednání výsledků vyšetření', 'Plánování další léčby'],
+      notes: 'Projednání výsledků vyšetření\nPlánování další léčby',
       patientRecords: [dummyPatientRecords[2]], // Petr Dvořák
       reports: ['Pacient je vhodný kandidát pro adjuvantní léčbu'] as any[]
     }
