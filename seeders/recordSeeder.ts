@@ -19,13 +19,13 @@ export const pushSeeds = (recordsStore: ReturnType<typeof useRecordsStore>) => {
       data: 'testData',
     } as TimelinePoint);
 
-    recordsStore.addRecord({
-      id: '3',
-      startDate: new Date('2025-02-01'),
-      endDate: new Date('2025-02-15'),
-      color: '#00FF00',
-      description: 'Pozitivna reakcia',
-      data: 'testData',
-    } as TimelineRange);
+    // recordsStore.addRecord({
+    //   id: '3',
+    //   startDate: new Date('2025-02-01'),
+    //   endDate: new Date('2025-02-15'),
+    //   color: '#00FF00',
+    //   description: 'Pozitivna reakcia',
+    //   data: 'testData',
+    // } as TimelineRange);
   }
 }
