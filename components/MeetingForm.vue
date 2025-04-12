@@ -139,10 +139,11 @@ function removeTeamMember(index: number) {
 // Function to search doctors
 function searchDoctors(query: string) {
   if (!query) return []
-  const lowerQuery = query.toLowerCase()
-  return doctorsDatabase.filter(doctor => 
-    `${doctor.lastName} ${doctor.firstName} ${doctor.specialization}`.toLowerCase().includes(lowerQuery)
-  )
+  const lowerQuery = query.toLowerCase().trim()
+  return doctorsDatabase.filter(doctor => {
+    const searchString = `${doctor.lastName} ${doctor.firstName} ${doctor.specialization}`.toLowerCase()
+    return searchString.includes(lowerQuery)
+  })
 }
 
 // Function to handle doctor selection
@@ -156,18 +157,31 @@ function handleDoctorSelect(doctor: typeof doctorsDatabase[0], index: number) {
 
 // Reactive search results
 const searchResults = ref<typeof doctorsDatabase>([])
-const activeSearchField = ref<{ index: number, field: 'lastName' | 'firstName' | 'specialization' } | null>(null)
+const searchQuery = ref('')
 
-// Function to handle input changes
-function handleSearchInput(value: string, index: number, field: 'lastName' | 'firstName' | 'specialization') {
-  activeSearchField.value = { index, field }
+// Function to handle search input
+function handleSearchInput(value: string, index: number) {
+  searchQuery.value = value
   searchResults.value = searchDoctors(value)
 }
 
-// Function to handle manual input
-function handleManualInput(value: string, index: number, field: 'lastName' | 'firstName' | 'specialization') {
-  state.teamMembers[index][field] = value
-  handleSearchInput(value, index, field)
+// Function to get display value for selected doctor
+function getDisplayValue(index: number): DoctorItem | undefined {
+  const member = state.teamMembers[index]
+  if (!member.lastName && !member.firstName) return undefined
+  return {
+    lastName: member.lastName,
+    firstName: member.firstName,
+    email: member.email,
+    phone: member.phone,
+    specialization: member.specialization
+  }
+}
+
+// Function to get search value
+function getSearchValue(index: number): string {
+  const member = state.teamMembers[index]
+  return `${member.lastName} ${member.firstName}`.trim()
 }
 
 // Type for doctor item
@@ -179,13 +193,8 @@ type DoctorItem = {
   specialization: string
 }
 
-// Function to handle search update
-function handleSearchUpdate(value: string, index: number, field: 'lastName' | 'firstName' | 'specialization') {
-  handleManualInput(value, index, field)
-}
-
 // Function to get current doctor item
-function getCurrentDoctorItem(index: number, field: 'lastName' | 'firstName' | 'specialization'): DoctorItem {
+function getCurrentDoctorItem(index: number): DoctorItem {
   return {
     lastName: state.teamMembers[index].lastName,
     firstName: state.teamMembers[index].firstName,
@@ -197,7 +206,7 @@ function getCurrentDoctorItem(index: number, field: 'lastName' | 'firstName' | '
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-6" @submit="onSubmit">
+  <UForm :schema="schema" :state="state" class="space-y-6 pt-10" @submit="onSubmit">
     <!-- Basic Information -->
     <UCard>
       <template #header>
@@ -278,80 +287,29 @@ function getCurrentDoctorItem(index: number, field: 'lastName' | 'firstName' | '
             />
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <UFormField label="Příjmení" :name="`teamMembers.${index}.lastName`">
+          <div class="grid grid-cols-1 gap-4">
+            <UFormField label="Vyhledat lékaře" :name="`teamMembers.${index}.search`">
               <UInputMenu
-                :model-value="getCurrentDoctorItem(index, 'lastName')"
+                :model-value="getDisplayValue(index)"
                 :items="searchResults"
-                :search="member.lastName"
-                @update:search="(value: string) => handleSearchUpdate(value, index, 'lastName')"
+                :search="getSearchValue(index)"
+                @update:search="(value: string) => handleSearchInput(value, index)"
                 @select="(doctor: DoctorItem) => handleDoctorSelect(doctor, index)"
                 class="w-full"
-                placeholder="Zadejte příjmení"
+                placeholder="Zadejte jméno nebo specializaci lékaře"
+                :loading="false"
+                :searchable="true"
               >
                 <template #item="{ item }">
                   <div class="flex items-center gap-2">
                     <div>
                       <div class="font-medium">{{ item.lastName }} {{ item.firstName }}</div>
                       <div class="text-sm text-gray-500">{{ item.specialization }}</div>
+                      <div class="text-sm text-gray-500">{{ item.email }}</div>
                     </div>
                   </div>
                 </template>
               </UInputMenu>
-            </UFormField>
-
-            <UFormField label="Jméno" :name="`teamMembers.${index}.firstName`">
-              <UInputMenu
-                :model-value="getCurrentDoctorItem(index, 'firstName')"
-                :items="searchResults"
-                :search="member.firstName"
-                @update:search="(value: string) => handleSearchUpdate(value, index, 'firstName')"
-                @select="(doctor: DoctorItem) => handleDoctorSelect(doctor, index)"
-                class="w-full"
-                placeholder="Zadejte jméno"
-              >
-                <template #item="{ item }">
-                  <div class="flex items-center gap-2">
-                    <div>
-                      <div class="font-medium">{{ item.lastName }} {{ item.firstName }}</div>
-                      <div class="text-sm text-gray-500">{{ item.specialization }}</div>
-                    </div>
-                  </div>
-                </template>
-              </UInputMenu>
-            </UFormField>
-
-            <UFormField label="Email" :name="`teamMembers.${index}.email`">
-              <UInput v-model="member.email" type="email" class="w-full" placeholder="Zadejte email" />
-            </UFormField>
-
-            <UFormField label="Telefon" :name="`teamMembers.${index}.phone`">
-              <UInput v-model="member.phone" type="tel" class="w-full" placeholder="Zadejte telefon" />
-            </UFormField>
-
-            <UFormField label="Odbornost" :name="`teamMembers.${index}.specialization`">
-              <UInputMenu
-                :model-value="getCurrentDoctorItem(index, 'specialization')"
-                :items="searchResults"
-                :search="member.specialization"
-                @update:search="(value: string) => handleSearchUpdate(value, index, 'specialization')"
-                @select="(doctor: DoctorItem) => handleDoctorSelect(doctor, index)"
-                class="w-full"
-                placeholder="Zadejte odbornost"
-              >
-                <template #item="{ item }">
-                  <div class="flex items-center gap-2">
-                    <div>
-                      <div class="font-medium">{{ item.lastName }} {{ item.firstName }}</div>
-                      <div class="text-sm text-gray-500">{{ item.specialization }}</div>
-                    </div>
-                  </div>
-                </template>
-              </UInputMenu>
-            </UFormField>
-
-            <UFormField label="Poznámka (Volitelné)" :name="`teamMembers.${index}.note`">
-              <UTextarea v-model="member.note" :rows="2" class="w-full" placeholder="Zadejte poznámku" />
             </UFormField>
           </div>
         </div>
