@@ -31,7 +31,7 @@
   
       <!-- Patients Table -->
       <UTable
-        :data="patients"
+        :data="filteredPatients"
         :columns="columns"
         :loading="loading"
         @select="handleSelect"
@@ -143,6 +143,18 @@
       avatar: ''
     }
   ])
+  
+  // Add this computed property after the patients ref
+  const filteredPatients = computed(() => {
+    if (!searchQuery.value) return patients.value
+    
+    const query = searchQuery.value.toLowerCase()
+    return patients.value.filter(patient => 
+      patient.name.toLowerCase().includes(query) ||
+      patient.email.toLowerCase().includes(query) ||
+      patient.phone.includes(query)
+    )
+  })
   
   definePageMeta({
     colorMode: "light",
