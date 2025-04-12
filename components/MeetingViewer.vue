@@ -65,32 +65,19 @@
       </div>
     </div>
 
-    <!-- Patient Records - Full Width -->
+    <!-- All Patients-->
     <div v-if="activeMeeting.patientRecords.length > 0" class="border-t pt-6">
       <div class="p-4 bg-blue-50 rounded-lg">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">Epikriza</h2>
-        <p class="text-sm text-gray-600">{{ patient?.epikriza }}</p>
-      </div>
-    </div>
-
-    <div v-if="patient?.modality && patient?.modality.length > 0" class="mt-3 pt-3 border-t border-gray-200">
-        <div class="p-4 bg-white rounded-lg">
-            <h2 class="text-lg font-semibold text-gray-900 mb-2">Relevantní vyšetření a výkony</h2>
-            <div class="space-y-2">
-                <div 
-                v-for="mod in patient.modality" 
-                :key="mod.id"
-                class="p-2 rounded border border-gray-200"
-                >
-                <div class="flex justify-between items-start">
-                    <div class="font-medium text-sm">{{ getModalityTypeName(mod.type) }}</div>
-                    <div class="text-xs text-gray-500">{{ formatDate(mod.date) }}</div>
-                </div>
-                <div class="text-xs text-gray-500 mt-1">{{ mod.place }}</div>
-                <div class="text-sm text-gray-700 mt-1">{{ mod.results }}</div>
-                </div>
-            </div>
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Všichni pacienti</h2>
+        <div class="space-y-4">
+          <div v-for="record in activeMeeting.patientRecords" :key="record.id" class="flex items-center justify-between bg-gray-50 p-3 rounded-md">
+            <span class="font-medium text-gray-700">{{ record.name }} {{ record.lastName }} - {{ record.birthNumber }}</span>
+            <NuxtLink :to="`/patient?id=${record.id}`" class="text-gray-500 hover:text-gray-700">
+              <UIcon name="i-heroicons-arrow-right" class="w-5 h-5" />
+            </NuxtLink>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Questions Section -->

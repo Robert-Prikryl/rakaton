@@ -1,6 +1,16 @@
 <template>
   <div class="p-4">
-    <h2 class="text-xl font-bold mb-4">Nový záznam pacienta</h2>
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold">Nový záznam pacienta</h2>
+      <button 
+        @click="$emit('close')" 
+        class="text-gray-500 hover:text-gray-700"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
 
     <div class="space-y-4">
       <!-- Patient Selection -->
@@ -10,7 +20,7 @@
         >
         <select
           v-model="selectedPatient"
-          class="form-select w-full border border-gray-300 rounded-md"
+          class="form-select w-full border border-gray-300 rounded-md p-2"
         >
           <option value="">Vyberte pacienta</option>
           <option
@@ -109,7 +119,7 @@
             </div>
             <button
               @click="addModality"
-              class="flex items-center justify-center w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="flex items-center justify-center w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#51aca8] hover:bg-[#3d8a86] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#51aca8]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +209,7 @@
             </div>
             <button
               @click="addQuestion"
-              class="flex items-center justify-center w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="flex items-center justify-center w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#51aca8] hover:bg-[#3d8a86] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#51aca8]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -222,7 +232,7 @@
       <button
         @click="createRecord"
         :disabled="!selectedPatient"
-        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300"
+        class="bg-[#7ac142] text-white px-4 py-2 rounded-md hover:bg-[#6aad3a] disabled:bg-gray-300"
       >
         Vytvoriť záznam
       </button>
@@ -239,6 +249,8 @@ import type { Doctor } from "@/types/doctor";
 import { ModalityType } from "@/types/patient";
 import { useMeetingStore } from "@/stores/meetingStore";
 
+const emit = defineEmits(['close']);
+
 const patientStore = usePatientStore();
 const doctorStore = useDoctorStore();
 const meetingStore = useMeetingStore();
@@ -251,81 +263,81 @@ const modalityTypes = Object.values(ModalityType);
 
 // Function to get human-readable labels for modality types
 const getModalityTypeLabel = (type: ModalityType): string => {
-  switch (type) {
-    case ModalityType.CT:
-      return "CT";
-    case ModalityType.MR:
-      return "MR";
-    case ModalityType.PET_CT:
-      return "PET/CT";
-    case ModalityType.OTHER:
-      return "Iné";
-    default:
-      return type;
-  }
+    switch (type) {
+        case ModalityType.CT:
+            return "CT";
+        case ModalityType.MR:
+            return "MR";
+        case ModalityType.PET_CT:
+            return "PET/CT";
+        case ModalityType.OTHER:
+            return "Iné";
+        default:
+            return type;
+    }
 };
 
 // Initialize the new record with default values
 const newRecord = ref<PatientRecord>({
-  id: "",
-  name: "",
-  lastName: "",
-  gender: "",
-  aisId: "",
-  insuranceId: "",
-  birthNumber: "",
-  dateOfBirth: "",
-  epikriza: "",
-  modality: [],
-  questions: [],
+    id: "",
+    name: "",
+    lastName: "",
+    gender: "",
+    aisId: "",
+    insuranceId: "",
+    birthNumber: "",
+    dateOfBirth: "",
+    epikriza: "",
+    modality: [],
+    questions: [],
 });
 
 // Watch for changes in selectedPatient and update newRecord accordingly
 watch(selectedPatient, (patient) => {
-  if (patient) {
-    newRecord.value = {
-      ...patient,
-      epikriza: "",
-      modality: [],
-      questions: [],
-    };
-  }
+    if (patient) {
+        newRecord.value = {
+            ...patient,
+            epikriza: "",
+            modality: [],
+            questions: [],
+        };
+    }
 });
 
 // Function to add a new modality
 const addModality = () => {
-  newRecord.value.modality.push({
-    id: crypto.randomUUID(),
-    type: ModalityType.CT,
-    date: new Date(),
-    place: "",
-    results: "",
-  });
+    newRecord.value.modality.push({
+        id: crypto.randomUUID(),
+        type: ModalityType.CT,
+        date: new Date(),
+        place: "",
+        results: "",
+    });
 };
 
 // Function to remove a modality
 const removeModality = (index: number) => {
-  newRecord.value.modality.splice(index, 1);
+    newRecord.value.modality.splice(index, 1);
 };
 
 // Function to add a new question
 const addQuestion = () => {
-  newRecord.value.questions.push({
-    id: crypto.randomUUID(),
-    reciepient: {} as Doctor,
-    question: "",
-    note: "",
-    tasks: [],
-  });
+    newRecord.value.questions.push({
+        id: crypto.randomUUID(),
+        reciepient: {} as Doctor,
+        question: "",
+        note: "",
+        tasks: [],
+    });
 };
 
 // Function to remove a question
 const removeQuestion = (index: number) => {
-  newRecord.value.questions.splice(index, 1);
+    newRecord.value.questions.splice(index, 1);
 };
 
 const createRecord = () => {
-  // Here you can add the logic to save the record
-  meetingStore.addPatientRecord(newRecord.value);
+    // Here you can add the logic to save the record
+    meetingStore.addPatientRecord(newRecord.value);
 };
 </script>

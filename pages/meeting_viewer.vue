@@ -9,6 +9,13 @@
                   <AddPatientModal />
               </template>
           </UModal>
+          <UModal title="Zapsat vyšetření">
+              <UButton label="Zapsat vyšetření" class="flex gap-6 mr-4 bg-[#51aca8] hover:bg-[#3d8a86]" color="neutral" variant="subtle" />
+
+              <template #body>
+                  <FinalResolution />
+              </template>
+          </UModal>
         </div>
     </div>
 </template>
