@@ -6,12 +6,12 @@ export const seedPatients = () => {
   
   // Only seed if the store is empty
   if (patientStore.patients.length === 0) {
-    // Male patients
+    // muž patients
     patientStore.addPatient({
       id: '1',
       name: 'Jan',
       lastName: 'Novák',
-      gender: 'male',
+      gender: 'muž',
       aisId: 'AIS00012345',
       insuranceId: '111',
       birthNumber: '900101/1234',
@@ -22,7 +22,7 @@ export const seedPatients = () => {
       id: '2',
       name: 'Petr',
       lastName: 'Svoboda',
-      gender: 'male',
+      gender: 'muž',
       aisId: 'AIS00023456',
       insuranceId: '201',
       birthNumber: '850612/1122',
@@ -33,19 +33,19 @@ export const seedPatients = () => {
       id: '3',
       name: 'Martin',
       lastName: 'Dvořák',
-      gender: 'male',
+      gender: 'muž',
       aisId: 'AIS00034567',
       insuranceId: '205',
       birthNumber: '780523/3344',
       dateOfBirth: '1978-05-23'
     } as Patient);
 
-    // Female patients
+    // žena patients
     patientStore.addPatient({
       id: '4',
       name: 'Marie',
       lastName: 'Procházková',
-      gender: 'female',
+      gender: 'žena',
       aisId: 'AIS00045678',
       insuranceId: '207',
       birthNumber: '915230/4455',
@@ -56,7 +56,7 @@ export const seedPatients = () => {
       id: '5',
       name: 'Lucie',
       lastName: 'Černá',
-      gender: 'female',
+      gender: 'žena',
       aisId: 'AIS00056789',
       insuranceId: '111',
       birthNumber: '880415/5566',
@@ -67,7 +67,7 @@ export const seedPatients = () => {
       id: '6',
       name: 'Kateřina',
       lastName: 'Veselá',
-      gender: 'female',
+      gender: 'žena',
       aisId: 'AIS00067890',
       insuranceId: '201',
       birthNumber: '950708/6677',
@@ -79,7 +79,7 @@ export const seedPatients = () => {
       id: '7',
       name: 'Jiří',
       lastName: 'Kučera',
-      gender: 'male',
+      gender: 'muž',
       aisId: 'AIS00078901',
       insuranceId: '205',
       birthNumber: '510304/7788'
@@ -89,7 +89,7 @@ export const seedPatients = () => {
       id: '8',
       name: 'Anna',
       lastName: 'Marešová',
-      gender: 'female',
+      gender: 'žena',
       aisId: 'AIS00089012',
       insuranceId: '207',
       birthNumber: '560219/8899',
@@ -101,7 +101,7 @@ export const seedPatients = () => {
       id: '9',
       name: 'Tomáš',
       lastName: 'Hájek',
-      gender: 'male',
+      gender: 'muž',
       aisId: 'AIS00090123',
       insuranceId: '111',
       birthNumber: '000825/9900',
@@ -112,7 +112,7 @@ export const seedPatients = () => {
       id: '10',
       name: 'Tereza',
       lastName: 'Pokorná',
-      gender: 'female',
+      gender: 'žena',
       aisId: 'AIS00101234',
       insuranceId: '201',
       birthNumber: '010612/0011',
