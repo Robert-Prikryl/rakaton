@@ -69,32 +69,27 @@
               <UDropdownMenu
                 class="hidden lg:block"
                 :modal="false"
-                :items="[
-                  {
-                    label: 'Úlohy',
-                    icon: 'i-lucide-user',
-                    to: '/tasks',
-                  },
-                  {
-                    label: 'Odhlásit se',
-                    icon: 'i-lucide-log-out',
-                    onSelect: async (e) => {
-                      handleLogout()
-                    },
-                  },
-                ]"
+                :items="notifications"
                 :content="{
                   align: 'center',
                   side: 'bottom',
                   sideOffset: 8,
+                  content: 'w-48',
+                  item: 'px-2',
                 }"
               >
                 <UButton
                   color="neutral"
                   variant="ghost"
                   icon="i-lucide-bell"
-                  class="flex items-center gap-2"
+                  class="flex items-center gap-2 relative"
                 >
+                  <span v-if="unreadNotifications > 0" class="absolute -top-1 -right-1 flex h-4 w-4">
+                    <span class="absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75 animate-ping"></span>
+                    <span class="relative inline-flex rounded-full h-4 w-4 bg-red-500 text-[10px] text-white justify-center items-center">
+                      {{ unreadNotifications > 9 ? '9+' : unreadNotifications }}
+                    </span>
+                  </span>
                 </UButton>
               </UDropdownMenu>
             </div>
@@ -162,6 +157,74 @@ const route = useRoute()
 let navigationItems = ref([])
 const userName = ref('User')
 const userRole = ref('')
+
+const isModalOpen = ref(false)
+
+// Notifications data - Mock data pro sarcomaboard schůzky v češtině
+const notifications = ref([
+  {
+    id: 1,
+    label: 'Nová schůzka sarcomaboardu',
+    //description: 'Byla naplánována nová schůzka sarcomaboardu pro pacienta Novák J. (zítra, 10:00)',
+    icon: 'i-lucide-calendar',
+    read: false
+  },
+  {
+    id: 2,
+    label: 'Změna termínu schůzky',
+    //description: 'Schůzka sarcomaboardu pro pacienta Dvořák M. byla přesunuta na 16.5.2023, 14:30',
+    icon: 'i-lucide-calendar-clock',
+    read: false
+  },
+  {
+    id: 3,
+    label: 'Připomenutí schůzky',
+    //description: 'Připomínáme schůzku sarcomaboardu pro pacienta Svoboda T. (dnes, 13:00)',
+    icon: 'i-lucide-bell-ring',
+    read: false
+  },
+  {
+    id: 4,
+    label: 'Zápis ze schůzky',
+    //description: 'K dispozici je nový zápis ze schůzky sarcomaboardu pacienta Novotný P.',
+    icon: 'i-lucide-file-text',
+    read: true
+  },
+  {
+    id: 5,
+    label: 'Zrušení schůzky',
+    //description: 'Schůzka sarcomaboardu pro pacienta Horáková L. byla zrušena',
+    icon: 'i-lucide-x-circle',
+    read: true
+  },
+  {
+    id: 6,
+    label: 'Pozvánka na konzultaci',
+    //description: 'Jste pozváni na konzultaci před schůzkou sarcomaboardu pacienta Koláře P.',
+    icon: 'i-lucide-users',
+    read: true
+  }
+])
+
+// Počet nepřečtených notifikací
+const unreadNotifications = computed(() => {
+  return notifications.value.filter(notification => !notification.read).length
+})
+
+// Function to mark a notification as read
+const markAsRead = (id) => {
+  const notification = notifications.value.find(n => n.id === id)
+  if (notification) {
+    notification.read = true
+  }
+}
+
+// Function to mark all notifications as read
+const markAllAsRead = () => {
+  notifications.value.forEach(notification => {
+    notification.read = true
+  })
+}
 
 function getInitials(name) {
   return name
