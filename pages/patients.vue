@@ -25,7 +25,7 @@
     <!-- Patients Table -->
     <UTable
       :columns="columns"
-      :rows="patients"
+      :data="data"
       :search="searchQuery"
       :sort="{ column: 'name' }"
     >
@@ -52,15 +52,67 @@
 </template>
 
 <script setup lang="ts">
-import { type Patient } from '~/types'
+import { type Patient } from '~/types/patient'
+import { seedPatients } from '~/seeders/patientSeeder'
 
 const searchQuery = ref('')
 const isModalOpen = ref(false)
 const isEditing = ref(false)
-const selectedPatient = ref<Patient | null>(null)
+const patientsData = ref<Patient[]>([])
+
+const data = ref([
+  {
+    id: '4600',
+    date: '2024-03-11T15:30:00',
+    status: 'paid',
+    email: 'james.anderson@example.com',
+    amount: 594
+  },
+  {
+    id: '4599',
+    date: '2024-03-11T10:10:00',
+    status: 'failed',
+    email: 'mia.white@example.com',
+    amount: 276
+  },
+  {
+    id: '4598',
+    date: '2024-03-11T08:50:00',
+    status: 'refunded',
+    email: 'william.brown@example.com',
+    amount: 315
+  },
+  {
+    id: '4597',
+    date: '2024-03-10T19:45:00',
+    status: 'paid',
+    email: 'emma.davis@example.com',
+    amount: 529
+  },
+  {
+    id: '4596',
+    date: '2024-03-10T15:55:00',
+    status: 'paid',
+    email: 'ethan.harris@example.com',
+    amount: 639
+  }
+])
+
+onMounted(() => {
+    const patientStore = usePatientStore();
+    seedPatients(patientStore);
+    patientsData.value = patientStore.patients;
+    console.log(patientsData.value);
+});
 
 // Table columns configuration
 const columns = [
+    {
+        key: 'id',
+        label: 'ID',
+        sortable: true,
+        id: 'id'
+    },
   {
     key: 'name',
     label: 'Name',
@@ -74,15 +126,10 @@ const columns = [
     id: 'email'
   },
   {
-    key: 'phone',
-    label: 'Phone',
-    id: 'phone'
-  },
-  {
-    key: 'dateOfBirth',
-    label: 'Date of Birth',
+    key: 'status',
+    label: 'Status',
     sortable: true,
-    id: 'dateOfBirth'
+    id: 'status'
   },
   {
     key: 'actions',
@@ -92,20 +139,9 @@ const columns = [
   }
 ]
 
-// Example data
-const patients = ref([
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    phone: '+421 123 456 789',
-    dateOfBirth: '1990-01-01'
-  }
-])
-
 // Modal functions
 function openAddModal() {
-  selectedPatient.value = null
+  patientsData.value = null
   isEditing.value = false
   isModalOpen.value = true
 }
@@ -113,11 +149,11 @@ function openAddModal() {
 function closeModal() {
   isModalOpen.value = false
   isEditing.value = false
-  selectedPatient.value = null
+  patientsData.value = null
 }
 
 function editPatient(patient: Patient) {
-  selectedPatient.value = patient
+  patientsData.value = patient
   isEditing.value = true
   isModalOpen.value = true
 }
@@ -131,7 +167,7 @@ function deletePatient(id: number) {
 function handleSubmit(data: Patient) {
   if (isEditing.value) {
     // Update existing patient
-    const index = patients.value.findIndex(p => p.id === selectedPatient.value?.id)
+    const index = patients.value.findIndex(p => p.id === patientsData.value?.id)
     if (index !== -1) {
       patients.value[index] = { ...patients.value[index], ...data }
     }

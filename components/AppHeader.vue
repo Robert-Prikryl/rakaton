@@ -79,7 +79,7 @@ onBeforeMount(() => {
         ]
     } else if (role === 'admin') { 
         navigationItems = [
-            { name: 'Patients', path: '/patients_table' }
+            { name: 'Doctors', path: '/doctors_table' }
         ]
     }else{
         router.push('/login')

@@ -1,22 +1,22 @@
 <template>
     <div class="container mx-auto p-8">
       <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Pacienti</h1>
+        <h1 class="text-3xl font-bold">Doktoři</h1>
         
         <!-- Search Bar -->
         <div class="w-72">
           <UInput
             v-model="searchQuery"
             icon="i-heroicons-magnifying-glass"
-            placeholder="Hledat pacienty..."
+            placeholder="Hledat doktory..."
             color="neutral"
           />
         </div>
       </div>
 
-      <UModal v-model="isModalOpen" :title="isEditing ? 'Upravit pacienta' : 'Přidat nového pacienta'">
+      <UModal v-model="isModalOpen" :title="isEditing ? 'Upravit doktora' : 'Přidat nového doktora'">
         <UButton 
-          label="Přidat nového pacienta" 
+          label="Přidat nového doktora" 
           color="primary" 
           icon="i-heroicons-user-plus"
           @click="openAddPatientModal"
@@ -84,7 +84,7 @@
   </template>
   
   <script setup lang="ts">
-  import { type Patient } from '~/types'
+  import { type Patient } from '~/types/patient'
   
   const searchQuery = ref('')
   const isModalOpen = ref(false)
