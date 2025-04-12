@@ -23,36 +23,22 @@
     </UModal>
 
     <!-- Patients Table -->
-    <UTable
-      :data="patientsData"
-      :search="searchQuery"
-      :sort="{ column: 'name' }"
-    >
-      <template #actions-data="{ row }">
-        <div class="flex items-center gap-2">
-          <UButton
-            color="primary"
-            variant="ghost"
-            icon="i-heroicons-pencil-square"
-            size="xs"
-            @click="editPatient(row)"
-          />
-          <UButton
-            color="red"
-            variant="ghost"
-            icon="i-heroicons-trash"
-            size="xs"
-            @click="deletePatient(row.id)"
-          />
-        </div>
-      </template>
-    </UTable>
+    <ClientOnly>
+      <UTable
+        :columns="columns"
+        :data="patientsData"
+        :search="searchQuery"
+        :sort="{ column: 'name' }"
+      />
+    </ClientOnly>
   </div>
 </template>
 
 <script setup lang="ts">
 import { type Patient } from '~/types/patient'
 import { seedPatients } from '~/seeders/patientSeeder'
+import { h, resolveComponent } from 'vue'
+import type { TableColumn } from '@nuxt/ui'
 
 const searchQuery = ref('')
 const isModalOpen = ref(false)
@@ -61,50 +47,73 @@ const patientsData = ref<Patient[]>([])
 let simplifiedPatients = ref<Patient[]>([])
 
 onMounted(() => {
+    // Create a new instance of the store to ensure correct hydration
     const patientStore = usePatientStore();
-    seedPatients(patientStore);
-    // simplifiedPatients.value = patientStore.patients.map(patient => ({
-    //     id: patient.id,
-    //     name: `${patient.name} ${patient.lastName}`
-    // }));
-    console.log(simplifiedPatients.value);
-    patientsData.value = patientStore.patients;
-    console.log(patientsData.value);
+    
+    // Execute seedPatients without arguments as it creates its own store instance
+    seedPatients();
+    
+    // Use import.meta.client to ensure we only access localStorage on client-side
+    if (import.meta.client) {
+        // Get patients data from the store
+        patientsData.value = patientStore.patients;
+        console.log('Loaded patients:', patientsData.value);
+    }
 });
 
-
-
 // Table columns configuration
-const columns = [
-    {
-        key: 'id',
-        label: 'ID',
-        sortable: true,
-        id: 'id'
-    },
+const columns: TableColumn<Patient>[] = [
   {
-    key: 'name',
-    label: 'Name',
-    sortable: true,
-    id: 'name'
+    accessorKey: 'id',
+    header: 'ID',
+    cell: ({ row }) => `#${row.getValue('id')}`
   },
   {
-    key: 'email',
-    label: 'Email',
-    sortable: true,
-    id: 'email'
+    accessorKey: 'name',
+    header: 'First Name',
+    cell: ({ row }) => row.getValue('name')
   },
   {
-    key: 'status',
-    label: 'Status',
-    sortable: true,
-    id: 'status'
+    accessorKey: 'lastName',
+    header: 'Last Name',
+    cell: ({ row }) => row.getValue('lastName')
   },
   {
-    key: 'actions',
-    label: 'Actions',
-    sortable: false,
-    id: 'actions'
+    accessorKey: 'gender',
+    header: 'Gender',
+    cell: ({ row }) => row.getValue('gender')
+  },
+  {
+    accessorKey: 'dateOfBirth',
+    header: 'Date of Birth',
+    cell: ({ row }) => row.getValue('dateOfBirth')
+  },
+  {
+    accessorKey: 'aisId',
+    header: 'AIS ID',
+    cell: ({ row }) => row.getValue('aisId')
+  },
+  {
+    accessorKey: 'actions',
+    header: 'Actions',
+    cell: ({ row }) => {
+      return h('div', { class: 'flex items-center gap-2' }, [
+        h(resolveComponent('UButton'), {
+          color: 'primary',
+          variant: 'ghost',
+          icon: 'i-heroicons-pencil-square',
+          size: 'xs',
+          onClick: () => editPatient(row.original)
+        }),
+        h(resolveComponent('UButton'), {
+          color: 'error',
+          variant: 'ghost',
+          icon: 'i-heroicons-trash',
+          size: 'xs',
+          onClick: () => deletePatient(row.original.id)
+        })
+      ])
+    }
   }
 ]
 
@@ -127,9 +136,9 @@ function editPatient(patient: Patient) {
   isModalOpen.value = true
 }
 
-function deletePatient(id: number) {
+function deletePatient(id: string) {
   if (confirm('Are you sure you want to delete this patient?')) {
-    patients.value = patients.value.filter(p => p.id !== id)
+    patientsData.value = patientsData.value.filter(p => p.id !== id)
   }
 }
 
