@@ -24,8 +24,7 @@
 
     <!-- Patients Table -->
     <UTable
-      :columns="columns"
-      :data="data"
+      :data="patientsData"
       :search="searchQuery"
       :sort="{ column: 'name' }"
     >
@@ -59,51 +58,21 @@ const searchQuery = ref('')
 const isModalOpen = ref(false)
 const isEditing = ref(false)
 const patientsData = ref<Patient[]>([])
-
-const data = ref([
-  {
-    id: '4600',
-    date: '2024-03-11T15:30:00',
-    status: 'paid',
-    email: 'james.anderson@example.com',
-    amount: 594
-  },
-  {
-    id: '4599',
-    date: '2024-03-11T10:10:00',
-    status: 'failed',
-    email: 'mia.white@example.com',
-    amount: 276
-  },
-  {
-    id: '4598',
-    date: '2024-03-11T08:50:00',
-    status: 'refunded',
-    email: 'william.brown@example.com',
-    amount: 315
-  },
-  {
-    id: '4597',
-    date: '2024-03-10T19:45:00',
-    status: 'paid',
-    email: 'emma.davis@example.com',
-    amount: 529
-  },
-  {
-    id: '4596',
-    date: '2024-03-10T15:55:00',
-    status: 'paid',
-    email: 'ethan.harris@example.com',
-    amount: 639
-  }
-])
+let simplifiedPatients = ref<Patient[]>([])
 
 onMounted(() => {
     const patientStore = usePatientStore();
     seedPatients(patientStore);
+    // simplifiedPatients.value = patientStore.patients.map(patient => ({
+    //     id: patient.id,
+    //     name: `${patient.name} ${patient.lastName}`
+    // }));
+    console.log(simplifiedPatients.value);
     patientsData.value = patientStore.patients;
     console.log(patientsData.value);
 });
+
+
 
 // Table columns configuration
 const columns = [
