@@ -27,13 +27,6 @@
         {{ range.description || `${formatDate(range.startDate)} - ${formatDate(range.endDate)}` }}
       </div>
     </div>
-  
-    <!-- Today marker -->
-    <div class="absolute left-[60%] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-red-500 cursor-pointer transition-transform duration-300 hover:scale-125 group z-20">
-      <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100">
-        Dnes
-      </div>
-    </div>
 
     <!-- Meeting points -->
     <div 
@@ -45,6 +38,13 @@
     >
       <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100">
         {{ getMeetingTooltip(meeting) }}
+      </div>
+    </div>
+
+    <!-- Today marker -->
+    <div class="absolute left-[60%] top-1/2 -translate-y-1/2 w-[3px] h-3 bg-red-500 cursor-pointer transition-transform duration-300 hover:scale-125 group z-20">
+      <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100">
+        Dnes
       </div>
     </div>
   </div>

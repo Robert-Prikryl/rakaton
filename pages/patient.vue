@@ -17,9 +17,9 @@
                         </p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <UIcon name="ph:hospital-light" class="shrink-0" />
+                        <UIcon name="material-symbols:calendar-month" class="shrink-0" />
                         <p class="text-sm md:text-lg text-gray-500">
-                            {{ patientStore.activePatient?.aisId }}
+                            {{ formatDate(patientStore.activePatient?.dateOfBirth) }}
                         </p>
                     </div>
                 </div>
@@ -40,9 +40,9 @@
                             </p>
                         </div>
                         <div class="flex items-center gap-3">
-                            <UIcon name="material-symbols:calendar-month" class="shrink-0" />
+                            <UIcon name="ph:hospital-light" class="shrink-0" />
                             <p class="text-sm md:text-lg text-gray-500">
-                                {{ patientStore.activePatient?.dateOfBirth }}
+                                {{ patientStore.activePatient?.aisId }}
                             </p>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRecordsStore } from '@/stores/recordsStore';
 import { usePatientStore } from '@/stores/patientStore';
 import { seedPatients } from '@/seeders/patientSeeder';
@@ -69,6 +69,13 @@ onMounted(() => {
     pushSeeds(recordsStore);
     seedMeetings();
 });
+
+function formatDate(date: string | undefined) {
+  if (!date) return '';
+  const [year, month, day] = date.split('-');
+  return `${day}.${month}.${year}`;
+}
+
 definePageMeta({
   colorMode: "light",
 });

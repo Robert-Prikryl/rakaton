@@ -12,7 +12,7 @@ export const seedDoctors = () => {
       surname: 'Novák',
       email: 'jan.novak@hospital.cz',
       phone: '+420 777 123 456',
-      specialization: 'Oncology',
+      specialization: 'Onkologie',
       password: 'password',
       patients: [],
       tasks: []
@@ -24,7 +24,7 @@ export const seedDoctors = () => {
       surname: 'Svobodová',
       email: 'marie.svobodova@hospital.cz',
       phone: '+420 777 234 567',
-      specialization: 'Radiology',
+      specialization: 'Rádiologie',
       password: 'password',
       patients: [],
       tasks: []
@@ -36,7 +36,7 @@ export const seedDoctors = () => {
       surname: 'Dvořák',
       email: 'petr.dvorak@hospital.cz',
       phone: '+420 777 345 678',
-      specialization: 'Surgery',
+      specialization: 'Chirurgie',
       password: 'password',
       patients: [],
       tasks: []
