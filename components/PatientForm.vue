@@ -3,6 +3,7 @@ import * as v from 'valibot'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 const props = defineProps<{
+  onSubmit: Function,
   initialData?: {
     name?: string
     email?: string
@@ -24,34 +25,52 @@ const state = reactive({
   name: props.initialData?.name || '',
   email: props.initialData?.email || '',
   phone: props.initialData?.phone || '',
-  dateOfBirth: props.initialData?.dateOfBirth || ''
+  dateOfBirth: props.initialData?.dateOfBirth || '',
+  surname: '',
+  gender: '',
+  aisId: ''
 })
 
 const emit = defineEmits(['submit'])
 
 const toast = useToast()
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-    console.log('event', event)
-  try {
-    console.log('event.data', event.data)
-    toast.add({ 
-      title: 'Úspěch', 
-      description: 'Data pacienta byla úspěšně uložena', 
-      color: 'success' 
-    })
-    emit('submit', event.data)
-  } catch (error) {
-    toast.add({ 
-      title: 'Chyba', 
-      description: 'Nepodařilo se uložit data pacienta', 
-      color: 'error' 
-    })
-  }
+    console.log('Form submitted!', event)
+    try {
+      // Create patient data object
+      const patientData = {
+        id: Date.now().toString(),
+        name: state.name,
+        lastName: state.surname || '',
+        gender: state.gender || '',
+        dateOfBirth: state.dateOfBirth,
+        aisId: state.aisId || ''
+      }
+      
+      console.log('Patient data:', patientData)
+      
+      // Call the parent's onSubmit function
+      props.onSubmit(patientData)
+      
+      toast.add({ 
+        title: 'Úspěch', 
+        description: 'Data pacienta byla úspěšně uložena', 
+        color: 'success' 
+      })
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      toast.add({ 
+        title: 'Chyba', 
+        description: 'Nepodařilo se uložit data pacienta', 
+        color: 'error' 
+      })
+    }
 }
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+  <UForm :state="state" class="space-y-4" @submit.prevent="onSubmit">
     <UFormField label="Jméno" name="name">
       <UInput class="w-full" v-model="state.name" type="text" placeholder="Zadejte jméno" />
     </UFormField>
