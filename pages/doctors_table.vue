@@ -4,242 +4,244 @@
         <h1 class="text-3xl font-bold">Doktoři</h1>
         
         <!-- Search Bar -->
-        <div class="w-72">
-          <UInput
-            v-model="searchQuery"
-            icon="i-heroicons-magnifying-glass"
-            placeholder="Hledat doktory..."
-            color="neutral"
-          />
-        </div>
-      </div>
+      <div class="w-auto flex">
 
-      <UModal v-model="isModalOpen" :title="isEditing ? 'Upravit doktora' : 'Přidat nového doktora'">
-        <UButton 
-          label="Přidat nového doktora" 
-          color="primary" 
-          icon="i-heroicons-user-plus"
-          @click="openAddPatientModal"
-        />
-        <template #body>
-          <PatientForm 
-            :initial-data="selectedPatient"
-            @submit="handleSubmit"
-          />
-        </template>
+      <UModal title="Vytvořit nového doktora">
+          <UButton label="Vytvořit nového doktora" class="flex gap-6 mr-4" color="primary" variant="subtle" />
+
+          <template #body>
+              <DoctorForm @submit="handleSubmit" />
+          </template>
       </UModal>
+
+      <UInput
+        v-model="searchQuery"
+        icon="i-heroicons-magnifying-glass"
+        placeholder="Search by name..."
+        color="primary"
+        class="shadow-sm"
+      />
+      </div>
+    </div>
   
       <!-- Patients Table -->
-      <UTable
-        :data="filteredPatients"
-        :columns="columns"
-        :loading="loading"
-        @select="handleSelect"
-      >
-        <!-- Custom name column with avatar -->
-        <template #name-data="{ row }">
-          <div class="flex items-center gap-2">
-            <UAvatar
-              :src="row.avatar || ''"
-              :alt="row.name"
-              :text="getInitials(row.name)"
-            />
-            <span>{{ row.name }}</span>
-          </div>
-        </template>
-  
-        <!-- Custom date column -->
-        <template #dateOfBirth-data="{ row }">
-          {{ formatDate(row.dateOfBirth) }}
-        </template>
-  
-        <!-- Custom actions column -->
-        <template #actions-data="{ row }">
-          <div class="flex items-center gap-2">
-            <UButton
-              color="primary"
-              variant="ghost"
-              icon="i-heroicons-pencil-square"
-              size="xs"
-              @click="editPatient(row)"
-            />
-            <UButton
-              color="error"
-              variant="ghost"
-              icon="i-heroicons-trash"
-              size="xs"
-              @click="deletePatient(row.id)"
-            />
-            <UButton
-              color="neutral"
-              variant="ghost"
-              icon="i-heroicons-eye"
-              size="xs"
-              @click="viewPatientDetails(row)"
-            />
-          </div>
-        </template>
-      </UTable>
+      <ClientOnly>
+        <UTable 
+          loading-color="primary" 
+          loading-animation="carousel"
+          :columns="columns"
+          :data="doctorsData"
+          :search="searchQuery"
+          :sort="{ column: 'name', direction: 'asc' }"
+        />
+      </ClientOnly>
+
+      <!-- Delete Confirmation Modal -->
+      <UModal v-model:open="isDeleteModalOpen">
+          <UButton label="Vymazat doktora" id="delete-doctor-button" class="flex gap-6 mr-4 hidden" color="primary" variant="subtle" />
+          <template #header>
+              <h3 class="text-xl font-semibold">Smazat doktora</h3>
+          </template>
+          <template #body>
+              <DeleteForm 
+                  @close="handleClose"
+                  @confirm="confirmDelete"
+              />
+          </template>
+      </UModal>
+
+      <!-- Edit Confirmation Modal -->
+      <UModal v-model:open="isEditModalOpen">
+          <UButton label="Upravit doktora" id="edit-doctor-button" class="flex gap-6 mr-4 hidden" color="primary" variant="subtle" />
+          <template #header>
+              <h3 class="text-xl font-semibold">Upravit doktora</h3>
+          </template>
+          <template #body>
+              <DoctorForm @submit="handleSubmit" :initial-data="selectedDoctorData" />
+          </template>
+      </UModal>
     </div>
   </template>
   
   <script setup lang="ts">
-  import { type Patient } from '~/types/patient'
-  
+  import { type Doctor } from '~/types/doctor'
+  import { seedDoctors } from '~/seeders/doctorSeeder'
+  import { h, resolveComponent } from 'vue'
+  import type { TableColumn } from '@nuxt/ui'
+
   const searchQuery = ref('')
   const isModalOpen = ref(false)
   const isEditing = ref(false)
-  const selectedPatient = ref<Patient | null>(null)
-  const loading = ref(false)
-  
+  const doctorsData = ref<Doctor[]>([])
+  let selectedDoctorData = ref<Doctor | null>(null)
+  let simplifiedDoctors = ref<Doctor[]>([])
+  const router = useRouter()
+  const isDeleteModalOpen = ref(false)
+  const isEditModalOpen = ref(false)
+  const doctorToDelete = ref<string | null>(null)
+
+  onMounted(() => {
+      // Create a new instance of the store to ensure correct hydration
+      const doctorStore = useDoctorStore();
+      
+      // Execute seedPatients without arguments as it creates its own store instance
+      seedDoctors();
+      
+      // Use import.meta.client to ensure we only access localStorage on client-side
+      if (import.meta.client) {
+          // Get patients data from the store
+          doctorsData.value = doctorStore.doctors;
+          console.log('Loaded doctors:', doctorsData.value);
+      }
+  });
+
   // Table columns configuration
-  const columns = [
+  const columns: TableColumn<Doctor>[] = [
     {
-      key: 'name',
-      label: 'Jméno',
-      sortable: true,
-      id: 'name'
+      accessorKey: 'id',
+      header: 'ID',
+      cell: ({ row }) => `#${row.getValue('id')}`
     },
     {
-      key: 'email',
-      label: 'Email',
-      sortable: true,
-      id: 'email'
+      accessorKey: 'firstname',
+      header: 'First Name',
+      cell: ({ row }) => row.getValue('firstname')
     },
     {
-      key: 'phone',
-      label: 'Telefon',
-      id: 'phone'
+      accessorKey: 'surname',
+      header: 'Last Name',
+      cell: ({ row }) => row.getValue('surname')
     },
     {
-      key: 'dateOfBirth',
-      label: 'Datum narození',
-      sortable: true,
-      id: 'dateOfBirth'
+      accessorKey: 'email',
+      header: 'Email',
+      cell: ({ row }) => row.getValue('email')
     },
     {
-      key: 'actions',
-      label: 'Akce',
-      id: 'actions'
+      accessorKey: 'phone',
+      header: 'Phone',
+      cell: ({ row }) => row.getValue('phone')
+    },
+    {
+      accessorKey: 'specialization',
+      header: 'Specialization',
+      cell: ({ row }) => row.getValue('specialization')
+    },
+    {
+      accessorKey: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => {
+        return h('div', { class: 'flex items-center gap-2' }, [
+          h(resolveComponent('UButton'), {
+            color: 'primary',
+            variant: 'ghost',
+            icon: 'i-heroicons-magnifying-glass',
+            size: 'xs',
+            onClick: () => navigateToDoctor(row.original.id)
+          }),
+          h(resolveComponent('UButton'), {
+            color: 'primary',
+            variant: 'ghost',
+            icon: 'i-heroicons-pencil-square',
+            size: 'xs',
+            onClick: () => editDoctor(row.original)
+          }),
+          h(resolveComponent('UButton'), {
+            color: 'error',
+            variant: 'ghost',
+            icon: 'i-heroicons-trash',
+            size: 'xs',
+            onClick: () => deleteDoctor(row.original.id)
+          })
+        ])
+      }
     }
   ]
-  
-  // Example data with more realistic content
-  const patients = ref<Patient[]>([
-    {
-      id: 1,
-      name: 'Jan Novák',
-      email: 'jan@example.com',
-      phone: '+420 123 456 789',
-      dateOfBirth: '1990-01-01',
-      avatar: ''
-    },
-    {
-      id: 2,
-      name: 'Marie Svobodová',
-      email: 'marie@example.com',
-      phone: '+420 987 654 321',
-      dateOfBirth: '1985-05-15',
-      avatar: ''
-    }
-  ])
-  
-  // Add this computed property after the patients ref
-  const filteredPatients = computed(() => {
-    if (!searchQuery.value) return patients.value
-    
-    const query = searchQuery.value.toLowerCase()
-    return patients.value.filter(patient => 
-      patient.name.toLowerCase().includes(query) ||
-      patient.email.toLowerCase().includes(query) ||
-      patient.phone.includes(query)
-    )
-  })
-  
-  definePageMeta({
-    colorMode: "light",
-  });
-  // Helper functions
-  function getInitials(name: string) {
-    return name
-      .split(' ')
-      .map(word => word[0])
-      .join('')
-      .toUpperCase()
-  }
-  
-  function formatDate(date: string) {
-    return new Date(date).toLocaleDateString('cs-CZ', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    })
-  }
-  
-  function handleSelect(row: any) {
-    console.log('Vybraný řádek:', row)
-  }
-  
-  function viewPatientDetails(patient: Patient) {
-    console.log('Zobrazit detaily pacienta:', patient)
-  }
-  
-  function editPatient(patient: Patient) {
-    selectedPatient.value = patient
-    isEditing.value = true
-    isModalOpen.value = true
-  }
-  
-  function deletePatient(id: number) {
-    if (confirm('Opravdu chcete smazat tohoto pacienta?')) {
-      patients.value = patients.value.filter(p => p.id !== id)
-    }
+
+  function handleClose() {
+      isDeleteModalOpen.value = !isDeleteModalOpen.value
+      isDeleteModalOpen.value = false
+      doctorToDelete.value = null
   }
 
-  function openAddPatientModal() {
-    selectedPatient.value = null
+  // Modal functions
+  function openAddModal() {
+    doctorsData.value = null
     isEditing.value = false
     isModalOpen.value = true
   }
-  
-  async function handleSubmit(data: Patient) {
-    loading.value = true
-    try {
-      if (isEditing.value && selectedPatient.value) {
-        // Update existing patient
-        const index = patients.value.findIndex(p => p.id === selectedPatient.value?.id)
-        if (index !== -1) {
-          patients.value[index] = { ...patients.value[index], ...data }
-        }
-      } else {
-        // Add new patient
-        const newPatient: Patient = {
-          id: Date.now(),
-          ...data,
-          avatar: ''
-        }
-        patients.value.push(newPatient)
-      }
-      
-      isModalOpen.value = false
-      isEditing.value = false
-      selectedPatient.value = null
+
+  function closeModal() {
+    isModalOpen.value = false
+    isEditing.value = false
+    doctorsData.value = null
+  }
+
+  function editDoctor(doctor: Doctor) {
+    isEditModalOpen.value = !isEditModalOpen.value
+    selectedDoctorData.value = doctor
+  }
+
+  function deleteDoctor(id: string) {
+    doctorToDelete.value = id
+    isDeleteModalOpen.value = true
+    document.getElementById('delete-doctor-button')?.click()
+  }
+
+  function confirmDelete() {
+    if (doctorToDelete.value) {
+      doctorsData.value = doctorsData.value.filter(d => d.id !== doctorToDelete.value)
       
       const toast = useToast()
       toast.add({
         title: 'Úspěch',
-        description: isEditing.value ? 'Pacient byl úspěšně aktualizován' : 'Pacient byl úspěšně přidán',
-        color: 'success'
+        description: 'Doktor byl úspěšně smazán',
+        color: 'green',
+        icon: 'i-heroicons-check-circle'
       })
-    } catch (error) {
-      const toast = useToast()
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se uložit data pacienta',
-        color: 'error'
-      })
-    } finally {
-      loading.value = false
+      
+      isDeleteModalOpen.value = false
+      doctorToDelete.value = null
     }
+  }
+
+  function navigateToDoctor(id: string) {
+    router.push(`/doctor?id=${id}`)
+    // Alternative format if you prefer cleaner URLs:
+    // router.push(`/doctor/${id}`)
+  }
+
+  function handleSubmit(data: Doctor) {
+      
+      doctorStore.doctors.push(data)
+      doctorsData.value.push(data)
+      console.log('doctorsData', doctorsData.value)
+
+  //   if (isEditing.value) {
+  //     // Update existing patient
+  //     const index = patientsData.value.findIndex(p => p.id === patientsData.value?.id)
+  //     if (index !== -1) {
+  //         patientsData.value[index] = { ...patientsData.value[index], ...data }
+  //     }
+  //   } else {
+  //     // Add new patient
+  //     patientsData.value.push({
+  //       id: Date.now(),
+  //       ...data
+  //     })
+  //   }
+    
+    // Close modal and reset state
+    closeModal()
+    definePageMeta({
+      colorMode: "light",
+      });
+    // Show success toast
+    const toast = useToast()
+    toast.add({
+      title: 'Success',
+      description: isEditing.value ? 'Doctor updated successfully' : 'Doctor added successfully',
+      color: 'success'
+    })
   }
   </script>

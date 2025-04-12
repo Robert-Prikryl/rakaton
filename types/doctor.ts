@@ -3,8 +3,8 @@ import type { Task } from "./patient";
 
 export interface Doctor {
     id: string;
-    surname: string;
     firstname: string;
+    surname: string;
     email: string;
     phone: string;
     specialization: string;

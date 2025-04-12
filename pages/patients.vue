@@ -6,7 +6,7 @@
       <!-- Search Bar -->
       <div class="w-auto flex">
 
-        <UModal title="Modal with title">
+        <UModal title="Vytvořit nového pacienta">
             <UButton label="Vytvořit nového pacienta" class="flex gap-6 mr-4" color="primary" variant="subtle" />
 
             <template #body>
