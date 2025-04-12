@@ -6,9 +6,10 @@ const props = defineProps<{
   onSubmit: Function,
   initialData?: {
     name?: string
-    email?: string
-    phone?: string
+    lastName?: string
+    gender?: string
     dateOfBirth?: string
+    aisId?: string
   } | null
 }>()
 
@@ -23,12 +24,10 @@ type Schema = v.InferOutput<typeof schema>
 
 const state = reactive({
   name: props.initialData?.name || '',
-  email: props.initialData?.email || '',
-  phone: props.initialData?.phone || '',
+  lastName: props.initialData?.lastName || '',
+  gender: props.initialData?.gender || '',
   dateOfBirth: props.initialData?.dateOfBirth || '',
-  surname: '',
-  gender: '',
-  aisId: ''
+  aisId: props.initialData?.aisId || '',
 })
 
 const emit = defineEmits(['submit'])
@@ -42,7 +41,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       const patientData = {
         id: Date.now().toString(),
         name: state.name,
-        lastName: state.surname || '',
+        lastName: state.lastName || '',
         gender: state.gender || '',
         dateOfBirth: state.dateOfBirth,
         aisId: state.aisId || ''
@@ -75,8 +74,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       <UInput class="w-full" v-model="state.name" type="text" placeholder="Zadejte jméno" />
     </UFormField>
 
-    <UFormField label="Příjmení" name="surname">
-      <UInput class="w-full" v-model="state.surname" type="text" placeholder="Zadejte příjmení" />
+    <UFormField label="Příjmení" name="lastName">
+      <UInput class="w-full" v-model="state.lastName" type="text" placeholder="Zadejte příjmení" />
     </UFormField>
 
     <UFormField label="Pohlaví" name="gender">

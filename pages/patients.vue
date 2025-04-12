@@ -50,6 +50,17 @@
         </template>
     </UModal>
 
+    <!-- Edit Confirmation Modal -->
+    <UModal v-model:open="isEditModalOpen">
+          <UButton label="Upravit doktora" id="edit-doctor-button" class="flex gap-6 mr-4 hidden" color="primary" variant="subtle" />
+          <template #header>
+              <h3 class="text-xl font-semibold">Upravit doktora</h3>
+          </template>
+          <template #body>
+              <PatientForm @submit="handleSubmit" :initial-data="selectedPatientData" />
+          </template>
+    </UModal>
+
   </div>
 </template>
 
@@ -66,6 +77,8 @@ const patientsData = ref<Patient[]>([])
 let simplifiedPatients = ref<Patient[]>([])
 const router = useRouter()
 const isDeleteModalOpen = ref(false)
+const isEditModalOpen = ref(false)
+let selectedPatientData = ref<Patient | null>(null)
 const patientToDelete = ref<string | null>(null)
 const patientStore = usePatientStore()
 
@@ -161,9 +174,8 @@ function closeModal() {
 }
 
 function editPatient(patient: Patient) {
-  patientsData.value = patient
-  isEditing.value = true
-  isModalOpen.value = true
+    isEditModalOpen.value = !isEditModalOpen.value
+    selectedPatientData.value = patient
 }
 
 function deletePatient(id: string) {
@@ -229,5 +241,9 @@ function handleSubmit(data: Patient) {
         description: isEditing.value ? 'Pacient byl úspěšně upraven' : 'Pacient byl úspěšně přidán',
         color: 'success'
     })
+
+    definePageMeta({
+        colorMode: "light",
+    });
 }
 </script>
