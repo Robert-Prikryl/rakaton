@@ -10,7 +10,7 @@
             <UButton label="Vytvořit nového pacienta" class="flex gap-6 mr-4" color="primary" variant="subtle" />
 
             <template #body>
-                <PatientForm @submit="handleSubmit" />
+                <PatientForm :onSubmit="handleSubmit" />
             </template>
         </UModal>
         
@@ -67,17 +67,12 @@ let simplifiedPatients = ref<Patient[]>([])
 const router = useRouter()
 const isDeleteModalOpen = ref(false)
 const patientToDelete = ref<string | null>(null)
+const patientStore = usePatientStore()
 
 onMounted(() => {
-    // Create a new instance of the store to ensure correct hydration
-    const patientStore = usePatientStore();
-    
-    // Execute seedPatients without arguments as it creates its own store instance
     seedPatients();
     
-    // Use import.meta.client to ensure we only access localStorage on client-side
     if (import.meta.client) {
-        // Get patients data from the store
         patientsData.value = patientStore.patients;
         console.log('Loaded patients:', patientsData.value);
     }
@@ -201,35 +196,38 @@ function navigateToPatient(id: string) {
 }
 
 function handleSubmit(data: Patient) {
-    patientStore.patients.push(data)
-    patientsData.value.push(data)
+    // Ensure patientStore.patients is initialized before pushing to it
+    if (!patientStore.patients) {
+        patientStore.patients = []
+    }
+    
+    // Create a new patient with the data
+    const newPatient = {
+        ...data,
+        id: data.id || Date.now().toString()
+    }
+    
+    // Add the patient to the store
+    patientStore.patients.push(newPatient)
+    
+    // Initialize patientsData if it's null
+    if (!patientsData.value) {
+        patientsData.value = []
+    }
+    
+    // Add to local data for table display
+    patientsData.value.push(newPatient)
     console.log('patientsData', patientsData.value)
 
-//   if (isEditing.value) {
-//     // Update existing patient
-//     const index = patientsData.value.findIndex(p => p.id === patientsData.value?.id)
-//     if (index !== -1) {
-//         patientsData.value[index] = { ...patientsData.value[index], ...data }
-//     }
-//   } else {
-//     // Add new patient
-//     patientsData.value.push({
-//       id: Date.now(),
-//       ...data
-//     })
-//   }
-  
-  // Close modal and reset state
-  closeModal()
-  definePageMeta({
-    colorMode: "light",
-    });
-  // Show success toast
-  const toast = useToast()
-  toast.add({
-    title: 'Success',
-    description: isEditing.value ? 'Patient updated successfully' : 'Patient added successfully',
-    color: 'success'
-  })
+    // Close modal and reset state
+    closeModal()
+    
+    // Show success toast
+    const toast = useToast()
+    toast.add({
+        title: 'Úspěch',
+        description: isEditing.value ? 'Pacient byl úspěšně upraven' : 'Pacient byl úspěšně přidán',
+        color: 'success'
+    })
 }
 </script>
