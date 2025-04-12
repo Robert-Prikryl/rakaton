@@ -25,7 +25,7 @@ export const seedDoctors = () => {
           insuranceId: '111',
           birthNumber: '900101/1234',
           dateOfBirth: '1990-01-01',
-          tasks: [
+          questions: [
             {
               id: 'task1',
               name: 'PET/CT vyšetření',
@@ -51,7 +51,7 @@ export const seedDoctors = () => {
           insuranceId: '201',
           birthNumber: '850612/1122',
           dateOfBirth: '1985-06-12',
-          tasks: [
+          questions: [
             {
               id: 'task1',
               name: 'PET/CT vyšetření',
@@ -77,7 +77,7 @@ export const seedDoctors = () => {
           insuranceId: '301',
           birthNumber: '800715/1234',
           dateOfBirth: '1980-07-15',
-          tasks: [
+          questions: [
             {
               id: 'task1',
               name: 'PET/CT vyšetření',
