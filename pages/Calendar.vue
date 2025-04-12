@@ -1,19 +1,27 @@
 <template>
     <div>
-        <SarcomaCalendar />
+      <SarcomaCalendar />
+      <MeetingForm />
     </div>
-</template>
+  </template>
+  
+  <script>
+  import SarcomaCalendar from '@/components/SarcomaCalendar.vue';
+  import MeetingForm from '@/components/MeetingForm.vue'; 
 
-<script>
-import SarcomaCalendar from '@/components/SarcomaCalendar.vue';
-
-export default {
+  definePageMeta({
+    colorMode: "light",
+  });
+  
+  export default {
     components: {
-        SarcomaCalendar,
+      SarcomaCalendar,
+      MeetingForm,  // Register it here
     },
-};
-</script>
-
-<style >
-/* Add your styles here if needed */
-</style>
+  };
+  </script>
+  
+  <style>
+  /* Your page styles */
+  </style>
+  
