@@ -79,8 +79,6 @@ const meetingStore = useMeetingStore()
 
 onMounted(() => {
     
-    seedMeetings();
-    
     if (import.meta.client) {
 
         const specificColumnMeetings = computed(() => 
