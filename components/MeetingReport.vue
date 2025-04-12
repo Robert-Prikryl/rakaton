@@ -38,11 +38,7 @@
         <!-- Notes -->
         <div>
           <h2 class="text-lg font-semibold text-gray-900 mb-2">Poznámky</h2>
-          <ul class="list-disc list-inside space-y-1">
-            <li v-for="(note, index) in activeMeeting.notes" :key="index" class="text-gray-600">
-              {{ note }}
-            </li>
-          </ul>
+          <p class="text-gray-600">{{ activeMeeting.notes }}</p>
         </div>
 
         <!-- Notification -->

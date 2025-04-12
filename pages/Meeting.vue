@@ -126,6 +126,13 @@ const columns: TableColumn<Meeting>[] = [
         h(resolveComponent('UButton'), {
           color: 'primary',
           variant: 'ghost',
+          icon: 'i-heroicons-magnifying-glass',
+          size: 'xs',
+          onClick: () => viewMeeting(row.original.id)
+        }),
+        h(resolveComponent('UButton'), {
+          color: 'primary',
+          variant: 'ghost',
           icon: 'i-heroicons-pencil-square',
           size: 'xs',
           onClick: () => navigateToSpecificMeeting(row.original.id)
@@ -137,6 +144,10 @@ const columns: TableColumn<Meeting>[] = [
 
 function navigateToMeeting() {
   router.push('/create_meeting')
+}
+
+function viewMeeting(id: string) {
+  router.push(`/meeting_viewer?id=${id}`)
 }
 
 function formatDate(date: string) {
