@@ -98,6 +98,7 @@ async function onSubmit(event: any) {
     } else if (state.email === 'doctor@rakaton.cz' && state.password === 'doctor') {
       const auth = useAuth()
       localStorage.setItem('role', 'doctor')
+      localStorage.setItem('doctorId', '1')
       auth.value.isAuthenticated = true
       router.push('/')
       toast.add({
