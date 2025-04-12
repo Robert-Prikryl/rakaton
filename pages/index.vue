@@ -190,7 +190,7 @@
         <h3 class="text-xl font-semibold mb-4">Potřebujete pomoc?</h3>
         <p class="text-gray-300">
           V případě technických problémů kontaktujte správce systému na:
-          <a href="mailto:support@rakaton.cz" class="text-pink-300 hover:text-pink-400">support@rakaton.cz</a>
+          <a href="mailto:support@motol.cz" class="text-pink-300 hover:text-pink-400">support@motol.cz</a>
         </p>
       </div>
     </div>
