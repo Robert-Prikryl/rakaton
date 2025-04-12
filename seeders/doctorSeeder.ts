@@ -13,6 +13,7 @@ export const seedDoctors = () => {
       email: 'jan.novak@hospital.cz',
       phone: '+420 777 123 456',
       specialization: 'Oncology',
+      password: 'password',
       patients: [],
       tasks: []
     } as Doctor);
@@ -24,6 +25,7 @@ export const seedDoctors = () => {
       email: 'marie.svobodova@hospital.cz',
       phone: '+420 777 234 567',
       specialization: 'Radiology',
+      password: 'password',
       patients: [],
       tasks: []
     } as Doctor);
@@ -35,6 +37,7 @@ export const seedDoctors = () => {
       email: 'petr.dvorak@hospital.cz',
       phone: '+420 777 345 678',
       specialization: 'Surgery',
+      password: 'password',
       patients: [],
       tasks: []
     } as Doctor);

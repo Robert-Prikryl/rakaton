@@ -8,6 +8,7 @@ export interface Doctor {
     email: string;
     phone: string;
     specialization: string;
+    password: string;
     patients: Patient[];
     tasks: Task[];
 }
