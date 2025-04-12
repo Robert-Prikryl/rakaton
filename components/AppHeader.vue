@@ -102,12 +102,13 @@
           variant="ghost"
           color="gray"
           class="md:hidden"
-          @click="isOpen = !isOpen"
+          @click="toggleMenu"
+          aria-label="Toggle menu"
         />
       </div>
 
       <!-- Mobile Navigation -->
-      <UCollapse v-model="isOpen" class="md:hidden">
+      <UCollapse :model-value="isOpen" class="md:hidden">
         <div class="flex flex-col space-y-1 py-4">
           <NuxtLink
             v-for="item in navigationItems"
@@ -115,6 +116,7 @@
             :to="item.path"
             class="px-4 py-3 rounded-md hover:bg-indigo-50 transition-colors duration-200 cursor-pointer font-medium"
             :class="$route.path === item.path ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700'"
+            @click="closeMenu"
           >
             {{ item.name }}
           </NuxtLink>
@@ -159,6 +161,21 @@ const userName = ref('User')
 const userRole = ref('')
 
 const isModalOpen = ref(false)
+
+// Toggle menu function
+const toggleMenu = () => {
+  isOpen.value = !isOpen.value
+}
+
+// Close menu function
+const closeMenu = () => {
+  isOpen.value = false
+}
+
+// Close menu when route changes
+watch(() => route.path, () => {
+  isOpen.value = false
+})
 
 // Notifications data - Mock data pro sarcomaboard schůzky v češtině
 const notifications = ref([
