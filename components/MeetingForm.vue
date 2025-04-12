@@ -6,7 +6,7 @@ import { useDoctorStore } from '@/stores/doctorStore'
 import type { Doctor } from '@/types/doctor'
 import { seedDoctors } from '@/seeders/doctorSeeder'
 import { useMeetingStore } from '~/stores/meetingStore'
-import { de, tr } from '@nuxt/ui/runtime/locale/index.js'
+import { de, id, tr } from '@nuxt/ui/runtime/locale/index.js'
 const emit = defineEmits()
 // Mock database of doctors
 const doctorStore = useDoctorStore()
@@ -58,6 +58,7 @@ type TeamMember = Doctor
 
 // Update the state type
 const state = reactive({
+  id: '',
   startDateTime: '',
   teamName: '',
   location: '',
@@ -67,24 +68,6 @@ const state = reactive({
   teamMembers: <TeamMember[]>[]
 })
 
-// Handle form submission
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  //toast.add({ title: 'Úspěch', description: 'MDT tým byl vytvořen.', color: 'success' })
-  emit('submitDate', event.data.startDateTime)
-  meetingStore.addMeeting({
-    id: '', // Provide a unique ID or generate one dynamically
-    date: new Date(event.data.startDateTime),
-    name: event.data.teamName ?? '',
-    place: event.data.location,
-    notification: event.data.notificationHours,
-    notes: event.data.notes ?? '',
-    description: event.data.description ?? '',
-    doctors: state.teamMembers,
-    isTeplate: false,
-    patientRecords: [] // Provide patient records or leave it as an empty array
-  })
-  console.log(event.data)
-}
 
 // Update the addTeamMember function
 function addTeamMember(doctor: Doctor) {
@@ -107,20 +90,98 @@ function removeTeamMember(index: number) {
   }
 }
 
-async function saveTemplate(event: FormSubmitEvent<Schema>) {
-  // Save the template logic here
+async function saveTemplate() {
+  // Use the state directly if you are saving the template without submitting
+  const { startDateTime, teamName, location, notificationHours, notes, description } = state;
+
+  // Check if required fields are present
+  if (!startDateTime || !location || notificationHours === undefined) {
+    console.error('Missing required fields');
+    return;
+  }
+
+  const lastMeeting = meetingStore.meetings[meetingStore.meetings.length - 1]
+  const newId = lastMeeting ? String(Number(lastMeeting.id) + 1) : '1'
+  // Save the template logic here (without scheduling a meeting)
   meetingStore.addMeeting({
-    id: '', // Provide a unique ID or generate one dynamically
-    date: new Date(event.data.startDateTime),
-    name: event.data.teamName ?? '',
-    place: event.data.location,
-    notification: event.data.notificationHours,
-    notes: event.data.notes ?? '',
-    description: event.data.description ?? '',
+    id: String(newId),  // Use the last meeting index for a unique ID
+    date: new Date(startDateTime), // Date when the template will be used
+    name: teamName ?? '',
+    place: location,
+    notification: notificationHours,
+    notes: notes ?? '',
+    description: description ?? '',
     doctors: state.teamMembers,
-    isTeplate: true,
-    patientRecords: [] // Provide patient records or leave it as an empty array
+    isTeplate: true, // Mark this as a template
+    patientRecords: [] // Empty patient records as it's a template
+  });
+
+  console.log('Template saved:', state);
+}
+
+function selectTemplate(template: any) {
+  state.id = template.id;
+  state.startDateTime = template.date.toISOString().slice(0, 16); // Format to datetime-local
+  state.teamName = template.name;
+  state.location = template.place;
+  state.notificationHours = template.notification;
+  state.notes = template.notes;
+  state.description = template.description;
+  state.teamMembers = template.doctors; // Prefill the team members
+}
+
+const templateOptions = computed(() =>
+  meetingStore.meetings
+    .filter(m => m.isTeplate)
+    .map((m, index) => ({
+      label: m.name || `Šablona ${index + 1}`,
+      value: m
+    }))
+  )
+
+  const selectedTemplate = ref(null)
+
+  watch(selectedTemplate, (template) => {
+    if (template) {
+      selectTemplate(template)
+    }
   })
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  // Check if form data exists
+  if (!event.data) {
+    console.error('Form data is undefined');
+    return;
+  }
+
+  
+  const lastMeeting = meetingStore.meetings[meetingStore.meetings.length - 1]
+  const newId = lastMeeting ? String(Number(lastMeeting.id) + 1) : '1'
+
+  // Extract data from the form
+  const { startDateTime, teamName, location, notificationHours, notes, description } = event.data;
+
+  // Ensure required fields
+  if (!startDateTime || !location || notificationHours === undefined) {
+    console.error('Missing required fields');
+    return;
+  }
+
+    // Proceed to schedule the meeting (add the actual meeting, not just a template)
+  meetingStore.addMeeting({
+    id: String(newId), // Unique ID
+    date: new Date(startDateTime),
+    name: teamName ?? '',
+    place: location,
+    notification: notificationHours,
+    notes: notes ?? '',
+    description: description ?? '',
+    doctors: state.teamMembers,
+    isTeplate: false, // Mark this as a scheduled meeting, not a template
+    patientRecords: [] // Provide patient records or leave it as an empty array
+  });
+
+  console.log('MDT Team scheduled:', event.data);
 }
 
 // Add watch for value changes
@@ -136,11 +197,21 @@ const items = computed(() => {
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-6 pt-10" @submit="onSubmit" @submitTemplate="saveTemplate">
+  <UForm :schema="schema" :state="state" class="space-y-6 pt-6" @submit="onSubmit" @submitTemplate="saveTemplate">
     <!-- Basic Information -->
     <UCard>
       <template #header>
-        <h3 class="text-lg font-semibold">Základní informace</h3>
+        <div class="flex justify-between items-center">
+          <h3 class="text-lg font-semibold">Základní informace</h3>
+          <USelect
+            v-model="selectedTemplate"
+            :items="templateOptions"
+            placeholder="Vyberte šablonu"
+            class="w-64"
+            option-attribute="label"
+            value-attribute="value"
+          />
+        </div>
       </template>
 
       <div class="space-y-4">
@@ -254,6 +325,8 @@ const items = computed(() => {
       >
         Uložit šablonu
       </UButton>
+
+      <!-- Create MDT Team Button -->
       <UButton
         type="submit"
         color="primary"
@@ -261,11 +334,10 @@ const items = computed(() => {
       >
         Vytvořit MDT tým
       </UButton>
-
-      
     </div>
   </UForm>
 </template>
+
 
 <style scoped>
 .autocomplete-results {

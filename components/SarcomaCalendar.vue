@@ -38,6 +38,8 @@ function getMeetingStatusColor(meetingDate: Date): 'success' | 'neutral' {
 const meetingColorsByDate = computed(() => {
   const map = new Map<string, 'success' | 'neutral'>()
   for (const meeting of meetingStore.meetings) {
+    if (meeting.isTeplate) continue // ⛔ Skip template meetings
+
     const date = new Date(meeting.date)
     const key = date.toDateString()
     const color = getMeetingStatusColor(date)
