@@ -11,9 +11,11 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@fontsource/roboto": "^5.2.5",
     "@nuxt/icon": "^1.11.0",
     "@nuxt/ui": "^3.0.2",
     "@pinia/nuxt": "^0.11.0",
+    "jspdf": "^3.0.1",
     "nuxt": "^3.16.2",
     "pinia": "^3.0.2",
     "tailwindcss": "^4.1.3",

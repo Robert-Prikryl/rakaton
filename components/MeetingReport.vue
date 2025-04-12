@@ -3,16 +3,30 @@
     <!-- Header Section -->
     <div class="border-b pb-4">
       <div class="flex justify-between items-start">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900 capitalize">{{ activeMeeting.name }}</h1>
-          <p class="text-gray-600 mt-1">{{ formatDateWithTime(activeMeeting.date) }}</p>
+        <div class="flex items-center gap-6">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 capitalize">{{ activeMeeting.name }}</h1>
+            <div class="flex items-center gap-2 mt-2">
+              <p class="text-gray-600 mt-1">{{ formatDateWithTime(activeMeeting.date) }}</p> 
+              <UBadge
+                :color="getMeetingStatusColor()"
+                :label="getMeetingStatus()"
+                size="lg"
+                class="capitalize"
+              />
+            </div>
+          </div>
         </div>
-        <UBadge
-          :color="getMeetingStatusColor()"
-          :label="getMeetingStatus()"
-          size="lg"
-          class="capitalize"
-        />
+        <div>
+          <UButton
+              @click="downloadReport"
+              class="capitalize item-center"
+              color="primary"
+              size="sm"
+            >
+              Stáhnout zápis pacienta
+            </UButton>
+        </div>
       </div>
     </div>
 
@@ -202,12 +216,18 @@
 import { computed } from 'vue';
 import { useMeetingStore } from '~/stores/meetingStore';
 import DoctorPreview from '~/components/DoctorPreview.vue';
+import { downloadDetailedReportUtils } from '@/utils/pdf_creator';
 
 const meetingStore = useMeetingStore();
 
 const activeMeeting = computed(() => meetingStore.activeMeeting);
 
 const patient = computed(() => activeMeeting.value?.patientRecords[0]); // CHANGE THIS FOR BETTER PATIENT SELECTION
+
+function downloadReport() {
+  console.log('downloadReport');
+  downloadReportUtils(activeMeeting.value, patient.value);
+}
 
 // Format date and time
 function formatDateTime(date: Date | string): string {
