@@ -422,6 +422,9 @@ function editTask(patientId: string, questionId: string, taskId: string): void {
     color: 'info'
   });
 }
+  definePageMeta({
+      colorMode: "light",
+  });
 </script>
 
 <style>
