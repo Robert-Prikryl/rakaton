@@ -1,68 +1,18 @@
 <script setup lang="ts">
 import * as v from 'valibot'
 import type { FormSubmitEvent } from '@nuxt/ui'
-import { defineEmits, reactive, ref } from 'vue'
-
+import { defineEmits, reactive, ref, watch, computed } from 'vue'
+import { useDoctorStore } from '@/stores/doctorStore'
+import type { Doctor } from '@/types/doctor'
+import { seedDoctors } from '@/seeders/doctorSeeder'
 const emit = defineEmits()
 // Mock database of doctors
-const doctorsDatabase = [
-  {
-    lastName: 'Novotný',
-    firstName: 'Jan',
-    email: 'jan.novotny@nemocnice.cz',
-    phone: '+420 777 123 456',
-    specialization: 'Onkologie'
-  },
-  {
-    lastName: 'Svobodová',
-    firstName: 'Marie',
-    email: 'marie.svobodova@nemocnice.cz',
-    phone: '+420 777 234 567',
-    specialization: 'Chirurgie'
-  },
-  {
-    lastName: 'Dvořák',
-    firstName: 'Petr',
-    email: 'petr.dvorak@nemocnice.cz',
-    phone: '+420 777 345 678',
-    specialization: 'Radiologie'
-  },
-  {
-    lastName: 'Černá',
-    firstName: 'Jana',
-    email: 'jana.cerna@nemocnice.cz',
-    phone: '+420 777 456 789',
-    specialization: 'Neurologie'
-  },
-  {
-    lastName: 'Procházka',
-    firstName: 'Tomáš',
-    email: 'tomas.prochazka@nemocnice.cz',
-    phone: '+420 777 567 890',
-    specialization: 'Urologie'
-  },
-  {
-    lastName: 'Kučerová',
-    firstName: 'Eva',
-    email: 'eva.kucerova@nemocnice.cz',
-    phone: '+420 777 678 901',
-    specialization: 'Onkologie'
-  },
-  {
-    lastName: 'Veselý',
-    firstName: 'Martin',
-    email: 'martin.vesely@nemocnice.cz',
-    phone: '+420 777 789 012',
-    specialization: 'Pneumologie'
-  },
-  {
-    lastName: 'Horáková',
-    firstName: 'Lucie',
-    email: 'lucie.horakova@nemocnice.cz',
-    phone: '+420 777 890 123',
-    specialization: 'Chirurgie'
-  }
-]
+const doctorStore = useDoctorStore()
+const value = ref<Doctor | null>(null)
+
+onMounted(() => {
+  seedDoctors()
+})
 
 const teamTypes = ref([
   'ORL',
@@ -85,51 +35,50 @@ const schema = v.object({
   notificationHours: v.number('Musí být alespoň 1 hodina'),
   notes: v.optional(v.string()),
   teamMembers: v.optional(v.object({
-    lastName: v.optional(v.string()),
-    firstName: v.optional(v.string()),
+    surname: v.optional(v.string()),
+    firstname: v.optional(v.string()),
     email: v.pipe(v.optional(v.string()), v.optional(v.string())),
     phone: v.optional(v.string()),
-    specialization: v.optional(v.string()),
-    note: v.optional(v.string())
+    specialization: v.optional(v.string())
   }))
 })
 
 type Schema = v.InferOutput<typeof schema>
 
-// Form state
+// Add this type definition
+type TeamMember = {
+  surname: string
+  firstname: string
+  email: string
+  phone: string
+  specialization: string
+}
+
+// Update the state type
 const state = reactive({
   startDateTime: '',
   teamName: '',
   location: '',
   notificationHours: 12,
   notes: '',
-  teamMembers: [{
-    lastName: '',
-    firstName: '',
-    email: '',
-    phone: '',
-    specialization: '',
-    note: ''
-  }]
+  teamMembers: <TeamMember[]>[]
 })
 
 // Handle form submission
-const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   //toast.add({ title: 'Úspěch', description: 'MDT tým byl vytvořen.', color: 'success' })
   emit('submitDate', event.data.startDateTime)
   console.log(event.data)
 }
 
-// Add/remove team members
-function addTeamMember() {
+// Update the addTeamMember function
+function addTeamMember(doctor: Doctor) {
   state.teamMembers.push({
-    lastName: '',
-    firstName: '',
-    email: '',
-    phone: '',
-    specialization: '',
-    note: ''
+    surname: doctor.surname,
+    firstname: doctor.firstname,
+    email: doctor.email,
+    phone: doctor.phone,
+    specialization: doctor.specialization
   })
 }
 
@@ -139,62 +88,15 @@ function removeTeamMember(index: number) {
   }
 }
 
-// Function to search doctors
-function searchDoctors(query: string) {
-  if (!query) return []
-  const lowerQuery = query.toLowerCase().trim()
-  return doctorsDatabase.filter(doctor => {
-    const searchString = `${doctor.lastName} ${doctor.firstName} ${doctor.specialization}`.toLowerCase()
-    return searchString.includes(lowerQuery)
-  })
-}
+// Add watch for value changes
+watch(value, (newDoctor) => {
+  addTeamMember(newDoctor as Doctor)
+})
 
-// Function to handle doctor selection
-function handleDoctorSelect(doctor: typeof doctorsDatabase[0], index: number) {
-  state.teamMembers[index] = {
-    ...state.teamMembers[index],
-    ...doctor,
-    note: state.teamMembers[index].note // Preserve existing note
-  }
-}
-
-// Reactive search results
-const searchResults = ref<typeof doctorsDatabase>([])
-const searchQuery = ref('')
-
-// Function to handle search input
-function handleSearchInput(value: string, index: number) {
-  searchQuery.value = value
-  searchResults.value = searchDoctors(value)
-}
-
-// Function to get display value for selected doctor
-function getDisplayValue(index: number): DoctorItem | undefined {
-  const member = state.teamMembers[index]
-  if (!member.lastName && !member.firstName) return undefined
-  return {
-    lastName: member.lastName,
-    firstName: member.firstName,
-    email: member.email,
-    phone: member.phone,
-    specialization: member.specialization
-  }
-}
-
-// Function to get search value
-function getSearchValue(index: number): string {
-  const member = state.teamMembers[index]
-  return `${member.lastName} ${member.firstName}`.trim()
-}
-
-// Type for doctor item
-type DoctorItem = {
-  lastName: string
-  firstName: string
-  email: string
-  phone: string
-  specialization: string
-}
+// Computed property for filtered doctors
+const items = computed(() => {
+  return doctorStore.doctors
+})
 
 </script>
 
@@ -256,55 +158,41 @@ type DoctorItem = {
       <template #header>
         <div class="flex justify-between items-center">
           <h3 class="text-lg font-semibold">Členové týmu</h3>
-          <UButton
-            color="primary"
-            variant="soft"
-            icon="i-heroicons-plus"
-            @click="addTeamMember"
-          >
-            Přidat člena
-          </UButton>
         </div>
       </template>
+
+      <div class="grid grid-cols-1 gap-4 mb-4">
+          <UFormField label="Vyhledat lékaře" :name="`teamMembers.${index}.search`">
+            <UInputMenu 
+              v-model="value" 
+              :items="items"
+              value-attribute="id"
+            >
+              <template #item="{ item }">
+                <div class="flex items-center gap-2">
+                  <div>
+                    <div class="font-medium">{{ item.surname }} {{ item.firstname }}</div>
+                    <div class="text-sm text-gray-500">{{ item.specialization }}</div>
+                    <div class="text-sm text-gray-500">{{ item.email }}</div>
+                  </div>
+                </div>
+              </template>
+            </UInputMenu>
+          </UFormField>
+        </div>
 
       <div v-for="(member, index) in state.teamMembers" :key="index" class="space-y-4">
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
           <div class="flex justify-between items-center mb-4">
-            <h4 class="text-lg font-medium">Člen {{ index + 1 }}</h4>
+            <DoctorPreview :doctor="member" />
             <UButton
-              v-if="state.teamMembers.length > 1"
               color="error"
               variant="soft"
               icon="i-heroicons-trash"
               @click="removeTeamMember(index)"
             />
           </div>
-
-          <div class="grid grid-cols-1 gap-4">
-            <UFormField label="Vyhledat lékaře" :name="`teamMembers.${index}.search`">
-              <UInputMenu
-                :model-value="getDisplayValue(index)"
-                :items="searchResults"
-                :search="getSearchValue(index)"
-                @update:search="(value: string) => handleSearchInput(value, index)"
-                @select="(doctor: DoctorItem) => handleDoctorSelect(doctor, index)"
-                class="w-full"
-                placeholder="Zadejte jméno nebo specializaci lékaře"
-                :loading="false"
-                :searchable="true"
-              >
-                <template #item="{ item }">
-                  <div class="flex items-center gap-2">
-                    <div>
-                      <div class="font-medium">{{ item.lastName }} {{ item.firstName }}</div>
-                      <div class="text-sm text-gray-500">{{ item.specialization }}</div>
-                      <div class="text-sm text-gray-500">{{ item.email }}</div>
-                    </div>
-                  </div>
-                </template>
-              </UInputMenu>
-            </UFormField>
-          </div>
+          
         </div>
 
         <UDivider v-if="index < state.teamMembers.length - 1" class="my-6" />
