@@ -19,6 +19,7 @@
         </div>
         <div>
           <UButton
+              v-if="activeMeeting.reports && activeMeeting.reports.length > 0"
               @click="downloadReport"
               class="capitalize item-center"
               color="primary"
