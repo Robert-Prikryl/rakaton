@@ -25,23 +25,47 @@
           <!-- User info and logout button -->
           <div class="flex items-center ml-6 pl-6 border-l border-gray-200">
             <div class="flex items-center gap-3">
-              <UAvatar
-                :text="getInitials(userName)"
-                color="indigo"
-                class="text-white"
-              />
-              <div class="flex flex-col">
-                <span class="font-semibold text-gray-800">{{ userName }}</span>
-                <span class="text-xs text-gray-500">{{ userRole }}</span>
-              </div>
-              <UButton
-                icon="i-heroicons-arrow-right-on-rectangle"
-                variant="ghost"
-                color="gray"
-                aria-label="Logout"
-                class="ml-2 cursor-pointer hover:bg-red-50 hover:text-red-600 transition-colors"
-                @click="handleLogout"
-              />
+              <UDropdownMenu
+                class="hidden lg:block"
+                :modal="false"
+                :items="[
+                  {
+                    label: 'Úlohy',
+                    icon: 'i-lucide-user',
+                    to: '/tasks',
+                  },
+                  {
+                    label: 'Odhlásit se',
+                    icon: 'i-lucide-log-out',
+                    onSelect: async (e) => {
+                      handleLogout()
+                    },
+                  },
+                ]"
+                :content="{
+                  align: 'center',
+                  side: 'bottom',
+                  sideOffset: 8,
+                }"
+              >
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  class="flex items-center gap-2"
+                >
+                  <div class="flex items-center gap-2">
+                    <UAvatar
+                      :text="getInitials(userName)"
+                      color="indigo"
+                      class="text-white"
+                    />
+                    <div class="flex flex-col text-left">
+                      <span class="font-semibold text-gray-800">{{ userName }}</span>
+                      <span class="text-xs text-gray-500">{{ userRole }}</span>
+                    </div>
+                  </div>
+                </UButton>
+              </UDropdownMenu>
             </div>
           </div>
         </div>
@@ -122,18 +146,19 @@ onBeforeMount(() => {
   // Set the user name and role based on the logged in user
   if (role === 'doctor') {
     userName.value = 'Dr. Smith'
-    userRole.value = 'Doctor'
+    userRole.value = 'Doktor'
     navigationItems.value = [
-      { name: 'Patients', path: '/patients' },
-      { name: 'Meetings', path: '/meeting' }
+      { name: 'Pacienti', path: '/patients' },
+      { name: 'Schůzky', path: '/meeting' },
+      { name: 'Vytvořit schůzku', path: '/create_meeting' }
     ]
   } else if (role === 'manager') {
     userName.value = 'Manager Johnson'
     userRole.value = 'Manager'
     navigationItems.value = [
-      { name: 'Patients', path: '/patients' },
-      { name: 'Meetings', path: '/meeting' },
-      { name: 'Create Meetings', path: '/create_meeting' }
+      { name: 'Pacienti', path: '/patients' },
+      { name: 'Schůzky', path: '/meeting' },
+      { name: 'Vytvořit schůzku', path: '/create_meeting' }
     ]
   } else if (role === 'admin') {
     userName.value = 'Admin User'
