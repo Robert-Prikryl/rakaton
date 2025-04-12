@@ -21,9 +21,9 @@ import SarcomaCalendar from '@/components/SarcomaCalendar.vue';  // Adjust the p
 definePageMeta({
   colorMode: "light",
 });
-const highlightedDates = ref<Date[]>([])
+const highlightedDates = ref<string[]>([])
 
-function handleDateSubmission(date: Date) {
+function handleDateSubmission(date: string) {
   // Handle the date submission from the MeetingForm component
   console.log('Date submitted:', date);
   highlightedDates.value.push(date);
@@ -33,5 +33,6 @@ function handleDateSubmission(date: Date) {
 
 
 <style scoped>
+
 /* Additional styling for the light mode sidebar */
 </style>
