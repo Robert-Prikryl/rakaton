@@ -25,7 +25,8 @@ export const seedDoctors = () => {
           insuranceId: '111',
           birthNumber: '900101/1234',
           dateOfBirth: '1990-01-01',
-          questions: [
+          questions: {
+            tasks: [
             {
               id: 'task1',
               name: 'PET/CT vyšetření',
@@ -41,6 +42,7 @@ export const seedDoctors = () => {
               deadline: new Date('2025-05-05T00:00:00'),
             }
           ]
+          }
         } as Patient,
         {
           id: '2',
@@ -51,10 +53,11 @@ export const seedDoctors = () => {
           insuranceId: '201',
           birthNumber: '850612/1122',
           dateOfBirth: '1985-06-12',
-          questions: [
-            {
-              id: 'task1',
-              name: 'PET/CT vyšetření',
+          questions: {
+            tasks: [
+              {
+                id: 'task1',
+                name: 'PET/CT vyšetření',
               description: 'Objednat PET/CT vyšetření pro staging onemocnění',
               createdAt: new Date('2025-04-10T11:00:00'),
               deadline: new Date('2025-04-25T00:00:00'),
@@ -67,6 +70,7 @@ export const seedDoctors = () => {
               deadline: new Date('2025-05-05T00:00:00'),
             }
           ]
+          }
         } as Patient,
         {
           id: '3',
@@ -77,13 +81,15 @@ export const seedDoctors = () => {
           insuranceId: '301',
           birthNumber: '800715/1234',
           dateOfBirth: '1980-07-15',
-          questions: [
-            {
-              id: 'task1',
-              name: 'PET/CT vyšetření',
-              description: 'Objednat PET/CT vyšetření pro staging onemocnění',
-            }
-          ]
+          questions: {
+            tasks: [
+              {
+                id: 'task1',
+                name: 'PET/CT vyšetření',
+                description: 'Objednat PET/CT vyšetření pro staging onemocnění',
+              }
+            ]
+          }
         } as Patient
       ],
       tasks: []

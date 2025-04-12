@@ -239,7 +239,7 @@ onBeforeMount(() => {
   
   // Set the user name and role based on the logged in user
   if (role === 'doctor') {
-    userName.value = 'Dr. Smith'
+    userName.value = 'Jan Novák'
     userRole.value = 'Doktor'
     navigationItems.value = [
       { name: 'Pacienti', path: '/patients' },

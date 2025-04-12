@@ -22,21 +22,98 @@
             </div>
           </div>
         </template>
+
+        {{console.log('HAS PATIENT TASKS: ', hasPatientTasks(patient))}}
           
         <!-- Tasks for this patient -->
         <div v-if="hasPatientTasks(patient)" class="space-y-4">
-          <div v-for="question in patient.questions || []" :key="question.id">
-            <div class="mb-2">
-              <UBadge color="primary" size="md">Dotaz</UBadge>
-              <p class="text-sm font-medium mt-1">{{ question.question || 'Bez dotazu' }}</p>
-              <p class="text-xs text-gray-500 mt-1">{{ question.note || '' }}</p>
+          <div v-if="Array.isArray(patient.questions)">
+            <div v-for="question in patient.questions" :key="question.id">
+              <UCard 
+                v-for="task in question.tasks || []" 
+                :key="task.id" 
+                class="mb-3 p-4"
+              >
+                {{console.log('TASK: ', task)}}
+                <div class="flex items-start justify-between">
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                      <p class="font-semibold text-lg">{{ task.name }}</p>
+                      <UBadge 
+                        :color="getTaskStatusColor(task)" 
+                        :label="getTaskStatus(task)"
+                        size="sm"
+                      />
+                    </div>
+                    
+                    <UDivider class="my-2" />
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      <div class="flex items-center">
+                        <UIcon name="i-heroicons-information-circle" class="mr-2 text-gray-400" />
+                        <p class="text-sm text-gray-700">{{ task.description }}</p>
+                      </div>
+                      <div class="flex items-center">
+                        <UIcon name="i-heroicons-calendar" class="mr-2 text-gray-400" />
+                        <p class="text-xs text-gray-600">Vytvořeno: {{ formatDateWithTime(task.createdAt) }}</p>
+                      </div>
+                      <div class="flex items-center">
+                        <UIcon name="i-heroicons-clock" class="mr-2 text-gray-400" />
+                        <p class="text-xs" :class="isDeadlinePassed(task.deadline) && !task.realizedAt ? 'text-red-500 font-bold' : 'text-gray-600'">
+                          Termín: {{ formatDateWithTime(task.deadline) }}
+                        </p>
+                      </div>
+                      <div class="flex items-center">
+                        <UIcon name="i-heroicons-bell" class="mr-2 text-gray-400" />
+                        <p class="text-xs text-gray-600">Notifikace: {{ task.notificationTime }} hodin před termínem</p>
+                      </div>
+                      <div class="flex items-center">
+                        <UIcon name="i-heroicons-check-circle" class="mr-2" :class="task.realizedAt ? 'text-green-500' : 'text-gray-400'" />
+                        <p class="text-xs" :class="task.realizedAt ? 'text-green-600' : 'text-red-500'">
+                          {{ task.realizedAt ? 'Dokončeno: ' + formatDateWithTime(task.realizedAt) : 'Není dokončeno' }}
+                        </p>
+                      </div>
+                      <div class="flex items-center">
+                        <UIcon name="i-heroicons-user" class="mr-2 text-gray-400" />
+                        <p class="text-xs text-gray-600">Odpovědná osoba: {{ task.responsible ? (task.responsible.firstname + ' ' + task.responsible.surname) : 'Neurčeno' }}</p>
+                      </div>
+                    </div>
+                    
+                    <UDivider class="my-2" />
+                    
+                    <!-- Task actions -->
+                    <div class="flex justify-end gap-2" v-if="!task.realizedAt">
+                      <UButton
+                        color="success"
+                        variant="soft"
+                        size="sm"
+                        icon="i-heroicons-check"
+                        @click="markTaskComplete(patient.id, '', task.id)"
+                      >
+                        Označit jako dokončené
+                      </UButton>
+                      <UButton
+                        color="primary"
+                        variant="ghost"
+                        size="sm"
+                        icon="i-heroicons-pencil-square"
+                        @click="editTask(patient.id, '', task.id)"
+                      >
+                        Upravit
+                      </UButton>
+                    </div>
+                  </div>
+                </div>
+              </UCard>
             </div>
-            
+          </div>
+          <div v-else-if="patient.questions && 'tasks' in patient.questions">
             <UCard 
-              v-for="task in question.tasks || []" 
+              v-for="task in (patient.questions as QuestionsObject).tasks" 
               :key="task.id" 
               class="mb-3 p-4"
             >
+              {{console.log('TASK: ', task)}}
               <div class="flex items-start justify-between">
                 <div class="flex-1">
                   <div class="flex items-center justify-between">
@@ -90,7 +167,7 @@
                       variant="soft"
                       size="sm"
                       icon="i-heroicons-check"
-                      @click="markTaskComplete(patient.id, question.id, task.id)"
+                      @click="markTaskComplete(patient.id, '', task.id)"
                     >
                       Označit jako dokončené
                     </UButton>
@@ -99,7 +176,7 @@
                       variant="ghost"
                       size="sm"
                       icon="i-heroicons-pencil-square"
-                      @click="editTask(patient.id, question.id, task.id)"
+                      @click="editTask(patient.id, '', task.id)"
                     >
                       Upravit
                     </UButton>
@@ -128,11 +205,24 @@
 <script lang="ts" setup>
 import { seedDoctors } from '~/seeders/doctorSeeder';
 import type { Doctor } from '~/types/doctor';
-import type { Patient, Task, Question } from '~/types/patient';
+import type { Patient, Task } from '~/types/patient';
+
+// Define interface for the question structures
+interface Question {
+  id: string;
+  name: string;
+  tasks?: Task[];
+}
+
+// Define interface for questions object structure (as seen in some patients)
+interface QuestionsObject {
+  id?: string;
+  tasks: Task[];
+}
 
 // Define interface for the extended patient with questions
 interface ExtendedPatient extends Patient {
-  questions?: Question[];
+  questions?: Question[] | QuestionsObject;
 }
 
 const patientStore = usePatientStore();
@@ -162,9 +252,17 @@ onMounted(() => {
 
 // Check if a patient has any tasks
 function hasPatientTasks(patient: ExtendedPatient): boolean {
-  if (!patient.questions || patient.questions.length === 0) return false;
+  console.log('Patient: ', patient);
+  if (!patient.questions) return false;
   
-  return patient.questions.some(q => q.tasks && q.tasks.length > 0);
+  // Handle both array and object structure
+  if (Array.isArray(patient.questions)) {
+    return patient.questions.length > 0;
+  } else if ('tasks' in patient.questions && Array.isArray(patient.questions.tasks)) {
+    return patient.questions.tasks.length > 0;
+  }
+  
+  return false;
 }
 
 // Format date display
@@ -273,18 +371,30 @@ async function markTaskComplete(patientId: string, questionId: string, taskId: s
   
   // Find the patient in the doctor's patients
   const patient = doctor.value.patients.find(p => p.id === patientId) as ExtendedPatient;
-  if (!patient || !patient.questions) return;
+  if (!patient) return;
   
-  // Find the question
-  const question = patient.questions.find(q => q.id === questionId);
-  if (!question || !question.tasks) return;
-  
-  // Find and update the task
-  const task = question.tasks.find(t => t.id === taskId);
-  if (!task) return;
-  
-  // Mark as complete
-  task.realizedAt = new Date();
+  if (Array.isArray(patient.questions)) {
+    // Handle array structure
+    const question = patient.questions.find(q => q.id === questionId);
+    if (!question || !question.tasks) return;
+    
+    // Find and update the task
+    const task = question.tasks.find(t => t.id === taskId);
+    if (!task) return;
+    
+    // Mark as complete
+    task.realizedAt = new Date();
+  } else if (patient.questions && 'tasks' in patient.questions) {
+    // Handle object structure with type assertion
+    const questionsObj = patient.questions as QuestionsObject;
+    const task = questionsObj.tasks.find((t: Task) => t.id === taskId);
+    if (!task) return;
+    
+    // Mark as complete
+    task.realizedAt = new Date();
+  } else {
+    return;
+  }
   
   // Here you would typically update the data in your store/backend
   // For now just log the completion
@@ -293,7 +403,7 @@ async function markTaskComplete(patientId: string, questionId: string, taskId: s
   // Show success toast
   useToast().add({
     title: 'Úkol dokončen',
-    description: `Úkol "${task.name}" byl označen jako dokončený`,
+    description: `Úkol byl označen jako dokončený`,
     icon: 'i-heroicons-check-circle',
     color: 'success'
   });
