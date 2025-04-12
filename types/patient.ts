@@ -41,8 +41,8 @@ export interface Question {
     reciepient: Doctor;
     question: string;
     note: string;
-    result: ResultType;
-    tasks: Task[];
+    result?: ResultType;
+    tasks?: Task[];
 }
 
 export interface PatientRecord extends Patient {
