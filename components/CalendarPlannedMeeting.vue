@@ -45,10 +45,10 @@
   
         <!-- Notes -->
         <div>
-          <h2 class="text-base font-semibold text-gray-900 mb-1">Poznámky</h2>
-          <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
-            <li v-for="(note, index) in activeMeeting.notes" :key="index">{{ note }}</li>
-          </ul>
+        <h2 class="text-base font-semibold text-gray-900 mb-1">Poznámky</h2>
+        <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+            <li v-for="(note, index) in activeMeeting.notes.split('\n')" :key="index">{{ note }}</li>
+        </ul>
         </div>
   
         <!-- Notification -->

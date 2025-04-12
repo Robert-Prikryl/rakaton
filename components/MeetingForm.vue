@@ -5,10 +5,13 @@ import { defineEmits, reactive, ref, watch, computed } from 'vue'
 import { useDoctorStore } from '@/stores/doctorStore'
 import type { Doctor } from '@/types/doctor'
 import { seedDoctors } from '@/seeders/doctorSeeder'
+import { useMeetingStore } from '~/stores/meetingStore'
+import { de, tr } from '@nuxt/ui/runtime/locale/index.js'
 const emit = defineEmits()
 // Mock database of doctors
 const doctorStore = useDoctorStore()
 const value = ref<Doctor | null>(null)
+const meetingStore = useMeetingStore()
 
 onMounted(() => {
   seedDoctors()
@@ -34,25 +37,24 @@ const schema = v.object({
   location: v.string('Místo setkání je povinné'),
   notificationHours: v.number('Musí být alespoň 1 hodina'),
   notes: v.optional(v.string()),
-  teamMembers: v.optional(v.object({
-    surname: v.optional(v.string()),
-    firstname: v.optional(v.string()),
-    email: v.pipe(v.optional(v.string()), v.optional(v.string())),
-    phone: v.optional(v.string()),
-    specialization: v.optional(v.string())
-  }))
+  description: v.optional(v.string()),
+  teamMembers: v.optional(v.array(v.object({
+    id: v.string('ID je povinné'),
+    firstname: v.string('Jméno je povinné'),
+    surname: v.string('Příjmení je povinné'),
+    email: v.pipe(v.string('Email je povinný'), v.email('Neplatný formát emailu')),
+    phone: v.string('Telefonní číslo je povinné'),
+    specialization: v.string('Odbornost je povinná'),
+    password: v.string('Heslo je povinné'),
+    patients: v.array(v.object({})),  // Můžete definovat typ pro Patient, pokud je potřeba
+    tasks: v.array(v.object({})),     // Můžete definovat typ pro Task, pokud je potřeba
+  })))
 })
 
 type Schema = v.InferOutput<typeof schema>
 
 // Add this type definition
-type TeamMember = {
-  surname: string
-  firstname: string
-  email: string
-  phone: string
-  specialization: string
-}
+type TeamMember = Doctor
 
 // Update the state type
 const state = reactive({
@@ -61,6 +63,7 @@ const state = reactive({
   location: '',
   notificationHours: 12,
   notes: '',
+  description: '',
   teamMembers: <TeamMember[]>[]
 })
 
@@ -68,17 +71,33 @@ const state = reactive({
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   //toast.add({ title: 'Úspěch', description: 'MDT tým byl vytvořen.', color: 'success' })
   emit('submitDate', event.data.startDateTime)
+  meetingStore.addMeeting({
+    id: '', // Provide a unique ID or generate one dynamically
+    date: new Date(event.data.startDateTime),
+    name: event.data.teamName ?? '',
+    place: event.data.location,
+    notification: event.data.notificationHours,
+    notes: event.data.notes ?? '',
+    description: event.data.description ?? '',
+    doctors: state.teamMembers,
+    isTeplate: false,
+    patientRecords: [] // Provide patient records or leave it as an empty array
+  })
   console.log(event.data)
 }
 
 // Update the addTeamMember function
 function addTeamMember(doctor: Doctor) {
   state.teamMembers.push({
+    id: doctor.id ?? '',  // Předpokládá, že `doctor.id` existuje
     surname: doctor.surname,
     firstname: doctor.firstname,
     email: doctor.email,
     phone: doctor.phone,
-    specialization: doctor.specialization
+    specialization: doctor.specialization,
+    password: doctor.password,  // Předpokládá, že `doctor.password` existuje
+    patients: doctor.patients,  // Předpokládá, že `doctor.patients` existuje
+    tasks: doctor.tasks         // Předpokládá, že `doctor.tasks` existuje
   })
 }
 
@@ -86,6 +105,22 @@ function removeTeamMember(index: number) {
   if (state.teamMembers.length > 1) {
     state.teamMembers.splice(index, 1)
   }
+}
+
+async function saveTemplate(event: FormSubmitEvent<Schema>) {
+  // Save the template logic here
+  meetingStore.addMeeting({
+    id: '', // Provide a unique ID or generate one dynamically
+    date: new Date(event.data.startDateTime),
+    name: event.data.teamName ?? '',
+    place: event.data.location,
+    notification: event.data.notificationHours,
+    notes: event.data.notes ?? '',
+    description: event.data.description ?? '',
+    doctors: state.teamMembers,
+    isTeplate: true,
+    patientRecords: [] // Provide patient records or leave it as an empty array
+  })
 }
 
 // Add watch for value changes
@@ -101,7 +136,7 @@ const items = computed(() => {
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-6 pt-10" @submit="onSubmit">
+  <UForm :schema="schema" :state="state" class="space-y-6 pt-10" @submit="onSubmit" @submitTemplate="saveTemplate">
     <!-- Basic Information -->
     <UCard>
       <template #header>
@@ -137,6 +172,15 @@ const items = computed(() => {
             type="number"
             :min="1"
             :max="72"
+            class="w-full"
+          />
+        </UFormField>
+
+        <UFormField label="Popis" name="description">
+          <UTextarea
+            v-model="state.description"
+            :rows="3"
+            placeholder="Zadejte popis"
             class="w-full"
           />
         </UFormField>
@@ -200,7 +244,16 @@ const items = computed(() => {
     </UCard>
 
     <!-- Submit Button -->
-    <div class="flex justify-end">
+    <div class="flex justify-end space-x-4">
+
+      <!-- Save Template Button -->
+      <UButton
+        color="secondary"
+        size="lg"
+        @click="saveTemplate"
+      >
+        Uložit šablonu
+      </UButton>
       <UButton
         type="submit"
         color="primary"
@@ -208,6 +261,8 @@ const items = computed(() => {
       >
         Vytvořit MDT tým
       </UButton>
+
+      
     </div>
   </UForm>
 </template>
@@ -218,4 +273,3 @@ const items = computed(() => {
   overflow-y: auto;
 }
 </style>
-
