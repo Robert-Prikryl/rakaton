@@ -4,33 +4,52 @@
       <h1 class="text-3xl font-bold">Patients</h1>
       
       <!-- Search Bar -->
-      <div class="w-72">
+      <div class="w-auto flex">
+
+        <UModal title="Modal with title">
+            <UButton label="Vytvořit nového pacienta" class="flex gap-6 mr-4" color="primary" variant="subtle" />
+
+            <template #body>
+                <PatientForm @submit="handleSubmit" />
+            </template>
+        </UModal>
+        
         <UInput
           v-model="searchQuery"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search patients..."
-          color="gray"
+          placeholder="Search by name..."
+          color="primary"
+          class="shadow-sm"
         />
       </div>
     </div>
-    
-    <UModal title="Modal with title">
-      <UButton label="Open" color="neutral" variant="subtle" />
-
-      <template #body>
-        <Placeholder class="h-48" />
-      </template>
-    </UModal>
 
     <!-- Patients Table -->
     <ClientOnly>
-      <UTable
+      <UTable 
+        loading-color="primary" 
+        loading-animation="carousel"
         :columns="columns"
         :data="patientsData"
         :search="searchQuery"
-        :sort="{ column: 'name' }"
+        :sort="{ column: 'name', direction: 'asc' }"
       />
     </ClientOnly>
+
+    <!-- Delete Confirmation Modal -->
+    <UModal v-model:open="isDeleteModalOpen">
+        <UButton label="Vymazat pacienta" id="delete-patient-button" class="flex gap-6 mr-4 hidden" color="primary" variant="subtle" />
+        <template #header>
+            <h3 class="text-xl font-semibold">Smazat pacienta</h3>
+        </template>
+        <template #body>
+            <DeleteForm 
+                @close="handleClose"
+                @confirm="confirmDelete"
+            />
+        </template>
+    </UModal>
+
   </div>
 </template>
 
@@ -45,6 +64,9 @@ const isModalOpen = ref(false)
 const isEditing = ref(false)
 const patientsData = ref<Patient[]>([])
 let simplifiedPatients = ref<Patient[]>([])
+const router = useRouter()
+const isDeleteModalOpen = ref(false)
+const patientToDelete = ref<string | null>(null)
 
 onMounted(() => {
     // Create a new instance of the store to ensure correct hydration
@@ -101,6 +123,13 @@ const columns: TableColumn<Patient>[] = [
         h(resolveComponent('UButton'), {
           color: 'primary',
           variant: 'ghost',
+          icon: 'i-heroicons-magnifying-glass',
+          size: 'xs',
+          onClick: () => navigateToPatient(row.original.id)
+        }),
+        h(resolveComponent('UButton'), {
+          color: 'primary',
+          variant: 'ghost',
           icon: 'i-heroicons-pencil-square',
           size: 'xs',
           onClick: () => editPatient(row.original)
@@ -116,6 +145,12 @@ const columns: TableColumn<Patient>[] = [
     }
   }
 ]
+
+function handleClose() {
+    isDeleteModalOpen.value = !isDeleteModalOpen.value
+    isDeleteModalOpen.value = false
+    patientToDelete.value = null
+}
 
 // Modal functions
 function openAddModal() {
@@ -137,25 +172,52 @@ function editPatient(patient: Patient) {
 }
 
 function deletePatient(id: string) {
-  if (confirm('Are you sure you want to delete this patient?')) {
-    patientsData.value = patientsData.value.filter(p => p.id !== id)
+  patientToDelete.value = id
+  isDeleteModalOpen.value = true
+  document.getElementById('delete-patient-button')?.click()
+}
+
+function confirmDelete() {
+  if (patientToDelete.value) {
+    patientsData.value = patientsData.value.filter(p => p.id !== patientToDelete.value)
+    
+    const toast = useToast()
+    toast.add({
+      title: 'Úspěch',
+      description: 'Pacient byl úspěšně smazán',
+      color: 'green',
+      icon: 'i-heroicons-check-circle'
+    })
+    
+    isDeleteModalOpen.value = false
+    patientToDelete.value = null
   }
 }
 
+function navigateToPatient(id: string) {
+  router.push(`/patient?id=${id}`)
+  // Alternative format if you prefer cleaner URLs:
+  // router.push(`/patient/${id}`)
+}
+
 function handleSubmit(data: Patient) {
-  if (isEditing.value) {
-    // Update existing patient
-    const index = patients.value.findIndex(p => p.id === patientsData.value?.id)
-    if (index !== -1) {
-      patients.value[index] = { ...patients.value[index], ...data }
-    }
-  } else {
-    // Add new patient
-    patients.value.push({
-      id: Date.now(),
-      ...data
-    })
-  }
+    patientStore.patients.push(data)
+    patientsData.value.push(data)
+    console.log('patientsData', patientsData.value)
+
+//   if (isEditing.value) {
+//     // Update existing patient
+//     const index = patientsData.value.findIndex(p => p.id === patientsData.value?.id)
+//     if (index !== -1) {
+//         patientsData.value[index] = { ...patientsData.value[index], ...data }
+//     }
+//   } else {
+//     // Add new patient
+//     patientsData.value.push({
+//       id: Date.now(),
+//       ...data
+//     })
+//   }
   
   // Close modal and reset state
   closeModal()
