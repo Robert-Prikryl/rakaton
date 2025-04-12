@@ -35,16 +35,16 @@
       </div>
     </div>
 
-    <!-- Data points -->
+    <!-- Meeting points -->
     <div 
-      v-for="(point, index) in visibleDataPoints" 
+      v-for="(meeting, index) in visibleMeetings" 
       :key="index"
       class="absolute w-3 h-3 rounded-full top-1/2 -translate-y-1/2 cursor-pointer transition-transform duration-300 hover:scale-125 group z-20"
-      :style="getPointStyle(point.id)"
-      @click="recordsStore.setActiveRecord(point.id)"
+      :style="getMeetingPointStyle(meeting.id)"
+      @click="meetingStore.setActiveMeeting(meeting.id)"
     >
       <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100">
-        {{ point.description }}
+        {{ getMeetingTooltip(meeting) }}
       </div>
     </div>
   </div>
@@ -54,8 +54,11 @@
 import { computed } from 'vue';
 import type { TimelinePoint, TimelineRange } from '@/types/timeline';
 import { useRecordsStore } from '@/stores/recordsStore';
+import type { Meeting } from '@/types/meeeting';
+import { useMeetingStore } from '@/stores/meetingStore';
 
 const recordsStore = useRecordsStore();
+const meetingStore = useMeetingStore();
 
 const today = new Date();
 
@@ -82,6 +85,12 @@ function getCzechMonth(date: Date): string {
 function formatDate(date: Date | string): string {
   const d = new Date(date);
   return `${d.getDate()}. ${getCzechMonth(d)}`;
+}
+
+// Format time for tooltip
+function formatTime(date: Date | string): string {
+  const d = new Date(date);
+  return d.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
 }
 
 // Calculate month markers
@@ -140,6 +149,14 @@ const visibleHighlightedRanges = computed(() => {
   });
 });
 
+// Filter meetings to only show those within the visible range
+const visibleMeetings = computed(() => {
+  return meetingStore.meetings.filter(meeting => {
+    const date = new Date(meeting.date);
+    return date >= twoMonthsAgo && date <= oneMonthAhead;
+  });
+});
+
 function getPointStyle(id: string) {
   const dateObj = new Date((recordsStore.records.find(record => record.id === id) as TimelinePoint).date);
   const daysDiff = Math.floor((dateObj.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
@@ -180,5 +197,57 @@ function getHighlightStyle(range: TimelineRange) {
     width: `${width}%`,
     backgroundColor: range.color || 'rgba(59, 130, 246, 0.3)' // Default to blue with 30% opacity
   };
+}
+
+// Get meeting point style
+function getMeetingPointStyle(id: string) {
+  const meeting = meetingStore.meetings.find(m => m.id === id);
+  if (!meeting) return {};
+
+  const dateObj = new Date(meeting.date);
+  const daysDiff = Math.floor((dateObj.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  const totalDays = Math.floor((oneMonthAhead.getTime() - twoMonthsAgo.getTime()) / (1000 * 60 * 60 * 24));
+  const basePosition = 60; // Today is at 60%
+  
+  const position = basePosition + (daysDiff / totalDays * 100);
+  
+  // Color based on meeting type
+  const getMeetingColor = () => {
+    switch (meeting.name) {
+      case 'orl':
+        return '#FF6B6B';
+      case 'horni git':
+        return '#4ECDC4';
+      case 'hrudni':
+        return '#45B7D1';
+      case 'mammarni':
+        return '#96CEB4';
+      case 'plicni':
+        return '#FFEEAD';
+      case 'urologicky':
+        return '#D4A5A5';
+      case 'neurologicky':
+        return '#9B59B6';
+      case 'sarcomaboard':
+        return '#E67E22';
+      case 'onkogynekologicky':
+        return '#FF9FF3';
+      case 'dolni_git':
+        return '#2ECC71';
+      default:
+        return '#666666';
+    }
+  };
+  
+  return {
+    left: `${position}%`,
+    backgroundColor: getMeetingColor()
+  };
+}
+
+// Get meeting tooltip content
+function getMeetingTooltip(meeting: Meeting): string {
+  return `${meeting.name} - ${formatDate(meeting.date)} ${formatTime(meeting.date)}
+${meeting.place}`;
 }
 </script>
