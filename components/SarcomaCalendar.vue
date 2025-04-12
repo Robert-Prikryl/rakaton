@@ -1,3 +1,19 @@
+<template>
+  <div class="calendar-wrapper">
+    <UCalendar v-model="modelValue" @update:model-value="handleDateSelection">
+      <template #day="{ day }">
+        <UChip 
+          :show="!!getColorByDate(day.toDate('UTC'))" 
+          :color="getColorByDate(day.toDate('UTC'))" 
+          size="2xs"
+        >
+          {{ day.day }}
+        </UChip>
+      </template>
+    </UCalendar>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { CalendarDate, type DateValue } from '@internationalized/date'
 import { shallowRef } from 'vue'
@@ -43,24 +59,39 @@ function handleDateSelection(date: DateValue | DateRange | DateValue[] | null | 
 }
 </script>
 
-<template>
-  <div class="calendar-wrapper">
-    <UCalendar v-model="modelValue" @update:model-value="handleDateSelection">
-      <template #day="{ day }">
-        <UChip 
-          :show="!!getColorByDate(day.toDate('UTC'))" 
-          :color="getColorByDate(day.toDate('UTC'))" 
-          size="2xs"
-        >
-          {{ day.day }}
-        </UChip>
-      </template>
-    </UCalendar>
-  </div>
-</template>
-
 <style scoped>
+.calendar-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  /* Ensure calendar is responsive */
+}
+
 .u-chip--warning {
   background-color: yellow !important;
+}
+
+@media (max-width: 768px) {
+  .calendar-wrapper {
+    /* On smaller screens, make the calendar container full width */
+    padding: 10px;
+  }
+
+  /* Optionally, you can adjust the calendar itself if needed */
+  .u-calendar {
+    width: 100%;
+    font-size: 14px; /* Adjust font size for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-wrapper {
+    padding: 5px;
+  }
+
+  .u-calendar {
+    width: 100%;
+    font-size: 12px; /* Adjust font size further on very small screens */
+  }
 }
 </style>
