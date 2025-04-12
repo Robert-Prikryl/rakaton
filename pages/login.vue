@@ -81,6 +81,16 @@ async function onSubmit(event: any) {
         description: 'Successfully logged in',
         color: 'success'
       })
+    } else if (state.email === 'student@rakaton.cz' && state.password === 'student') {
+      const auth = useAuth()
+      localStorage.setItem('role', 'student')
+      auth.value.isAuthenticated = true
+      router.push('/')
+      toast.add({
+        title: 'Success',
+        description: 'Successfully logged in',
+        color: 'success'
+      })
     } else {
       throw new Error('Invalid credentials')
     }

@@ -141,6 +141,12 @@ onBeforeMount(() => {
     navigationItems.value = [
       { name: 'Doctors', path: '/doctors_table' }
     ]
+  } else if (role === 'student') {
+    userName.value = 'Student User'
+    userRole.value = 'Student'
+    navigationItems.value = [
+      { name: 'Cases Preview', path: '/cases_preview' }
+    ]
   } else {
     router.push('/login')
   }
