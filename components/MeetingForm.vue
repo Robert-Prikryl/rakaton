@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import * as v from 'valibot'
 import type { FormSubmitEvent } from '@nuxt/ui'
+import { defineEmits } from 'vue'
 
+const emit = defineEmits()
 // Mock database of doctors
 const doctorsDatabase = [
   {
@@ -78,16 +80,16 @@ const teamTypes = [
 // Form schema with validation
 const schema = v.object({
   startDateTime: v.string('Datum a čas začátku je povinný'),
-  teamName: v.string('Název týmu je povinný'),
+  teamName: v.optional(v.string()),
   location: v.string('Místo setkání je povinné'),
   notificationHours: v.number('Musí být alespoň 1 hodina'),
   notes: v.optional(v.string()),
-  teamMembers: v.array(v.object({
-    lastName: v.string('Příjmení je povinné'),
-    firstName: v.string('Jméno je povinné'),
-    email: v.pipe(v.string('Email je povinný'), v.email('Neplatný formát emailu')),
-    phone: v.string('Telefon je povinný'),
-    specialization: v.string('Odbornost je povinná'),
+  teamMembers: v.optional(v.object({
+    lastName: v.optional(v.string()),
+    firstName: v.optional(v.string()),
+    email: v.pipe(v.optional(v.string()), v.optional(v.string())),
+    phone: v.optional(v.string()),
+    specialization: v.optional(v.string()),
     note: v.optional(v.string())
   }))
 })
@@ -114,7 +116,8 @@ const state = reactive({
 // Handle form submission
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  toast.add({ title: 'Úspěch', description: 'MDT tým byl vytvořen.', color: 'success' })
+  //toast.add({ title: 'Úspěch', description: 'MDT tým byl vytvořen.', color: 'success' })
+  emit('submitDate', event.data.startDateTime)
   console.log(event.data)
 }
 
