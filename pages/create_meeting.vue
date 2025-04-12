@@ -6,13 +6,12 @@
     </div>
     
     <!-- Sidebar on the Right with Light Mode -->
-     <UCard class="" style="margin-top: 2.5rem; margin-bottom: 4.75rem;">
-      <div class="w-full bg-white text-black">
-      <!-- Adding SarcomaCalendar component here -->
-      <SarcomaCalendar :highlightedDates="highlightedDates"/>
+  <UCard class="w-full lg:w-1/4 mt-10 mb-20 overflow-hidden" style="margin-right: 1rem;">
+    <div class="w-full bg-white text-black break-words overflow-hidden">
+      <SarcomaCalendar :highlightedDates="highlightedDates" />
       <CalendarPlannedMeeting />
     </div>
-     </UCard>
+  </UCard>
     
   </div>
 </template>
