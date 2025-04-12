@@ -17,7 +17,7 @@ import { usePatientStore } from '@/stores/patientStore';
 import { seedPatients } from '@/seeders/patientSeeder';
 import { pushSeeds } from '@/seeders/recordSeeder';
 import { seedMeetings } from '@/seeders/meetingSeeder';
-
+import { seedDoctors } from '@/seeders/doctorSeeder';
 const patientStore = usePatientStore();
 onMounted(() => {
     seedPatients();
@@ -25,5 +25,6 @@ onMounted(() => {
     const recordsStore = useRecordsStore();
     pushSeeds(recordsStore);
     seedMeetings();
+    seedDoctors();
 });
 </script>

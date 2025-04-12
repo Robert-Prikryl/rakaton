@@ -1,6 +1,15 @@
 <template>
     <div class="border-2 border-gray-300 rounded-lg m-8">
         <MeetingViewer />
+        <div class="flex justify-end mr-8 m-4">
+          <UModal title="Pridat pacienta">
+              <UButton label="+ Pridat pacienta" class="flex gap-6 mr-4" color="primary" variant="subtle" />
+
+              <template #body>
+                  <AddPatientModal />
+              </template>
+          </UModal>
+        </div>
     </div>
 </template>
 
@@ -13,6 +22,7 @@ import { seedMeetings } from '@/seeders/meetingSeeder';
 
 const route = useRoute();
 const meetingStore = useMeetingStore();
+const addingPatient = ref(false);
 
 onMounted(() => {
   const recordsStore = useRecordsStore();

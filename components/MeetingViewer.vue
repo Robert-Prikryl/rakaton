@@ -149,40 +149,42 @@
       </div>
     </div>
     <!-- Tasks Section -->
-    <div v-if="patient?.questions[0].tasks && patient?.questions[0].tasks.length > 0" class="border-t pt-4">
+    <div v-if="patient?.questions && patient?.questions.some(q => q.tasks && q.tasks.length > 0)" class="border-t pt-4">
       <div class="p-4 bg-blue-50 rounded-lg">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Úkoly</h2>
         <div class="space-y-4">
           <div v-for="question in patient.questions" :key="question.id" class="p-4 bg-white rounded-lg"> 
-              <div v-for="task in question.tasks" :key="task.id" class="p-4 rounded-lg border-t border-gray-200">
-                  <div class="flex items-start gap-3">
-                      <div class="flex-1">
-                          <div class="flex items-center">
-                              <p class="font-2xl">{{ task.name }}</p>
-                          </div>
-                          <div class="flex items-center mt-1">
-                              <UIcon name="i-heroicons-information-circle" class="mr-2 text-gray-400" />
-                              <p class="text-sm text-gray-500">{{ task.description }}</p>
-                          </div>
-                          <div class="flex items-center mt-1">
-                              <UIcon name="i-heroicons-calendar" class="mr-2 text-gray-400" />
-                              <p class="text-xs text-gray-500">{{ formatDateWithTime(task.createdAt) }}</p>
-                          </div>
-                          <div class="flex items-center mt-1">
-                              <UIcon name="i-heroicons-clock" class="mr-2 text-gray-400" />
-                              <p class="text-xs text-gray-500">{{ formatDateWithTime(task.deadline) }}</p>
-                          </div>
-                          <div class="flex items-center mt-1">
-                              <UIcon name="i-heroicons-bell" class="mr-2 text-gray-400" />
-                              <p class="text-xs text-gray-500">{{ task.notificationTime }}</p>
-                          </div>
-                          <div class="flex items-center mt-1">
-                              <UIcon name="i-heroicons-check-circle" class="mr-2 text-gray-400" />
-                              <p class="text-xs" :class="task.realizedAt ? 'text-gray-500' : 'text-red-500'">{{ task.realizedAt ? formatDateWithTime(task.realizedAt) : 'Není dokončeno' }}</p>
-                          </div>
-                          <div class="flex items-center mt-1">
-                              <UIcon name="i-heroicons-user" class="mr-2 text-gray-400" />
-                              <p class="text-xs text-gray-500">{{ task.responsible.firstname + ' ' + task.responsible.surname }}</p>
+              <div v-if="question.tasks && question.tasks.length > 0">
+                  <div v-for="task in question.tasks" :key="task.id" class="p-4 rounded-lg border-t border-gray-200">
+                      <div class="flex items-start gap-3">
+                          <div class="flex-1">
+                              <div class="flex items-center">
+                                  <p class="font-2xl">{{ task.name }}</p>
+                              </div>
+                              <div class="flex items-center mt-1">
+                                  <UIcon name="i-heroicons-information-circle" class="mr-2 text-gray-400" />
+                                  <p class="text-sm text-gray-500">{{ task.description }}</p>
+                              </div>
+                              <div class="flex items-center mt-1">
+                                  <UIcon name="i-heroicons-calendar" class="mr-2 text-gray-400" />
+                                  <p class="text-xs text-gray-500">{{ formatDateWithTime(task.createdAt) }}</p>
+                              </div>
+                              <div class="flex items-center mt-1">
+                                  <UIcon name="i-heroicons-clock" class="mr-2 text-gray-400" />
+                                  <p class="text-xs text-gray-500">{{ formatDateWithTime(task.deadline) }}</p>
+                              </div>
+                              <div class="flex items-center mt-1">
+                                  <UIcon name="i-heroicons-bell" class="mr-2 text-gray-400" />
+                                  <p class="text-xs text-gray-500">{{ task.notificationTime }}</p>
+                              </div>
+                              <div class="flex items-center mt-1">
+                                  <UIcon name="i-heroicons-check-circle" class="mr-2 text-gray-400" />
+                                  <p class="text-xs" :class="task.realizedAt ? 'text-gray-500' : 'text-red-500'">{{ task.realizedAt ? formatDateWithTime(task.realizedAt) : 'Není dokončeno' }}</p>
+                              </div>
+                              <div class="flex items-center mt-1">
+                                  <UIcon name="i-heroicons-user" class="mr-2 text-gray-400" />
+                                  <p class="text-xs text-gray-500">{{ task.responsible.firstname + ' ' + task.responsible.surname }}</p>
+                              </div>
                           </div>
                       </div>
                   </div>

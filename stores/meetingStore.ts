@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { Meeting } from "~/types/meeeting";
-
+import type { PatientRecord } from "~/types/patient";
 // stores should be named 'use*Store'
 export const useMeetingStore = defineStore("meeting", () => {
   /** STATE */
@@ -22,6 +22,10 @@ export const useMeetingStore = defineStore("meeting", () => {
     meetings.value.push(meeting);
   }
 
+  function addPatientRecord(patientRecord: PatientRecord) {
+    activeMeeting.value?.patientRecords.push(patientRecord);
+  }
+
   // Everything we want to use in the components needs to be returned
   /** RETURNS */
   return {
@@ -34,5 +38,6 @@ export const useMeetingStore = defineStore("meeting", () => {
     /** ACTIONS */
     setActiveMeeting,
     addMeeting,
+    addPatientRecord
   };
 });
