@@ -1,28 +1,49 @@
 <template>
-  <header class="border-b">
+  <header class="bg-white shadow-md">
     <nav class="container mx-auto px-4 py-3">
       <div class="flex items-center justify-between">
         <!-- Logo/Brand -->
-        <NuxtLink to="/" class="text-2xl font-bold text-indigo-600">
-          🧬 Rakaton
+        <NuxtLink to="/" class="flex items-center gap-2">
+          <span class="text-3xl">🧬</span>
+          <span class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            Rakaton
+          </span>
         </NuxtLink>
 
         <!-- Desktop Navigation -->
-        <div class="hidden md:flex items-center space-x-6">
+        <div class="hidden md:flex items-center space-x-4">
           <NuxtLink
             v-for="item in navigationItems"
             :key="item.path"
             :to="item.path"
-            class="px-4 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
+            class="px-4 py-2 rounded-md hover:bg-indigo-50 transition-colors duration-200 cursor-pointer font-medium"
+            :class="$route.path === item.path ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700'"
           >
             {{ item.name }}
           </NuxtLink>
-          <NuxtLink
-            @click="handleLogout"
-            class="px-4 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
-          >
-            Logout
-          </NuxtLink>
+          
+          <!-- User info and logout button -->
+          <div class="flex items-center ml-6 pl-6 border-l border-gray-200">
+            <div class="flex items-center gap-3">
+              <UAvatar
+                :text="getInitials(userName)"
+                color="indigo"
+                class="text-white"
+              />
+              <div class="flex flex-col">
+                <span class="font-semibold text-gray-800">{{ userName }}</span>
+                <span class="text-xs text-gray-500">{{ userRole }}</span>
+              </div>
+              <UButton
+                icon="i-heroicons-arrow-right-on-rectangle"
+                variant="ghost"
+                color="gray"
+                aria-label="Logout"
+                class="ml-2 cursor-pointer hover:bg-red-50 hover:text-red-600 transition-colors"
+                @click="handleLogout"
+              />
+            </div>
+          </div>
         </div>
 
         <!-- Mobile Menu Button -->
@@ -37,21 +58,41 @@
 
       <!-- Mobile Navigation -->
       <UCollapse v-model="isOpen" class="md:hidden">
-        <div class="flex flex-col space-y-2 py-4">
+        <div class="flex flex-col space-y-1 py-4">
           <NuxtLink
             v-for="item in navigationItems"
             :key="item.path"
             :to="item.path"
-            class="px-4 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
+            class="px-4 py-3 rounded-md hover:bg-indigo-50 transition-colors duration-200 cursor-pointer font-medium"
+            :class="$route.path === item.path ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700'"
           >
             {{ item.name }}
           </NuxtLink>
-          <NuxtLink
-            @click="handleLogout"
-            class="px-4 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
-          >
-            Logout
-          </NuxtLink>
+          
+          <!-- Mobile user info and logout button -->
+          <div class="px-4 py-3 mt-2 border-t border-gray-200">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <UAvatar
+                  :text="getInitials(userName)"
+                  color="indigo"
+                  class="text-white"
+                />
+                <div class="flex flex-col">
+                  <span class="font-semibold text-gray-800">{{ userName }}</span>
+                  <span class="text-xs text-gray-500">{{ userRole }}</span>
+                </div>
+              </div>
+              <UButton
+                icon="i-heroicons-arrow-right-on-rectangle"
+                variant="ghost" 
+                color="gray"
+                aria-label="Logout"
+                class="cursor-pointer hover:bg-red-50 hover:text-red-600 transition-colors"
+                @click="handleLogout"
+              />
+            </div>
+          </div>
         </div>
       </UCollapse>
     </nav>
@@ -62,28 +103,47 @@
 const isOpen = ref(false)
 const router = useRouter()
 const auth = useAuth()
+const route = useRoute()
 let navigationItems = ref([])
+const userName = ref('User')
+const userRole = ref('')
+
+function getInitials(name) {
+  return name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase()
+}
 
 onBeforeMount(() => {
   const role = localStorage.getItem('role')
+  
+  // Set the user name and role based on the logged in user
   if (role === 'doctor') {
-        navigationItems = [
-            { name: 'Patients', path: '/patients' },
-            { name: 'Meetings', path: '/meeting' }
-        ]
-    } else if (role === 'manager') {
-        navigationItems = [
-            { name: 'Patients', path: '/patients' },
-            { name: 'Meetings', path: '/meeting' },
-            { name: 'Create Meetings', path: '/create_meeting' }
-        ]
-    } else if (role === 'admin') { 
-        navigationItems = [
-            { name: 'Doctors', path: '/doctors_table' }
-        ]
-    }else{
-        router.push('/login')
-    }
+    userName.value = 'Dr. Smith'
+    userRole.value = 'Doctor'
+    navigationItems.value = [
+      { name: 'Patients', path: '/patients' },
+      { name: 'Meetings', path: '/meeting' }
+    ]
+  } else if (role === 'manager') {
+    userName.value = 'Manager Johnson'
+    userRole.value = 'Manager'
+    navigationItems.value = [
+      { name: 'Patients', path: '/patients' },
+      { name: 'Meetings', path: '/meeting' },
+      { name: 'Create Meetings', path: '/create_meeting' }
+    ]
+  } else if (role === 'admin') {
+    userName.value = 'Admin User'
+    userRole.value = 'Administrator'
+    navigationItems.value = [
+      { name: 'Doctors', path: '/doctors_table' }
+    ]
+  } else {
+    router.push('/login')
+  }
 })
 
 function handleLogout() {
@@ -93,7 +153,7 @@ function handleLogout() {
 }
 </script>
 
-<style>
-  
+<style scoped>
+/* Add any additional styles here */
 </style>
   
