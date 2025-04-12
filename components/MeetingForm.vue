@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as v from 'valibot'
 import type { FormSubmitEvent } from '@nuxt/ui'
-import { defineEmits } from 'vue'
+import { defineEmits, reactive, ref } from 'vue'
 
 const emit = defineEmits()
 // Mock database of doctors
@@ -64,7 +64,7 @@ const doctorsDatabase = [
   }
 ]
 
-const teamTypes = [
+const teamTypes = ref([
   'ORL',
   'Horní GIT',
   'Hrudní',
@@ -75,7 +75,7 @@ const teamTypes = [
   'Sarcomaboard',
   'Onkogynekologický',
   'Dolní GIT'
-]
+]);
 
 // Form schema with validation
 const schema = v.object({
@@ -196,16 +196,6 @@ type DoctorItem = {
   specialization: string
 }
 
-// Function to get current doctor item
-function getCurrentDoctorItem(index: number): DoctorItem {
-  return {
-    lastName: state.teamMembers[index].lastName,
-    firstName: state.teamMembers[index].firstName,
-    email: state.teamMembers[index].email,
-    phone: state.teamMembers[index].phone,
-    specialization: state.teamMembers[index].specialization
-  }
-}
 </script>
 
 <template>
@@ -224,7 +214,7 @@ function getCurrentDoctorItem(index: number): DoctorItem {
         <UFormField label="Název týmu" name="teamName">
           <USelect
             v-model="state.teamName"
-            :options="teamTypes"
+            :items="teamTypes"
             placeholder="Vyberte typ týmu"
             class="w-full"
           />

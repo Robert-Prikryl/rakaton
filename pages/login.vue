@@ -2,9 +2,14 @@
   <div class="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center justify-center p-4">
     <UCard class="w-full max-w-md">
       <template #header>
-        <div class="text-center">
+        <div class="text-center relative">
           <h1 class="text-2xl font-bold">🧬 Rakaton</h1>
           <p class="text-gray-500 mt-2">Please login to continue</p>
+          <div class="absolute right-0 top-0">
+            <UDropdownMenu :items="loginOptions">
+              <UButton color="gray" icon="i-heroicons-question-mark-circle" />
+            </UDropdownMenu>
+          </div>
         </div>
       </template>
 
@@ -46,6 +51,35 @@ const state = reactive({
 const loading = ref(false)
 const toast = useToast()
 const router = useRouter()
+
+const loginOptions = [
+  {
+    label: 'Admin Login',
+    icon: 'i-heroicons-user-circle',
+    onSelect: () => fillCredentials({ email: 'admin@rakaton.cz', password: 'admin' })
+  },
+  {
+    label: 'Doctor Login',
+    icon: 'i-heroicons-user-circle',
+    onSelect: () => fillCredentials({ email: 'doctor@rakaton.cz', password: 'doctor' })
+  },
+  {
+    label: 'Manager Login',
+    icon: 'i-heroicons-user-circle',
+    onSelect: () => fillCredentials({ email: 'manager@rakaton.cz', password: 'manager' })
+  },
+  {
+    label: 'Student Login',
+    icon: 'i-heroicons-user-circle',
+    onSelect: () => fillCredentials({ email: 'student@rakaton.cz', password: 'student' })
+  }
+]
+
+function fillCredentials({ email, password }: { email: string; password: string }) {
+    console.log(email, password)
+  state.email = email
+  state.password = password
+}
 
 async function onSubmit(event: any) {
   loading.value = true

@@ -37,6 +37,7 @@ export const seedMeetings = () => {
             firstname: 'Jan',
             email: 'jan.novotny@nemocnice.cz',
             phone: '+420 777 123 456',
+            password: 'password',
             specialization: 'Onkologie',
             patients: [],
             tasks: []
@@ -54,6 +55,7 @@ export const seedMeetings = () => {
             firstname: 'Marie',
             email: 'marie.svobodova@nemocnice.cz',
             phone: '+420 777 234 567',
+            password: 'password',
             specialization: 'Chirurgie',
             patients: [],
             tasks: []
@@ -93,6 +95,7 @@ export const seedMeetings = () => {
             firstname: 'Jan',
             email: 'jan.novotny@nemocnice.cz',
             phone: '+420 777 123 456',
+            password: 'password',
             specialization: 'Onkologie',
             patients: [],
             tasks: []
@@ -110,6 +113,7 @@ export const seedMeetings = () => {
             firstname: 'Marie',
             email: 'marie.svobodova@nemocnice.cz',
             phone: '+420 777 234 567',
+            password: 'password',
             specialization: 'Chirurgie',
             patients: [],
             tasks: []
@@ -149,6 +153,7 @@ export const seedMeetings = () => {
             firstname: 'Jan',
             email: 'jan.novotny@nemocnice.cz',
             phone: '+420 777 123 456',
+            password: 'password',
             specialization: 'Onkologie',
             patients: [],
             tasks: []
@@ -166,6 +171,7 @@ export const seedMeetings = () => {
             firstname: 'Marie',
             email: 'marie.svobodova@nemocnice.cz',
             phone: '+420 777 234 567',
+            password: 'password',
             specialization: 'Chirurgie',
             patients: [],
             tasks: []
@@ -192,6 +198,7 @@ export const seedMeetings = () => {
           firstname: 'Jan',
           email: 'jan.novotny@nemocnice.cz',
           phone: '+420 777 123 456',
+          password: 'password',
           specialization: 'Onkologie',
           patients: [],
           tasks: []
@@ -202,6 +209,7 @@ export const seedMeetings = () => {
           firstname: 'Marie',
           email: 'marie.svobodova@nemocnice.cz',
           phone: '+420 777 234 567',
+          password: 'password',
           specialization: 'Chirurgie',
           patients: [],
           tasks: []
@@ -225,6 +233,7 @@ export const seedMeetings = () => {
           firstname: 'Martin',
           email: 'martin.vesely@nemocnice.cz',
           phone: '+420 777 789 012',
+          password: 'password',
           specialization: 'Pneumologie',
           patients: [],
           tasks: []
@@ -248,6 +257,7 @@ export const seedMeetings = () => {
           firstname: 'Eva',
           email: 'eva.kucerova@nemocnice.cz',
           phone: '+420 777 678 901',
+          password: 'password',
           specialization: 'Onkologie',
           patients: [],
           tasks: []
@@ -258,6 +268,7 @@ export const seedMeetings = () => {
           firstname: 'Lucie',
           email: 'lucie.horakova@nemocnice.cz',
           phone: '+420 777 890 123',
+          password: 'password',
           specialization: 'Chirurgie',
           patients: [],
           tasks: []
@@ -281,6 +292,7 @@ export const seedMeetings = () => {
           firstname: 'Jana',
           email: 'jana.cerna@nemocnice.cz',
           phone: '+420 777 456 789',
+          password: 'password',
           specialization: 'Neurologie',
           patients: [],
           tasks: []
@@ -291,6 +303,7 @@ export const seedMeetings = () => {
           firstname: 'Tomáš',
           email: 'tomas.prochazka@nemocnice.cz',
           phone: '+420 777 567 890',
+          password: 'password',
           specialization: 'Urologie',
           patients: [],
           tasks: []
@@ -315,6 +328,7 @@ export const seedMeetings = () => {
         firstname: 'Jan',
         email: 'jan.novotny@nemocnice.cz',
         phone: '+420 777 123 456',
+        password: 'password',
         specialization: 'Onkologie',
         patients: [],
         tasks: []
@@ -333,6 +347,7 @@ export const seedMeetings = () => {
         firstname: 'Marie',
         email: 'marie.svobodova@nemocnice.cz',
         phone: '+420 777 234 567',
+        password: 'password',
         specialization: 'Chirurgie',
         patients: [],
         tasks: []
@@ -355,6 +370,7 @@ export const seedMeetings = () => {
         firstname: 'Jan',
         email: 'jan.novotny@nemocnice.cz',
         phone: '+420 777 123 456',
+        password: 'password',
         specialization: 'Onkologie',
         patients: [],
         tasks: []
@@ -373,6 +389,7 @@ export const seedMeetings = () => {
         firstname: 'Marie',
         email: 'marie.svobodova@nemocnice.cz',
         phone: '+420 777 234 567',
+        password: 'password',
         specialization: 'Chirurgie',
         patients: [],
         tasks: []

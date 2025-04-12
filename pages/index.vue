@@ -40,7 +40,7 @@ definePageMeta({
 </script>
 
 <style>
-@keyframes fadeIn {
+/* @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(-20px);
@@ -87,5 +87,5 @@ definePageMeta({
 .group:nth-child(1) { animation-delay: 0.2s; }
 .group:nth-child(2) { animation-delay: 0.4s; }
 .group:nth-child(3) { animation-delay: 0.6s; }
-.group:nth-child(4) { animation-delay: 0.8s; }
+.group:nth-child(4) { animation-delay: 0.8s; } */
 </style>

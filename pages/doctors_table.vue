@@ -60,6 +60,20 @@
               <DoctorForm @submit="handleSubmit" :initial-data="selectedDoctorData" />
           </template>
       </UModal>
+
+      <!-- Reset Password Modal -->
+      <UModal v-model:open="isResetPasswordModalOpen">
+          <UButton label="Resetovat heslo" id="reset-password-button" class="flex gap-6 mr-4 hidden" color="primary" variant="subtle" />
+          <template #header>
+              <h3 class="text-xl font-semibold">Resetovat heslo</h3>
+          </template>
+          <template #body>
+              <ResetPasswordForm 
+                @close="isResetPasswordModalOpen = false" 
+                @confirm="resetPassword"
+                :selectedDoctorData="selectedDoctorData" />
+          </template>
+      </UModal>
     </div>
   </template>
   
@@ -78,6 +92,7 @@
   const router = useRouter()
   const isDeleteModalOpen = ref(false)
   const isEditModalOpen = ref(false)
+  const isResetPasswordModalOpen = ref(false)
   const doctorToDelete = ref<string | null>(null)
 
   onMounted(() => {
@@ -135,9 +150,9 @@
           h(resolveComponent('UButton'), {
             color: 'primary',
             variant: 'ghost',
-            icon: 'i-heroicons-magnifying-glass',
+            icon: 'i-heroicons-arrow-path',
             size: 'xs',
-            onClick: () => navigateToDoctor(row.original.id)
+            onClick: () => resetPassword(row.original)
           }),
           h(resolveComponent('UButton'), {
             color: 'primary',
@@ -186,6 +201,11 @@
     doctorToDelete.value = id
     isDeleteModalOpen.value = true
     document.getElementById('delete-doctor-button')?.click()
+  }
+
+  function resetPassword(doctor: Doctor) {
+    isResetPasswordModalOpen.value = !isResetPasswordModalOpen.value
+    selectedDoctorData.value = doctor
   }
 
   function confirmDelete() {
