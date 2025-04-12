@@ -1,16 +1,15 @@
 <template>
-  <div class="flex">
+  <div class="flex flex-col lg:flex-row">
     <!-- Main Content -->
-    <div class="w-3/4 p-4">
+    <div class="w-full lg:w-3/4 p-4">
       <MeetingForm @submitDate="handleDateSubmission"/>
     </div>
     
     <!-- Sidebar on the Right with Light Mode -->
-    <div class="w-1/4 bg-white text-black p-4 shadow-lg">
-    
-      
+    <div class="w-full lg:w-1/4 bg-white text-black p-4 shadow-lg mt-4 lg:mt-0">
       <!-- Adding SarcomaCalendar component here -->
       <SarcomaCalendar :highlightedDates="highlightedDates"/>
+      <CalendarPlannedMeeting />
     </div>
   </div>
 </template>
@@ -21,7 +20,8 @@ import SarcomaCalendar from '@/components/SarcomaCalendar.vue';  // Adjust the p
 definePageMeta({
   colorMode: "light",
 });
-const highlightedDates = ref<string[]>([])
+
+const highlightedDates = ref<string[]>([]);
 
 function handleDateSubmission(date: string) {
   // Handle the date submission from the MeetingForm component
@@ -30,9 +30,12 @@ function handleDateSubmission(date: string) {
 }
 </script>
 
-
-
 <style scoped>
-
 /* Additional styling for the light mode sidebar */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
 </style>

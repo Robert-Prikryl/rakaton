@@ -62,13 +62,13 @@ import { pushSeeds } from '@/seeders/recordSeeder';
 import { seedMeetings } from '@/seeders/meetingSeeder';
 
 const patientStore = usePatientStore();
-onMounted(() => {
-    seedPatients();
-    patientStore.setActivePatient(patientStore.patients[0].id);
-    const recordsStore = useRecordsStore();
-    pushSeeds(recordsStore);
-    seedMeetings();
-});
+// onMounted(() => {
+//     seedPatients();
+//     patientStore.setActivePatient(patientStore.patients[0].id);
+//     const recordsStore = useRecordsStore();
+//     pushSeeds(recordsStore);
+//     seedMeetings();
+// });
 
 function formatDate(date: string | undefined) {
   if (!date) return '';
