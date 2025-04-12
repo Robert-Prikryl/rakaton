@@ -1,11 +1,11 @@
 <template>
-  <div v-if="activeMeeting" class="space-y-6 p-4 bg-white rounded-lg shadow">
+  <div v-if="activeMeeting" class="space-y-6 py-4 px-12 bg-white rounded-lg shadow">
     <!-- Header Section -->
     <div class="border-b pb-4">
       <div class="flex justify-between items-start">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900">{{ activeMeeting.name }}</h1>
-          <p class="text-gray-600 mt-1">{{ formatDateTime(activeMeeting.date) }}</p>
+          <h1 class="text-2xl font-bold text-gray-900 capitalize">{{ activeMeeting.name }}</h1>
+          <p class="text-gray-600 mt-1">{{ formatDateWithTime(activeMeeting.date) }}</p>
         </div>
         <UBadge
           :color="getMeetingStatusColor()"
@@ -44,100 +44,6 @@
             </li>
           </ul>
         </div>
-      </div>
-
-      <!-- Right Column -->
-      <div class="space-y-6">
-        <!-- Participating Doctors -->
-        <div>
-          <h2 class="text-lg font-semibold text-gray-900 mb-2">Účastníci</h2>
-          <div class="space-y-3">
-            <div
-              v-for="doctor in activeMeeting.doctors"
-              :key="doctor.id"
-              class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg"
-            >
-              <UAvatar
-                :alt="doctor.firstname + ' ' + doctor.surname"
-                :text="doctor.firstname[0] + doctor.surname[0]"
-              />
-              <div>
-                <div class="font-medium text-gray-900">
-                  {{ doctor.firstname }} {{ doctor.surname }}
-                </div>
-                <div class="text-sm text-gray-500">{{ doctor.specialization }}</div>
-                <div class="text-sm text-gray-500 flex items-center gap-2 mt-1">
-                  <UIcon name="i-heroicons-envelope" class="text-gray-400" />
-                  {{ doctor.email }}
-                </div>
-                <div class="text-sm text-gray-500 flex items-center gap-2">
-                  <UIcon name="i-heroicons-phone" class="text-gray-400" />
-                  {{ doctor.phone }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Patient Records -->
-        <div v-if="activeMeeting.patientRecords.length > 0">
-          <h2 class="text-lg font-semibold text-gray-900 mb-2">Pacienti</h2>
-          <div class="space-y-4">
-            <div
-              v-for="patient in activeMeeting.patientRecords"
-              :key="patient.id"
-              class="p-4 bg-gray-50 rounded-lg"
-            >
-              <div class="flex justify-between items-start">
-                <div>
-                  <div class="font-medium text-gray-900 text-lg">
-                    {{ patient.name }} {{ patient.lastName }}
-                  </div>
-                  <div class="text-sm text-gray-500 mt-1">
-                    <div class="flex items-center gap-2">
-                      <UIcon name="i-heroicons-identification" class="text-gray-400" />
-                      <span>AIS ID: {{ patient.aisId }}</span>
-                    </div>
-                    <div class="flex items-center gap-2 mt-1">
-                      <UIcon name="i-heroicons-credit-card" class="text-gray-400" />
-                      <span>Pojištění: {{ patient.insuranceId }}</span>
-                    </div>
-                    <div class="flex items-center gap-2 mt-1">
-                      <UIcon name="i-heroicons-calendar" class="text-gray-400" />
-                      <span>Datum narození: {{ formatDate(patient.dateOfBirth) }}</span>
-                    </div>
-                  </div>
-                </div>
-                <UBadge :label="patient.gender" color="primary" />
-              </div>
-              
-              <!-- Epikriza -->
-              <div class="mt-3 pt-3 border-t border-gray-200">
-                <h3 class="text-sm font-medium text-gray-700 mb-1">Epikriza</h3>
-                <p class="text-sm text-gray-600">{{ patient.epikriza }}</p>
-              </div>
-              
-              <!-- Modality -->
-              <div v-if="patient.modality && patient.modality.length > 0" class="mt-3 pt-3 border-t border-gray-200">
-                <h3 class="text-sm font-medium text-gray-700 mb-2">Zobrazovací vyšetření</h3>
-                <div class="space-y-2">
-                  <div 
-                    v-for="mod in patient.modality" 
-                    :key="mod.id"
-                    class="bg-white p-2 rounded border border-gray-200"
-                  >
-                    <div class="flex justify-between items-start">
-                      <div class="font-medium text-sm">{{ getModalityTypeName(mod.type) }}</div>
-                      <div class="text-xs text-gray-500">{{ formatDate(mod.date) }}</div>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-1">{{ mod.place }}</div>
-                    <div class="text-sm text-gray-700 mt-1">{{ mod.results }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <!-- Notification -->
         <div>
@@ -148,22 +54,148 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Reports Section -->
-    <div v-if="activeMeeting.reports && activeMeeting.reports.length > 0" class="border-t pt-4">
-      <h2 class="text-lg font-semibold text-gray-900 mb-4">Zprávy</h2>
-      <div class="space-y-4">
-        <div
-          v-for="(report, index) in activeMeeting.reports"
-          :key="index"
-          class="p-4 bg-gray-50 rounded-lg"
-        >
-          <!-- Display report content based on its type -->
-          <p class="text-gray-600">{{ typeof report === 'string' ? report : JSON.stringify(report) }}</p>
+      <!-- Right Column -->
+      <div class="space-y-6">
+        <!-- Participating Doctors -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-2">Účastníci</h2>
+          <div class="space-y-3">
+            <div v-for="doctor in activeMeeting.doctors" :key="doctor.id">
+              <DoctorPreview :doctor="doctor" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Patient Records - Full Width -->
+    <div v-if="activeMeeting.patientRecords.length > 0" class="border-t pt-6">
+      <div class="p-4 bg-blue-50 rounded-lg">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Epikriza</h2>
+        <p class="text-sm text-gray-600">{{ patient?.epikriza }}</p>
+      </div>
+    </div>
+
+    <div v-if="patient?.modality && patient?.modality.length > 0" class="mt-3 pt-3 border-t border-gray-200">
+        <div class="p-4 bg-white rounded-lg">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2">Relevantní vyšetření a výkony</h2>
+            <div class="space-y-2">
+                <div 
+                v-for="mod in patient.modality" 
+                :key="mod.id"
+                class="p-2 rounded border border-gray-200"
+                >
+                <div class="flex justify-between items-start">
+                    <div class="font-medium text-sm">{{ getModalityTypeName(mod.type) }}</div>
+                    <div class="text-xs text-gray-500">{{ formatDate(mod.date) }}</div>
+                </div>
+                <div class="text-xs text-gray-500 mt-1">{{ mod.place }}</div>
+                <div class="text-sm text-gray-700 mt-1">{{ mod.results }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Questions Section -->
+    <div v-if="activeMeeting.patientRecords.some(record => record.questions && record.questions.length > 0)" class="border-t pt-4">
+      <div class="p-4 bg-blue-50 rounded-lg">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Otázky k projednání</h2>
+        <div class="space-y-4">
+          <div v-for="record in activeMeeting.patientRecords" :key="record.id">
+            <div v-if="record.questions && record.questions.length > 0">
+              <div class="font-medium text-gray-700 mb-2">{{ record.name }} {{ record.lastName }}</div>
+              <div
+                v-for="question in record.questions"
+                :key="question.id"
+                class="p-4 bg-white rounded-lg mb-2"
+              >
+                <div class="flex items-start gap-3">
+                  <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                      <div class="font-medium text-gray-900">{{ question.question }}</div>
+                      <UBadge v-if="question.result"
+                        color="primary"
+                        size="sm"
+                      >
+                        {{ question.result }}
+                      </UBadge>
+                    </div>
+                    <div class="text-sm text-gray-500 mt-1">
+                      <div class="flex items-center gap-2">
+                        <UIcon name="i-heroicons-user" class="text-gray-400" />
+                        <span>Pro: {{ question.reciepient.firstname }} {{ question.reciepient.surname }}</span>
+                      </div>
+                      <div class="text-sm text-gray-600 mt-2">{{ question.note }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Reports Section -->
+    <div v-if="activeMeeting.reports && activeMeeting.reports.length > 0" class="border-t pt-4">
+      <div class="p-4 bg-white rounded-lg">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Závěr MDT</h2>
+        <div class="space-y-4">
+          <div
+            v-for="(report, index) in activeMeeting.reports"
+            :key="index"
+            class="p-4 rounded-lg"
+          >
+            <!-- Display report content based on its type -->
+            <p class="text-gray-600">{{ typeof report === 'string' ? report : JSON.stringify(report) }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Tasks Section -->
+    <div v-if="patient?.questions[0].tasks && patient?.questions[0].tasks.length > 0" class="border-t pt-4">
+      <div class="p-4 bg-blue-50 rounded-lg">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Úkoly</h2>
+        <div class="space-y-4">
+          <div v-for="question in patient.questions" :key="question.id" class="p-4 bg-white rounded-lg"> 
+              <div v-for="task in question.tasks" :key="task.id" class="p-4 rounded-lg border-t border-gray-200">
+                  <div class="flex items-start gap-3">
+                      <div class="flex-1">
+                          <div class="flex items-center">
+                              <p class="font-2xl">{{ task.name }}</p>
+                          </div>
+                          <div class="flex items-center mt-1">
+                              <UIcon name="i-heroicons-information-circle" class="mr-2 text-gray-400" />
+                              <p class="text-sm text-gray-500">{{ task.description }}</p>
+                          </div>
+                          <div class="flex items-center mt-1">
+                              <UIcon name="i-heroicons-calendar" class="mr-2 text-gray-400" />
+                              <p class="text-xs text-gray-500">{{ formatDateWithTime(task.createdAt) }}</p>
+                          </div>
+                          <div class="flex items-center mt-1">
+                              <UIcon name="i-heroicons-clock" class="mr-2 text-gray-400" />
+                              <p class="text-xs text-gray-500">{{ formatDateWithTime(task.deadline) }}</p>
+                          </div>
+                          <div class="flex items-center mt-1">
+                              <UIcon name="i-heroicons-bell" class="mr-2 text-gray-400" />
+                              <p class="text-xs text-gray-500">{{ task.notificationTime }}</p>
+                          </div>
+                          <div class="flex items-center mt-1">
+                              <UIcon name="i-heroicons-check-circle" class="mr-2 text-gray-400" />
+                              <p class="text-xs" :class="task.realizedAt ? 'text-gray-500' : 'text-red-500'">{{ task.realizedAt ? formatDateWithTime(task.realizedAt) : 'Není dokončeno' }}</p>
+                          </div>
+                          <div class="flex items-center mt-1">
+                              <UIcon name="i-heroicons-user" class="mr-2 text-gray-400" />
+                              <p class="text-xs text-gray-500">{{ task.responsible.firstname + ' ' + task.responsible.surname }}</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
   </div>
   <div v-else class="p-4 text-center text-gray-500">
     Vyberte schůzku pro zobrazení detailů
@@ -173,10 +205,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useMeetingStore } from '~/stores/meetingStore';
+import DoctorPreview from '~/components/DoctorPreview.vue';
 
 const meetingStore = useMeetingStore();
 
 const activeMeeting = computed(() => meetingStore.activeMeeting);
+
+const patient = computed(() => activeMeeting.value?.patientRecords[0]); // CHANGE THIS FOR BETTER PATIENT SELECTION
 
 // Format date and time
 function formatDateTime(date: Date | string): string {
@@ -229,6 +264,18 @@ function formatDate(date: string | Date): string {
     month: '2-digit',
     year: 'numeric'
   });
+}
+
+// Format date with time in hh:mm dd.mm.yyyy format
+function formatDateWithTime(date: string | Date): string {
+  const d = new Date(date);
+  const hours = d.getHours().toString().padStart(2, '0');
+  const minutes = d.getMinutes().toString().padStart(2, '0');
+  const day = d.getDate().toString().padStart(2, '0');
+  const month = (d.getMonth() + 1).toString().padStart(2, '0');
+  const year = d.getFullYear();
+  
+  return `${hours}:${minutes} ${day}.${month}.${year}`;
 }
 
 // Get modality type name

@@ -2,7 +2,7 @@ import { useMeetingStore } from '@/stores/meetingStore';
 import type { Meeting } from '@/types/meeeting';
 import { MeetingType } from '@/types/meeeting';
 import type { PatientRecord } from '@/types/patient';
-import { ModalityType } from '@/types/patient';
+import { ModalityType, ResultType } from '@/types/patient';
 
 export const seedMeetings = () => {
   const meetingStore = useMeetingStore();
@@ -18,7 +18,7 @@ export const seedMeetings = () => {
       insuranceId: 'VZP123456789',
       birthNumber: '7501011234',
       dateOfBirth: '1975-01-01',
-      epikriza: 'Pacient s anamnézou plicního karcinomu',
+      epikriza: 'Pacient po extirpaci ložiska nad hřebenem lopaty kosti kyčelní vlevo na spádové chirurgické ambulanci (anamnesticky předpokládán organizovaný hematom). Dle definitivní histologie neklasifikovaný vřetenobuněčný nízce maligní tumor. Nyní po MR ve FNM.',
       modality: [
         {
           id: 'mod1',
@@ -28,7 +28,42 @@ export const seedMeetings = () => {
           results: 'Nález v pravém horním laloku'
         }
       ],
-      questions: []
+      questions: [
+        {
+          id: 'q1',
+          reciepient: {
+            id: 'doc1',
+            surname: 'Novotný',
+            firstname: 'Jan',
+            email: 'jan.novotny@nemocnice.cz',
+            phone: '+420 777 123 456',
+            specialization: 'Onkologie',
+            patients: [],
+            tasks: []
+          },
+          question: 'Jaká je doporučená léčba pro pacienta s plicním karcinomem?',
+          note: 'Pacient je v dobrém stavu, vhodný kandidát pro chirurgický výkon',
+          result: ResultType.SURGICAL_PROCEDURE,
+          tasks: []
+        },
+        {
+          id: 'q2',
+          reciepient: {
+            id: 'doc2',
+            surname: 'Svobodová',
+            firstname: 'Marie',
+            email: 'marie.svobodova@nemocnice.cz',
+            phone: '+420 777 234 567',
+            specialization: 'Chirurgie',
+            patients: [],
+            tasks: []
+          },
+          question: 'Je nutné doplnit další zobrazovací vyšetření před operací?',
+          note: 'Zvážit PET/CT pro vyloučení vzdálených metastáz',
+          result: ResultType.IMAGING_EXAMINATION,
+          tasks: []
+        }
+      ]
     },
     {
       id: 'pat2',
@@ -49,7 +84,42 @@ export const seedMeetings = () => {
           results: 'Nález v pravém prsu'
         }
       ],
-      questions: []
+      questions: [
+        {
+          id: 'q3',
+          reciepient: {
+            id: 'doc1',
+            surname: 'Novotný',
+            firstname: 'Jan',
+            email: 'jan.novotny@nemocnice.cz',
+            phone: '+420 777 123 456',
+            specialization: 'Onkologie',
+            patients: [],
+            tasks: []
+          },
+          question: 'Jaká je doporučená systémová léčba?',
+          note: 'Zvážit neoadjuvantní chemoterapii před chirurgickým výkonem',
+          result: ResultType.SYSTEMIC_TREATMENT,
+          tasks: []
+        },
+        {
+          id: 'q4',
+          reciepient: {
+            id: 'doc2',
+            surname: 'Svobodová',
+            firstname: 'Marie',
+            email: 'marie.svobodova@nemocnice.cz',
+            phone: '+420 777 234 567',
+            specialization: 'Chirurgie',
+            patients: [],
+            tasks: []
+          },
+          question: 'Jaký je plánovaný rozsah chirurgického výkonu?',
+          note: 'Zvážit sentinelovou biopsii',
+          result: ResultType.HISTOLOGICAL_VERIFICATION,
+          tasks: []
+        }
+      ]
     },
     {
       id: 'pat3',
@@ -70,7 +140,42 @@ export const seedMeetings = () => {
           results: 'Nález v tlustém střevě'
         }
       ],
-      questions: []
+      questions: [
+        {
+          id: 'q5',
+          reciepient: {
+            id: 'doc1',
+            surname: 'Novotný',
+            firstname: 'Jan',
+            email: 'jan.novotny@nemocnice.cz',
+            phone: '+420 777 123 456',
+            specialization: 'Onkologie',
+            patients: [],
+            tasks: []
+          },
+          question: 'Jaká je doporučená adjuvantní léčba?',
+          note: 'Zvážit kombinaci chemoterapie a radioterapie',
+          result: ResultType.RADIOTHERAPY,
+          tasks: []
+        },
+        {
+          id: 'q6',
+          reciepient: {
+            id: 'doc2',
+            surname: 'Svobodová',
+            firstname: 'Marie',
+            email: 'marie.svobodova@nemocnice.cz',
+            phone: '+420 777 234 567',
+            specialization: 'Chirurgie',
+            patients: [],
+            tasks: []
+          },
+          question: 'Jaký je plán dispenzarizace?',
+          note: 'Navrhnout pravidelnou kontrolu každé 3 měsíce',
+          result: ResultType.ONCOLOGICAL_DISPENSARY,
+          tasks: []
+        }
+      ]
     }
   ];
 
@@ -195,7 +300,88 @@ export const seedMeetings = () => {
       notification: 24,
       notes: ['Projednání výsledků vyšetření', 'Plánování další léčby'],
       patientRecords: [dummyPatientRecords[2]], // Petr Dvořák
-      reports: []
+      reports: ['Pacient je vhodný kandidát pro adjuvantní léčbu'] as any[]
+    }
+  ];
+
+  // Update the questions in the past meeting's patient record to include tasks
+  dummyPatientRecords[2].questions[0].tasks = [
+    {
+      id: 'task1',
+      name: 'PET/CT vyšetření',
+      responsible: {
+        id: 'doc1',
+        surname: 'Novotný',
+        firstname: 'Jan',
+        email: 'jan.novotny@nemocnice.cz',
+        phone: '+420 777 123 456',
+        specialization: 'Onkologie',
+        patients: [],
+        tasks: []
+      },
+      description: 'Objednat PET/CT vyšetření pro staging onemocnění',
+      createdAt: new Date('2025-04-10T11:00:00'),
+      deadline: new Date('2025-04-25T00:00:00'),
+      notificationTime: 24
+    },
+    {
+      id: 'task2',
+      name: 'Dokumentace pro radioterapii',
+      responsible: {
+        id: 'doc2',
+        surname: 'Svobodová',
+        firstname: 'Marie',
+        email: 'marie.svobodova@nemocnice.cz',
+        phone: '+420 777 234 567',
+        specialization: 'Chirurgie',
+        patients: [],
+        tasks: []
+      },
+      description: 'Vytvořit plán radioterapie a připravit potřebnou dokumentaci',
+      createdAt: new Date('2025-04-10T11:00:00'),
+      deadline: new Date('2025-04-20T00:00:00'),
+      notificationTime: 12,
+      realizedAt: new Date('2025-04-15T00:00:00')
+    }
+  ];
+
+  dummyPatientRecords[2].questions[1].tasks = [
+    {
+      id: 'task3',
+      name: 'Plán adjuvantní léčby',
+      responsible: {
+        id: 'doc1',
+        surname: 'Novotný',
+        firstname: 'Jan',
+        email: 'jan.novotny@nemocnice.cz',
+        phone: '+420 777 123 456',
+        specialization: 'Onkologie',
+        patients: [],
+        tasks: []
+      },
+      description: 'Detailní plán chemoterapie a radioterapie',
+      createdAt: new Date('2025-04-10T11:00:00'),
+      deadline: new Date('2025-04-15T00:00:00'),
+      notificationTime: 24
+    },
+    {
+      id: 'task4',
+      name: 'Dispenzarizační plán',
+      responsible: {
+        id: 'doc2',
+        surname: 'Svobodová',
+        firstname: 'Marie',
+        email: 'marie.svobodova@nemocnice.cz',
+        phone: '+420 777 234 567',
+        specialization: 'Chirurgie',
+        patients: [],
+        tasks: []
+      },
+      description: 'Vytvořit harmonogram kontrolních vyšetření',
+      createdAt: new Date('2025-04-10T11:00:00'),
+      deadline: new Date('2025-04-12T00:00:00'),
+      notificationTime: 12,
+      realizedAt: new Date('2025-04-11T00:00:00')
     }
   ];
 

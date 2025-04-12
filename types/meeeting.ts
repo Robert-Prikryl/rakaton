@@ -24,5 +24,5 @@ export interface Meeting {
     notification: number;
     notes: string[];
     patientRecords: PatientRecord[];
-    reports?: Report[];
+    reports?: string[];
 }
