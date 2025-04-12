@@ -66,6 +66,37 @@
                   </div>
                 </UButton>
               </UDropdownMenu>
+              <UDropdownMenu
+                class="hidden lg:block"
+                :modal="false"
+                :items="[
+                  {
+                    label: 'Úlohy',
+                    icon: 'i-lucide-user',
+                    to: '/tasks',
+                  },
+                  {
+                    label: 'Odhlásit se',
+                    icon: 'i-lucide-log-out',
+                    onSelect: async (e) => {
+                      handleLogout()
+                    },
+                  },
+                ]"
+                :content="{
+                  align: 'center',
+                  side: 'bottom',
+                  sideOffset: 8,
+                }"
+              >
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  icon="i-lucide-bell"
+                  class="flex items-center gap-2"
+                >
+                </UButton>
+              </UDropdownMenu>
             </div>
           </div>
         </div>
