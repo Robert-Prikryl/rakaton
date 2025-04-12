@@ -1,5 +1,5 @@
 <template>
-  <div v-if="activeMeeting" class="space-y-6 p-4 bg-white rounded-lg shadow">
+  <div v-if="activeMeeting" class="space-y-6 py-4 px-12 bg-white rounded-lg shadow">
     <!-- Header Section -->
     <div class="border-b pb-4">
       <div class="flex justify-between items-start">
@@ -44,6 +44,15 @@
             </li>
           </ul>
         </div>
+
+        <!-- Notification -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-2">Notifikace</h2>
+          <div class="flex items-center gap-2 text-gray-600">
+            <UIcon name="i-heroicons-bell-alert" />
+            <span>{{ activeMeeting.notification }} hodin před začátkem</span>
+          </div>
+        </div>
       </div>
 
       <!-- Right Column -->
@@ -52,39 +61,9 @@
         <div>
           <h2 class="text-lg font-semibold text-gray-900 mb-2">Účastníci</h2>
           <div class="space-y-3">
-            <div
-              v-for="doctor in activeMeeting.doctors"
-              :key="doctor.id"
-              class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg"
-            >
-              <UAvatar
-                :alt="doctor.firstname + ' ' + doctor.surname"
-                :text="doctor.firstname[0] + doctor.surname[0]"
-              />
-              <div>
-                <div class="font-medium text-gray-900">
-                  {{ doctor.firstname }} {{ doctor.surname }}
-                </div>
-                <div class="text-sm text-gray-500">{{ doctor.specialization }}</div>
-                <div class="text-sm text-gray-500 flex items-center gap-2 mt-1">
-                  <UIcon name="i-heroicons-envelope" class="text-gray-400" />
-                  {{ doctor.email }}
-                </div>
-                <div class="text-sm text-gray-500 flex items-center gap-2">
-                  <UIcon name="i-heroicons-phone" class="text-gray-400" />
-                  {{ doctor.phone }}
-                </div>
-              </div>
+            <div v-for="doctor in activeMeeting.doctors" :key="doctor.id">
+              <DoctorPreview :doctor="doctor" />
             </div>
-          </div>
-        </div>
-
-        <!-- Notification -->
-        <div>
-          <h2 class="text-lg font-semibold text-gray-900 mb-2">Notifikace</h2>
-          <div class="flex items-center gap-2 text-gray-600">
-            <UIcon name="i-heroicons-bell-alert" />
-            <span>{{ activeMeeting.notification }} hodin před začátkem</span>
           </div>
         </div>
       </div>
@@ -105,7 +84,7 @@
                 <div 
                 v-for="mod in patient.modality" 
                 :key="mod.id"
-                class="bg-blue-50 p-2 rounded border border-gray-200"
+                class="p-2 rounded border border-gray-200"
                 >
                 <div class="flex justify-between items-start">
                     <div class="font-medium text-sm">{{ getModalityTypeName(mod.type) }}</div>
@@ -165,7 +144,7 @@
           <div
             v-for="(report, index) in activeMeeting.reports"
             :key="index"
-            class="p-4 bg-blue-50 rounded-lg"
+            class="p-4 rounded-lg"
           >
             <!-- Display report content based on its type -->
             <p class="text-gray-600">{{ typeof report === 'string' ? report : JSON.stringify(report) }}</p>
@@ -226,6 +205,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useMeetingStore } from '~/stores/meetingStore';
+import DoctorPreview from '~/components/DoctorPreview.vue';
 
 const meetingStore = useMeetingStore();
 

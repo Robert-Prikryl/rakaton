@@ -1,6 +1,6 @@
 <template>
     <div class="border-2 border-gray-300 rounded-lg m-8">
-        <div class="border-b-2 border-gray-300 px-16 py-4" v-if="patientStore.activePatient">
+        <div class="border-b-2 border-gray-300 px-12 py-4" v-if="patientStore.activePatient">
             <div class="flex flex-col space-y-4 md:grid md:grid-cols-2 md:gap-6 md:space-y-0">
                 <!-- Left Column -->
                 <div class="space-y-4">
@@ -25,7 +25,7 @@
                 </div>
                 
                 <!-- Right Column -->
-                <div class="space-y-4 flex justify-end">
+                <div class="space-y-4 flex md:justify-end">
                     <div class="space-y-4 inline-flex flex-col items-start">
                         <div class="flex items-center gap-3">
                             <UIcon name="garden:credit-card-stroke-12" class="shrink-0" />
