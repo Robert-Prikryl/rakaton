@@ -9,6 +9,15 @@
                         <p class="text-lg md:text-2xl text-gray-900">
                             {{ patientStore.activePatient?.name + ' ' + patientStore.activePatient?.lastName }}
                         </p>
+                        <NuxtLink 
+                            to="/" 
+                            class="w-5 h-5 bg-gradient-to-br from-indigo-600 to-purple-600 rounded flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-50 group"
+                        >
+                            <UIcon 
+                                name="i-heroicons-sparkles" 
+                                class="w-3 h-3 text-white group-hover:scale-110 transition-transform duration-300"
+                            />
+                        </NuxtLink>
                     </div>
                     <div class="flex items-center gap-3">
                         <UIcon name="mdi:gender-male-female" class="shrink-0" />
