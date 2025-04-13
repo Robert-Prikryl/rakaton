@@ -15,7 +15,7 @@
     <!-- Tooltip content -->
     <div 
       v-if="isHovered"
-      class="absolute bottom-full right-0 w-56 bg-white rounded-lg shadow-lg p-3 z-50 border border-gray-200"
+      class="absolute bottom-full right-0 w-56 -mb-10 bg-white rounded-lg shadow-lg p-3 z-50 border border-gray-200"
     >
       <h3 class="text-sm font-semibold mb-2">Typy konzilií</h3>
       <div class="space-y-2">
