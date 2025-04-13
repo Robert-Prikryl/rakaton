@@ -216,23 +216,23 @@ function getMeetingPointStyle(id: string) {
     switch (meeting.name) {
       case 'orl':
         return '#FF6B6B';
-      case 'horni git':
+      case 'horní git':
         return '#4ECDC4';
-      case 'hrudni':
+      case 'hrudní':
         return '#45B7D1';
-      case 'mammarni':
+      case 'mammární':
         return '#96CEB4';
-      case 'plicni':
+      case 'plicní':
         return '#FFEEAD';
-      case 'urologicky':
+      case 'urologický':
         return '#D4A5A5';
-      case 'neurologicky':
+      case 'neurologický':
         return '#9B59B6';
       case 'sarcomaboard':
         return '#E67E22';
-      case 'onkogynekologicky':
+      case 'onkogynekologický':
         return '#FF9FF3';
-      case 'dolni_git':
+      case 'dolní git':
         return '#2ECC71';
       default:
         return '#666666';

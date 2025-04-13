@@ -17,7 +17,7 @@
       <UInput
         v-model="searchQuery"
         icon="i-heroicons-magnifying-glass"
-        placeholder="Search by name..."
+        placeholder="Hledat podle jména..."
         color="primary"
         class="shadow-sm"
       />
@@ -119,12 +119,12 @@
     },
     {
       accessorKey: 'firstname',
-      header: 'First Name',
+      header: 'Jméno',
       cell: ({ row }) => row.getValue('firstname')
     },
     {
       accessorKey: 'surname',
-      header: 'Last Name',
+      header: 'Příjmení',
       cell: ({ row }) => row.getValue('surname')
     },
     {
@@ -134,17 +134,17 @@
     },
     {
       accessorKey: 'phone',
-      header: 'Phone',
+      header: 'Telefon',
       cell: ({ row }) => row.getValue('phone')
     },
     {
       accessorKey: 'specialization',
-      header: 'Specialization',
+      header: 'Specializace',
       cell: ({ row }) => row.getValue('specialization')
     },
     {
       accessorKey: 'actions',
-      header: 'Actions',
+      header: 'Akce',
       cell: ({ row }) => {
         return h('div', { class: 'flex items-center gap-2' }, [
           h(resolveComponent('UButton'), {

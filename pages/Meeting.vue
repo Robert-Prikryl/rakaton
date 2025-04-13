@@ -11,7 +11,7 @@
         <UInput
           v-model="searchQuery"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by name..."
+          placeholder="Hledat podle jména..."
           color="primary"
           class="shadow-sm"
         />
@@ -101,17 +101,17 @@ onMounted(() => {
 const columns: TableColumn<Meeting>[] = [
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'Jméno',
     cell: ({ row }) => row.getValue('name')
   },
   {
     accessorKey: 'place',
-    header: 'Place',
+    header: 'Místo',
     cell: ({ row }) => row.getValue('place')
   },
   {
     accessorKey: 'date',
-    header: 'Date',
+    header: 'Datum',
     cell: ({ row }) => row.getValue('date'),
     sort: {
       column: 'date',
@@ -120,7 +120,7 @@ const columns: TableColumn<Meeting>[] = [
   },
   {
     accessorKey: 'actions',
-    header: 'Actions',
+    header: 'Akce',
     cell: ({ row }) => {
       return h('div', { class: 'flex items-center gap-2' }, [
         h(resolveComponent('UButton'), {

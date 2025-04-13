@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto p-8">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold">Patients</h1>
+      <h1 class="text-3xl font-bold">Pacienti</h1>
       
       <!-- Search Bar -->
       <div class="w-auto flex">
@@ -17,7 +17,7 @@
         <UInput
           v-model="searchQuery"
           icon="i-heroicons-magnifying-glass"
-          placeholder="Search by name..."
+          placeholder="Hledat podle jména..."
           color="primary"
           class="shadow-sm"
         />
@@ -100,22 +100,22 @@ const columns: TableColumn<Patient>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'First Name',
+    header: 'Jméno',
     cell: ({ row }) => row.getValue('name')
   },
   {
     accessorKey: 'lastName',
-    header: 'Last Name',
+    header: 'Příjmení',
     cell: ({ row }) => row.getValue('lastName')
   },
   {
     accessorKey: 'gender',
-    header: 'Gender',
+    header: 'Pohlaví',
     cell: ({ row }) => row.getValue('gender')
   },
   {
     accessorKey: 'dateOfBirth',
-    header: 'Date of Birth',
+    header: 'Datum narození',
     cell: ({ row }) => row.getValue('dateOfBirth')
   },
   {
@@ -125,7 +125,7 @@ const columns: TableColumn<Patient>[] = [
   },
   {
     accessorKey: 'actions',
-    header: 'Actions',
+    header: 'Akce',
     cell: ({ row }) => {
       return h('div', { class: 'flex items-center gap-2' }, [
         h(resolveComponent('UButton'), {

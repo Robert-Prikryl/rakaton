@@ -3,15 +3,15 @@ import type { PatientRecord } from "./patient";
 
 export enum MeetingType {
     ORL = 'orl',
-    HORNI_GIT = 'horni git', 
-    HRUDNI = 'hrudni',
-    MAMMARNI = 'mammarni',
-    PLICNI = 'plicni',
-    UROLOGICKY = 'urologicky',
-    NEUROLOGICKY = 'neurologicky',
+    HORNI_GIT = 'horní git', 
+    HRUDNI = 'hrudní',
+    MAMMARNI = 'mammární',
+    PLICNI = 'plicní',
+    UROLOGICKY = 'urologický',
+    NEUROLOGICKY = 'neurologický',
     SARCOMABOARD = 'sarcomaboard',
-    ONKOGYNEKOLOGICKY = 'onkogynekologicky',
-    DOLNI_GIT = 'dolni_git'
+    ONKOGYNEKOLOGICKY = 'onkogynekologický',
+    DOLNI_GIT = 'dolní git'
 }
 
 export interface Meeting {

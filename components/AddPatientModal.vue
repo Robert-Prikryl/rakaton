@@ -44,7 +44,7 @@
             v-model="newRecord.epikriza"
             rows="4"
             class="w-full border border-gray-300 rounded-md p-2"
-            placeholder="Zadajte epikrízu"
+            placeholder="Zadejte epikrízu"
           ></textarea>
         </div>
 
@@ -101,7 +101,7 @@
                 <input
                   v-model="modality.place"
                   type="text"
-                  placeholder="Zadajte místo vyšetření"
+                  placeholder="Zadejte místo vyšetření"
                   class="w-full border border-gray-300 rounded-md p-2"
                 />
               </div>
@@ -113,7 +113,7 @@
                   v-model="modality.results"
                   rows="3"
                   class="w-full border border-gray-300 rounded-md p-2"
-                  placeholder="Zadajte výsledek vyšetření"
+                  placeholder="Zadejte výsledek vyšetření"
                 ></textarea>
               </div>
             </div>
@@ -133,7 +133,7 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              Pridať vyšetrenie
+              Přidat vyšetření
             </button>
           </div>
         </div>
@@ -156,7 +156,7 @@
                   v-model="question.question"
                   rows="2"
                   class="w-full border border-gray-300 rounded-md p-2"
-                  placeholder="Zadajte otázku"
+                  placeholder="Zadejte otázku"
                 ></textarea>
               </div>
               <div class="mb-2">
@@ -167,12 +167,12 @@
                   v-model="question.note"
                   rows="2"
                   class="w-full border border-gray-300 rounded-md p-2"
-                  placeholder="Zadajte poznámku"
+                  placeholder="Zadejte poznámku"
                 ></textarea>
               </div>
               <div class="mb-2">
                 <label class="block text-sm font-medium text-gray-700 mb-1"
-                  >Vysetrujúci lékař</label
+                  >Vyšetřující lékař</label
                 >
                 <select
                   v-model="question.reciepient"
@@ -223,7 +223,7 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              Pridať otázku
+              Přidat otázku
             </button>
           </div>
         </div>
@@ -234,7 +234,7 @@
         :disabled="!selectedPatient"
         class="bg-[#7ac142] text-white px-4 py-2 rounded-md hover:bg-[#6aad3a] disabled:bg-gray-300"
       >
-        Vytvoriť záznam
+        Vytvořit záznam
       </button>
     </div>
   </div>

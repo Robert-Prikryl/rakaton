@@ -74,7 +74,7 @@
       <!-- Patient Records -->
       <div v-if="activeMeeting.patientRecords.length > 0" class="border-t pt-4">
         <div class="p-3 bg-blue-50 rounded-lg">
-          <h2 class="text-base font-semibold text-gray-900 mb-2">Epikriza</h2>
+          <h2 class="text-base font-semibold text-gray-900 mb-2">Epikrize</h2>
           <p class="text-sm text-gray-600 break-words">{{ patient?.epikriza }}</p>
         </div>
       </div>

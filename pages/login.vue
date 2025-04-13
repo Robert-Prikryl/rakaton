@@ -4,7 +4,7 @@
       <template #header>
         <div class="text-center relative">
           <h1 class="text-2xl font-bold">🧬 Rakaton</h1>
-          <p class="text-gray-500 mt-2">Please login to continue</p>
+          <p class="text-gray-500 mt-2">Přihlaste se pro pokračování</p>
           <div class="absolute right-0 top-0">
             <UDropdownMenu :items="loginOptions">
               <UButton color="gray" icon="i-heroicons-question-mark-circle" />
@@ -18,12 +18,12 @@
           <UInput v-model="state.email" class="w-full" />
         </UFormField>
 
-        <UFormField label="Password" name="password" class="w-full">
+        <UFormField label="Heslo" name="password" class="w-full">
           <UInput v-model="state.password" type="password" class="w-full" />
         </UFormField>
 
         <UButton type="submit" color="primary" block :loading="loading">
-          Login
+          Přihlásit se
         </UButton>
       </UForm>
     </UCard>
@@ -91,8 +91,8 @@ async function onSubmit(event: any) {
       auth.value.isAuthenticated = true
       router.push('/')
       toast.add({
-        title: 'Success',
-        description: 'Successfully logged in',
+        title: 'Úspěšně přihlášen',
+        description: 'Úspěšně jste se přihlásili',
         color: 'success'
       })
     } else if (state.email === 'doctor@rakaton.cz' && state.password === 'doctor') {
@@ -102,8 +102,8 @@ async function onSubmit(event: any) {
       auth.value.isAuthenticated = true
       router.push('/')
       toast.add({
-        title: 'Success',
-        description: 'Successfully logged in',
+        title: 'Úspěšně přihlášen',
+        description: 'Úspěšně jste se přihlásili',
         color: 'success'
       })
     } else if (state.email === 'manager@rakaton.cz' && state.password === 'manager') {
@@ -112,8 +112,8 @@ async function onSubmit(event: any) {
       auth.value.isAuthenticated = true
       router.push('/')
       toast.add({
-        title: 'Success',
-        description: 'Successfully logged in',
+        title: 'Úspěšně přihlášen',
+        description: 'Úspěšně jste se přihlásili',
         color: 'success'
       })
     } else if (state.email === 'student@rakaton.cz' && state.password === 'student') {
@@ -122,8 +122,8 @@ async function onSubmit(event: any) {
       auth.value.isAuthenticated = true
       router.push('/')
       toast.add({
-        title: 'Success',
-        description: 'Successfully logged in',
+        title: 'Úspěšně přihlášen',
+        description: 'Úspěšně jste se přihlásili',
         color: 'success'
       })
     } else {
@@ -131,8 +131,8 @@ async function onSubmit(event: any) {
     }
   } catch (error: any) {
     toast.add({
-      title: 'Error',
-      description: error.message || 'Failed to login',
+      title: 'Chyba',
+      description: error.message || 'Nepodařilo se přihlásit',
       color: 'error'
     })
   } finally {

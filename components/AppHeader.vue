@@ -264,24 +264,24 @@ onBeforeMount(() => {
       { name: 'Vytvořit schůzku', path: '/create_meeting' }
     ]
   } else if (role === 'manager') {
-    userName.value = 'Manager Johnson'
-    userRole.value = 'Manager'
+    userName.value = 'J. Novák'
+    userRole.value = 'Manažer'
     navigationItems.value = [
       { name: 'Pacienti', path: '/patients' },
       { name: 'Schůzky', path: '/meeting' },
       { name: 'Vytvořit schůzku', path: '/create_meeting' }
     ]
   } else if (role === 'admin') {
-    userName.value = 'Admin User'
-    userRole.value = 'Administrator'
+    userName.value = 'P. Novotný'
+    userRole.value = 'Administrátor'
     navigationItems.value = [
-      { name: 'Doctors', path: '/doctors_table' }
+      { name: 'Doktoři', path: '/doctors_table' }
     ]
   } else if (role === 'student') {
-    userName.value = 'Student User'
+    userName.value = 'Petr Albrecht'
     userRole.value = 'Student'
     navigationItems.value = [
-      { name: 'Cases Preview', path: '/cases_preview' }
+      { name: 'Přehled případů', path: '/cases_preview' }
     ]
   } else {
     router.push('/login')

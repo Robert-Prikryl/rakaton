@@ -2,8 +2,8 @@
     <div class="border-2 border-gray-300 rounded-lg md:m-8">
         <MeetingViewer />
         <div class="flex justify-end mr-8 m-4">
-          <UModal title="Pridat pacienta">
-              <UButton label="+ Pridat pacienta" class="flex gap-6 mr-4" color="primary" variant="subtle" />
+          <UModal title="Přidat pacienta">
+              <UButton label="+ Přidat pacienta" class="flex gap-6 mr-4" color="primary" variant="subtle" />
 
               <template #body>
                   <AddPatientModal />

@@ -5,32 +5,32 @@
         <UCard class="bg-white">
           <div class="text-center">
             <div class="text-2xl font-bold">{{ patientsData.length }}</div>
-            <div class="text-gray-600">Total Patients</div>
+            <div class="text-gray-600">Celkový počet pacientů</div>
           </div>
         </UCard>
         <UCard class="bg-white">
           <div class="text-center">
             <div class="text-2xl font-bold text-primary">{{ activePatients }}</div>
-            <div class="text-gray-600">Under Treatment</div>
+            <div class="text-gray-600">V léčbě</div>
           </div>
         </UCard>
         <UCard class="bg-white">
           <div class="text-center">
             <div class="text-2xl font-bold text-green-600">{{ completedTreatments }}</div>
-            <div class="text-gray-600">Completed Cases</div>
+            <div class="text-gray-600">Dokončené léčby</div>
           </div>
         </UCard>
         <UCard class="bg-white">
           <div class="text-center">
             <div class="text-2xl font-bold text-red-600">{{ criticalCases }}</div>
-            <div class="text-gray-600">Critical Cases</div>
+            <div class="text-gray-600">Kritické případy</div>
           </div>
         </UCard>
       </div>
   
       <!-- Main Header and Search Section (preserved from original) -->
       <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Patients</h1>
+        <h1 class="text-3xl font-bold">Pacienti</h1>
         
         <!-- Search Bar -->
         <div class="w-auto flex">
@@ -46,7 +46,7 @@
           <UInput
             v-model="searchQuery"
             icon="i-heroicons-magnifying-glass"
-            placeholder="Search by name..."
+            placeholder="Hledat podle jména..."
             color="primary"
             class="shadow-sm"
           />
@@ -163,10 +163,10 @@
   // New refs for educational features
   const showEducationalSidebar = ref(false)
   const quickFilters = [
-    { label: 'Critical Cases', color: 'red', value: 'critical' },
-    { label: 'Recent Updates', color: 'blue', value: 'recent' },
-    { label: 'Long-term Care', color: 'purple', value: 'longterm' },
-    { label: 'New Patients', color: 'green', value: 'new' }
+    { label: 'Kritické případy', color: 'red', value: 'critical' },
+    { label: 'Nedávno aktualizované', color: 'blue', value: 'recent' },
+    { label: 'Dlouhodobá léčba', color: 'purple', value: 'longterm' },
+    { label: 'Noví pacienti', color: 'green', value: 'new' }
   ]
   
   onMounted(() => {
@@ -187,22 +187,22 @@
     },
     {
       accessorKey: 'name',
-      header: 'First Name',
+      header: 'Jméno',
       cell: ({ row }) => row.getValue('name')
     },
     {
       accessorKey: 'lastName',
-      header: 'Last Name',
+      header: 'Příjmení',
       cell: ({ row }) => row.getValue('lastName')
     },
     {
       accessorKey: 'gender',
-      header: 'Gender',
+      header: 'Pohlaví',
       cell: ({ row }) => row.getValue('gender')
     },
     {
       accessorKey: 'dateOfBirth',
-      header: 'Date of Birth',
+      header: 'Datum narození',
       cell: ({ row }) => row.getValue('dateOfBirth')
     },
     {
@@ -212,7 +212,7 @@
     },
     {
       accessorKey: 'actions',
-      header: 'Actions',
+      header: 'Akce',
       cell: ({ row }) => {
         return h('div', { class: 'flex items-center gap-2' }, [
           h(resolveComponent('UButton'), {

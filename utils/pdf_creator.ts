@@ -104,7 +104,7 @@ function downloadReportUtils(activeMeeting: any, patient: any) {
   // Add epikríza if exists
   if (patient.epikriza) {
     doc.setFontSize(16)
-    doc.text(removeDiacritics("Epikriza"), margin, startY + 90)
+    doc.text(removeDiacritics("Epikrize"), margin, startY + 90)
     doc.setFontSize(12)
     
     // Handle long text wrapping

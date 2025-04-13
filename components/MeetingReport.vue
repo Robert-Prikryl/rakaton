@@ -83,19 +83,19 @@
     <!-- Patient Records - Full Width -->
     <div v-if="activeMeeting.patientRecords.length > 0" class="border-t pt-6">
       <div class="p-4 bg-blue-50 rounded-lg">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">Epikriza</h2>
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Epikrize</h2>
         <p class="text-sm text-gray-600">{{ patient?.epikriza }}</p>
       </div>
     </div>
 
     <div v-if="patient?.modality && patient?.modality.length > 0" class="mt-3 pt-3 border-t border-gray-200">
-        <div class="p-4 bg-white rounded-lg">
+        <div class="bg-white rounded-lg">
             <h2 class="text-lg font-semibold text-gray-900 mb-2">Relevantní vyšetření a výkony</h2>
             <div class="space-y-2">
                 <div 
                 v-for="mod in patient.modality" 
                 :key="mod.id"
-                class="p-2 rounded border border-gray-200"
+                class="p-4 rounded border border-gray-200"
                 >
                 <div class="flex justify-between items-start">
                     <div class="font-medium text-sm">{{ getModalityTypeName(mod.type) }}</div>
@@ -149,7 +149,7 @@
     </div>
     <!-- Reports Section -->
     <div v-if="activeMeeting.reports && activeMeeting.reports.length > 0" class="border-t pt-4">
-      <div class="p-4 bg-white rounded-lg">
+      <div class="py-4 bg-white rounded-lg">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Závěr MDT</h2>
         <div class="space-y-4">
           <div
