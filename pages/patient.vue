@@ -9,15 +9,73 @@
                         <p class="text-lg md:text-2xl text-gray-900">
                             {{ patientStore.activePatient?.name + ' ' + patientStore.activePatient?.lastName }}
                         </p>
-                        <NuxtLink 
-                            to="/" 
-                            class="w-5 h-5 bg-gradient-to-br from-indigo-600 to-purple-600 rounded flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-50 group"
-                        >
-                            <UIcon 
-                                name="i-heroicons-sparkles" 
-                                class="w-3 h-3 text-white group-hover:scale-110 transition-transform duration-300"
-                            />
-                        </NuxtLink>
+                        <UModal :title="`Vyhledejte informace o pacientovi ${patientStore.activePatient?.name + ' ' + patientStore.activePatient?.lastName}`">
+                            <UButton 
+                                class="w-8 h-7 rounded flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-50"
+                            >
+                                <UIcon 
+                                    name="i-heroicons-sparkles" 
+                                    class="text-white group-hover:scale-110 transition-transform duration-300"
+                                />
+                            </UButton>
+                            <template #body>
+                                <div class="flex flex-col space-y-4">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <UIcon 
+                                            name="i-heroicons-light-bulb" 
+                                            class="w-5 h-5 text-amber-500"
+                                        />
+                                        <h1 class="text-lg font-semibold text-gray-900">Nápověda</h1>
+                                    </div>
+                                    
+                                    <div class="relative bg-white rounded-xl shadow-sm border border-gray-200">
+                                        <UTextarea
+                                            v-model="prompt"
+                                            placeholder="Zeptejte se na cokoliv ohledně pacienta..."
+                                            class="w-full pr-14 resize-none border-0 focus:ring-0 rounded-xl"
+                                            :rows="2"
+                                            @keydown.enter.prevent="handlePrompt"
+                                        />
+                                        <UButton
+                                            color="primary"
+                                            :loading="isLoading"
+                                            class="absolute bottom-2.5 right-2.5 rounded-full w-9 h-9 flex items-center justify-center"
+                                            @click="handlePrompt"
+                                        >
+                                            <UIcon 
+                                                name="i-heroicons-paper-airplane" 
+                                                class="w-4 h-4 -rotate-45"
+                                            />
+                                        </UButton>
+                                    </div>
+
+                                    <!-- Only AI Response -->
+                                    <div 
+                                        v-if="response"
+                                        class="bg-gradient-to-br from-purple-50 to-indigo-50 p-4 rounded-xl shadow-sm border border-purple-100"
+                                    >
+                                        <div class="flex items-start gap-3">
+                                            <div class="shrink-0">
+                                                <UAvatar
+                                                    src="/ai-avatar.png"
+                                                    size="sm"
+                                                    class="ring-2 ring-purple-200 ring-offset-2"
+                                                />
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="flex items-center gap-2 mb-1">
+                                                    <span class="text-sm font-medium text-purple-900">Informační Asistent</span>
+                                                    <span class="text-xs text-purple-500">•</span>
+                                                    <span class="text-xs text-purple-500">Rakaton</span>
+                                                </div>
+                                                <p class="text-sm text-gray-700 leading-relaxed">{{ response }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </UModal>
+                        
                     </div>
                     <div class="flex items-center gap-3">
                         <UIcon name="mdi:gender-male-female" class="shrink-0" />
@@ -89,7 +147,39 @@ function formatDate(date: string | undefined) {
   return `${day}.${month}.${year}`;
 }
 
+const prompt = ref('')
+const isLoading = ref(false)
+const response = ref('')
+
+async function handlePrompt() {
+  if (!prompt.value.trim()) return
+
+  isLoading.value = true
+  try {
+    // Simulate AI response - replace with your actual AI implementation
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    response.value = 'Toto je simulovaná odpověď asistenta. Implementujte vlastní logiku pro zpracování dotazů.'
+  } finally {
+    isLoading.value = false
+  }
+}
+
 definePageMeta({
   colorMode: "light",
 });
 </script>
+
+<style scoped>
+.resize-none {
+  resize: none;
+}
+
+/* Optional: Add smooth transitions */
+.rounded-xl {
+  transition: all 0.2s ease-in-out;
+}
+
+.UTextarea:focus-within {
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+}
+</style>
