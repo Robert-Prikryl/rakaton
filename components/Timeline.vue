@@ -1,51 +1,51 @@
 <template>
-  <div class="relative w-full h-[5px] my-5">
-    <div class="absolute w-full h-full bg-gray-200 rounded-2xl"></div>
-    
-    <!-- Month break markers with labels -->
-    <div 
-      v-for="(marker, index) in monthMarkers" 
-      :key="'month-' + index"
-      class="absolute top-1/2 -translate-y-1/2 z-10"
-      :style="{ left: `${marker.position}%` }"
-    >
-      <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs text-gray-500 whitespace-nowrap capitalize">
-        {{ getCzechMonth(marker.date) }}
+    <div class="relative w-full h-[5px] my-5">
+      <div class="absolute w-full h-full bg-gray-200 rounded-2xl"></div>
+      
+      <!-- Month break markers with labels -->
+      <div 
+        v-for="(marker, index) in monthMarkers" 
+        :key="'month-' + index"
+        class="absolute top-1/2 -translate-y-1/2 z-10"
+        :style="{ left: `${marker.position}%` }"
+      >
+        <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs text-gray-500 whitespace-nowrap capitalize">
+          {{ getCzechMonth(marker.date) }}
+        </div>
+        <div class="w-0.5 h-3 bg-gray-300"></div>
       </div>
-      <div class="w-0.5 h-3 bg-gray-300"></div>
-    </div>
 
-    <!-- Highlighted ranges -->
-    <div 
-      v-for="(range, index) in visibleHighlightedRanges" 
-      :key="'highlight-' + index"
-      class="absolute h-full rounded-2xl cursor-pointer transition-all duration-300 group z-10 hover:scale-y-125"
-      :style="getHighlightStyle(range)"
-      @click="recordsStore.setActiveRecord(range.id)"
-    >
-      <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100 scale-x-125">
-        {{ range.description || `${formatDate(range.startDate)} - ${formatDate(range.endDate)}` }}
+      <!-- Highlighted ranges -->
+      <div 
+        v-for="(range, index) in visibleHighlightedRanges" 
+        :key="'highlight-' + index"
+        class="absolute h-full rounded-2xl cursor-pointer transition-all duration-300 group z-10 hover:scale-y-125"
+        :style="getHighlightStyle(range)"
+        @click="recordsStore.setActiveRecord(range.id)"
+      >
+        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100 scale-x-125">
+          {{ range.description || `${formatDate(range.startDate)} - ${formatDate(range.endDate)}` }}
+        </div>
       </div>
-    </div>
 
-    <!-- Meeting points -->
-    <div 
-      v-for="(meeting, index) in visibleMeetings" 
-      :key="index"
-      class="absolute w-3 h-3 rounded-full top-1/2 -translate-y-1/2 cursor-pointer transition-transform duration-300 hover:scale-125 group z-20"
-      :style="getMeetingPointStyle(meeting.id)"
-      @click="meetingStore.setActiveMeeting(meeting.id)"
-    >
-      <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100">
-        {{ getMeetingTooltip(meeting) }}
+      <!-- Meeting points -->
+      <div 
+        v-for="(meeting, index) in visibleMeetings" 
+        :key="index"
+        class="absolute w-3 h-3 rounded-full top-1/2 -translate-y-1/2 cursor-pointer transition-transform duration-300 hover:scale-125 group z-20"
+        :style="getMeetingPointStyle(meeting.id)"
+        @click="meetingStore.setActiveMeeting(meeting.id)"
+      >
+        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100">
+          {{ getMeetingTooltip(meeting) }}
+        </div>
       </div>
-    </div>
 
-    <!-- Today marker -->
-    <div class="absolute left-[60%] top-1/2 -translate-y-1/2 w-[3px] h-3 bg-red-500 cursor-pointer transition-transform duration-300 hover:scale-125 group z-20">
-      <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100">
-        Dnes
-      </div>
+      <!-- Today marker -->
+      <div class="absolute left-[60%] top-1/2 -translate-y-1/2 w-[3px] h-3 bg-red-500 cursor-pointer transition-transform duration-300 hover:scale-125 group z-20">
+        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100">
+          Dnes
+        </div>
     </div>
   </div>
 </template>

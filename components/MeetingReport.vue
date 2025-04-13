@@ -1,5 +1,5 @@
 <template>
-  <div v-if="activeMeeting" class="space-y-6 py-4 px-12 bg-white rounded-lg shadow">
+  <div v-if="activeMeeting" class="space-y-6 py-4 px-6 md:px-12 bg-white rounded-lg shadow">
     <!-- Header Section -->
     <div class="border-b pb-4">
       <div class="flex justify-between items-start">

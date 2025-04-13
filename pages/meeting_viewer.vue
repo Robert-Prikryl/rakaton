@@ -1,5 +1,5 @@
 <template>
-    <div class="border-2 border-gray-300 rounded-lg m-8">
+    <div class="border-2 border-gray-300 rounded-lg md:m-8">
         <MeetingViewer />
         <div class="flex justify-end mr-8 m-4">
           <UModal title="Pridat pacienta">

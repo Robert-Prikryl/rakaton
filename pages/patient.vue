@@ -1,6 +1,6 @@
 <template>
-    <div class="border-2 border-gray-300 rounded-lg m-8">
-        <div class="border-b-2 border-gray-300 px-12 py-4" v-if="patientStore.activePatient">
+    <div class="border-2 border-gray-300 rounded-lg md:m-8">
+        <div class="border-b-2 border-gray-300 px-6 md:px-12 py-4" v-if="patientStore.activePatient">
             <div class="flex flex-col space-y-4 md:grid md:grid-cols-2 md:gap-6 md:space-y-0">
                 <!-- Left Column -->
                 <div class="space-y-4">
@@ -48,7 +48,10 @@
                     </div>
                 </div>
             </div>
-            <Timeline class="mt-12"/>
+            <div class="flex flex-col md:flex-row gap-4">
+                <Timeline class="mt-12 flex-grow"/>
+                <TimelineLegend class="flex md:w-6 justify-end flex-col"/>
+            </div>
         </div>
         <MeetingReport />
     </div>
@@ -60,6 +63,7 @@ import { usePatientStore } from '@/stores/patientStore';
 import { seedPatients } from '@/seeders/patientSeeder';
 import { pushSeeds } from '@/seeders/recordSeeder';
 import { seedMeetings } from '@/seeders/meetingSeeder';
+import TimelineLegend from '~/components/TimelineLegend.vue'
 
 const patientStore = usePatientStore();
 // onMounted(() => {
