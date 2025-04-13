@@ -1,9 +1,12 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center justify-center p-4">
+  <div class="min-h-screen bg-gradient-to-br bg-seagull-300 to-seagull-600 flex items-center justify-center p-4">
     <UCard class="w-full max-w-md">
       <template #header>
         <div class="text-center relative">
-          <h1 class="text-2xl font-bold">🧬 Rakaton</h1>
+          <h1 class="text-2xl font-bold">
+            <span class="text-2xl font-bold bg-gradient-to-r from-seagull-600 to-seagull-400 bg-clip-text text-transparent">
+            OptiCase
+          </span></h1>
           <p class="text-gray-500 mt-2">Přihlaste se pro pokračování</p>
           <div class="absolute right-0 top-0">
             <UDropdownMenu :items="loginOptions">

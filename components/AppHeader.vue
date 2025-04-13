@@ -4,11 +4,18 @@
       <div class="flex items-center justify-between">
         <!-- Logo/Brand -->
         <NuxtLink to="/" class="flex items-center gap-2">
-          <span class="text-3xl"></span>
-          <span class="text-2xl font-bold bg-gradient-to-r from-seagull-600 to-seagull-400 bg-clip-text text-transparent">
-            Rakaton
+          <span class="text-3xl flex items-center gap-2">
+            <img 
+              src="@/assets/images/logo_rakaton.png" 
+              alt="FN Motol Logo" 
+              class="h-8 w-auto"
+            />
+            <span class="text-2xl font-bold bg-gradient-to-r from-seagull-600 to-seagull-400 bg-clip-text text-transparent">
+            OptiCase
+          </span>
           </span>
         </NuxtLink>
+        
 
         <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center space-x-4">

@@ -5,17 +5,17 @@
       <div class="text-center mb-8">
         <h1 class="text-6xl font-bold mb-4">
           <span class="mr-4"></span>
-          <span class="text-white">Rakaton</span>
+          <span class="text-white">OptiCase</span>
         </h1>
-        <p class="text-xl">Multidisciplinární onkologický systém</p>
+        <p class="text-xl">Platforma pro kontinuitu péče</p>
       </div>
 
       <!-- Enhanced Role-specific content -->
       <div v-if="userRole === 'doctor'" class="space-y-8">
-        <h2 class="text-2xl font-semibold mb-4">Vítejte, doktore</h2>
+        <h2 class="text-2xl font-semibold mb-4 font-semibold">Vítejte, doktore</h2>
         
         <!-- Main Features -->
-        <div class="grid md:grid-cols-2 gap-6">
+        <div class="grid md:grid-cols-2 gap-6 font-medium">
           <FeatureCard
             icon="i-heroicons-user-group"
             title="Správa pacientů"
@@ -29,8 +29,8 @@
         </div>
 
         <!-- Detailed System Guide -->
-        <div class="mt-8 space-y-6">
-          <section class="bg-white/15 text-black rounded-lg p-6">
+        <div class="mt-8 space-y-6 font-medium">
+          <section class="bg-white/15 rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Práce s pacienty</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Přehled pacientů najdete v sekci "Pacienti"</li>
@@ -44,7 +44,7 @@
             </ul>
           </section>
 
-          <section class="bg-white/15 text-black rounded-lg p-6">
+          <section class="bg-white/15 rounded-lg p-6 font-medium">
             <h3 class="text-xl font-semibold mb-4">Správa schůzek</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>V sekci "Schůzky" můžete:
@@ -60,7 +60,7 @@
         </div>
       </div>
 
-      <div v-else-if="userRole === 'manager'" class="space-y-8">
+      <div v-else-if="userRole === 'manager'" class="space-y-8 font-medium">
         <h2 class="text-2xl font-semibold mb-4">Manažerský přehled</h2>
         
         <div class="grid md:grid-cols-2 gap-6">
@@ -76,8 +76,8 @@
           />
         </div>
 
-        <div class="mt-8 space-y-6">
-          <section class="bg-white/15 text-black rounded-lg p-6">
+        <div class="mt-8 space-y-6 font-medium">
+          <section class="bg-white/15 rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Analytické nástroje</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Sledování vytíženosti doktorů</li>
@@ -87,7 +87,7 @@
             </ul>
           </section>
 
-          <section class="bg-white/15 text-black rounded-lg p-6">
+          <section class="bg-white/15 rounded-lg p-6 font-medium">
             <h3 class="text-xl font-semibold mb-4">Koordinace týmů</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Plánování multidisciplinárních setkání</li>
@@ -98,7 +98,7 @@
         </div>
       </div>
 
-      <div v-else-if="userRole === 'admin'" class="space-y-8">
+      <div v-else-if="userRole === 'admin'" class="space-y-8 font-medium">
         <h2 class="text-2xl font-semibold mb-4">Administrátorský panel</h2>
         
         <div class="grid md:grid-cols-2 gap-6">
@@ -114,8 +114,8 @@
           />
         </div>
 
-        <div class="mt-8 space-y-6">
-          <section class="bg-white/15 text-black rounded-lg p-6">
+        <div class="mt-8 space-y-6 font-medium">
+            <section class="bg-white/15 rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Správa uživatelů</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Vytváření nových účtů pro doktory</li>
@@ -125,7 +125,7 @@
             </ul>
           </section>
 
-          <section class="bg-white/15 text-black rounded-lg p-6">
+          <section class="bg-white/15 rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Systémová údržba</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Konfigurace systémových parametrů</li>
@@ -136,7 +136,7 @@
         </div>
       </div>
 
-      <div v-else-if="userRole === 'student'" class="space-y-8">
+      <div v-else-if="userRole === 'student'" class="space-y-8 font-medium">
         <h2 class="text-2xl font-semibold mb-4">Vzdělávací portál</h2>
         
         <div class="grid md:grid-cols-2 gap-6">
@@ -152,8 +152,8 @@
           />
         </div>
 
-        <div class="mt-8 space-y-6">
-          <section class="bg-white/15 text-black rounded-lg p-6">
+        <div class="mt-8 space-y-6 font-medium">
+            <section class="bg-white/15 rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Studium případů</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Prohlížení anonymizovaných případů</li>
@@ -163,7 +163,7 @@
             </ul>
           </section>
 
-          <section class="bg-white/15 text-black rounded-lg p-6">
+          <section class="bg-white/15 rounded-lg p-6 font-medium">
             <h3 class="text-xl font-semibold mb-4">Vzdělávací materiály</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Přístup k odborným postupům</li>
@@ -175,8 +175,8 @@
       </div>
 
       <!-- Enhanced Quick Start Guide -->
-      <div class="mt-8 pt-8 border-t border-white/20">
-        <h3 class="text-xl text-black font-semibold mb-4">Rychlý průvodce systémem</h3>
+      <div class="mt-8 pt-8 border-t border-white/20 font-medium">
+        <h3 class="text-xl font-semibold mb-4">Rychlý průvodce systémem</h3>
         <ul class="space-y-2">
           <li v-for="guide in quickGuides" :key="guide.title" class="flex items-center">
             <UIcon :name="guide.icon" class="mr-2" />
@@ -186,11 +186,11 @@
       </div>
 
       <!-- Support Section -->
-      <div class="mt-8 pt-8 border-t border-white/20">
-        <h3 class="text-xl text-black font-semibold mb-4">Potřebujete pomoc?</h3>
-        <p class="text-black">
+      <div class="mt-8 pt-8 border-t border-white/20 font-medium">
+        <h3 class="text-xl font-semibold mb-4">Potřebujete pomoc?</h3>
+        <p class="">
           V případě technických problémů kontaktujte správce systému na:
-          <a href="mailto:support@motol.cz" class="text-pink-300 hover:text-pink-400">support@motol.cz</a>
+          <a href="mailto:support@motol.cz" class="text-seagull-600 hover:text-seagull-500 ">support@motol.cz</a>
         </p>
       </div>
     </div>

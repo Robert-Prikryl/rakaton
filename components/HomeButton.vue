@@ -26,7 +26,7 @@
 /* Optional: Add a pulse animation */
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+    box-shadow: 0 0 0 0 rgba(61, 155, 186, 0.4);
   }
   70% {
     box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);

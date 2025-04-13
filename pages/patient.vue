@@ -52,21 +52,21 @@
                                     <!-- Only AI Response -->
                                     <div 
                                         v-if="response"
-                                        class="bg-gradient-to-br from-purple-50 to-indigo-50 p-4 rounded-xl shadow-sm border border-purple-100"
+                                        class="bg-gradient-to-br from-seagull-50 to-seagull-50 p-4 rounded-xl shadow-sm border border-seagull-100"
                                     >
                                         <div class="flex items-start gap-3">
                                             <div class="shrink-0">
                                                 <UAvatar
                                                     src="/ai-avatar.png"
                                                     size="sm"
-                                                    class="ring-2 ring-purple-200 ring-offset-2"
+                                                    class="ring-2 ring-seagull-200 ring-offset-2"
                                                 />
                                             </div>
                                             <div class="flex-1">
                                                 <div class="flex items-center gap-2 mb-1">
-                                                    <span class="text-sm font-medium text-purple-900">Informační Asistent</span>
-                                                    <span class="text-xs text-purple-500">•</span>
-                                                    <span class="text-xs text-purple-500">Rakaton</span>
+                                                    <span class="text-sm font-medium text-seagull-900">Informační Asistent</span>
+                                                    <span class="text-xs text-seagull-500">•</span>
+                                                    <span class="text-xs text-seagull-500">Rakaton</span>
                                                 </div>
                                                 <p class="text-sm text-gray-700 leading-relaxed">{{ response }}</p>
                                             </div>
