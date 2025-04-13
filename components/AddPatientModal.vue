@@ -230,9 +230,9 @@
       </div>
 
       <button
-        @click="createRecord"
+        @click="createRecord" 
         :disabled="!selectedPatient"
-        class="bg-[#7ac142] text-white px-4 py-2 rounded-md hover:bg-[#6aad3a] disabled:bg-gray-300"
+        class="bg-seagull-400 text-white px-4 py-2 rounded-md hover:bg-seagull-500 disabled:bg-gray-300"
       >
         Vytvořit záznam
       </button>
