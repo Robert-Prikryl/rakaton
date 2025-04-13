@@ -1,13 +1,13 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex flex-col items-center justify-center p-8">
+  <div class="min-h-screen bg-seagull-300 flex flex-col items-center justify-center p-8">
     <div class="max-w-6xl w-full bg-white/10 backdrop-blur-lg rounded-xl p-8 text-white">
       <!-- Header -->
       <div class="text-center mb-8">
         <h1 class="text-6xl font-bold mb-4">
-          <span class="mr-4">🏥</span>
+          <span class="mr-4"></span>
           <span class="text-white">Rakaton</span>
         </h1>
-        <p class="text-xl text-pink-300">Multidisciplinární onkologický systém</p>
+        <p class="text-xl">Multidisciplinární onkologický systém</p>
       </div>
 
       <!-- Enhanced Role-specific content -->
@@ -30,7 +30,7 @@
 
         <!-- Detailed System Guide -->
         <div class="mt-8 space-y-6">
-          <section class="bg-white/5 rounded-lg p-6">
+          <section class="bg-white/15 text-black rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Práce s pacienty</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Přehled pacientů najdete v sekci "Pacienti"</li>
@@ -44,7 +44,7 @@
             </ul>
           </section>
 
-          <section class="bg-white/5 rounded-lg p-6">
+          <section class="bg-white/15 text-black rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Správa schůzek</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>V sekci "Schůzky" můžete:
@@ -77,7 +77,7 @@
         </div>
 
         <div class="mt-8 space-y-6">
-          <section class="bg-white/5 rounded-lg p-6">
+          <section class="bg-white/15 text-black rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Analytické nástroje</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Sledování vytíženosti doktorů</li>
@@ -87,7 +87,7 @@
             </ul>
           </section>
 
-          <section class="bg-white/5 rounded-lg p-6">
+          <section class="bg-white/15 text-black rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Koordinace týmů</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Plánování multidisciplinárních setkání</li>
@@ -115,7 +115,7 @@
         </div>
 
         <div class="mt-8 space-y-6">
-          <section class="bg-white/5 rounded-lg p-6">
+          <section class="bg-white/15 text-black rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Správa uživatelů</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Vytváření nových účtů pro doktory</li>
@@ -125,7 +125,7 @@
             </ul>
           </section>
 
-          <section class="bg-white/5 rounded-lg p-6">
+          <section class="bg-white/15 text-black rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Systémová údržba</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Konfigurace systémových parametrů</li>
@@ -153,7 +153,7 @@
         </div>
 
         <div class="mt-8 space-y-6">
-          <section class="bg-white/5 rounded-lg p-6">
+          <section class="bg-white/15 text-black rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Studium případů</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Prohlížení anonymizovaných případů</li>
@@ -163,7 +163,7 @@
             </ul>
           </section>
 
-          <section class="bg-white/5 rounded-lg p-6">
+          <section class="bg-white/15 text-black rounded-lg p-6">
             <h3 class="text-xl font-semibold mb-4">Vzdělávací materiály</h3>
             <ul class="space-y-3 list-disc list-inside">
               <li>Přístup k odborným postupům</li>
@@ -176,7 +176,7 @@
 
       <!-- Enhanced Quick Start Guide -->
       <div class="mt-8 pt-8 border-t border-white/20">
-        <h3 class="text-xl font-semibold mb-4">Rychlý průvodce systémem</h3>
+        <h3 class="text-xl text-black font-semibold mb-4">Rychlý průvodce systémem</h3>
         <ul class="space-y-2">
           <li v-for="guide in quickGuides" :key="guide.title" class="flex items-center">
             <UIcon :name="guide.icon" class="mr-2" />
@@ -187,8 +187,8 @@
 
       <!-- Support Section -->
       <div class="mt-8 pt-8 border-t border-white/20">
-        <h3 class="text-xl font-semibold mb-4">Potřebujete pomoc?</h3>
-        <p class="text-gray-300">
+        <h3 class="text-xl text-black font-semibold mb-4">Potřebujete pomoc?</h3>
+        <p class="text-black">
           V případě technických problémů kontaktujte správce systému na:
           <a href="mailto:support@motol.cz" class="text-pink-300 hover:text-pink-400">support@motol.cz</a>
         </p>

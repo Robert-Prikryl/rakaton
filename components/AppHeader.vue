@@ -4,8 +4,8 @@
       <div class="flex items-center justify-between">
         <!-- Logo/Brand -->
         <NuxtLink to="/" class="flex items-center gap-2">
-          <span class="text-3xl">🧬</span>
-          <span class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          <span class="text-3xl"></span>
+          <span class="text-2xl font-bold bg-gradient-to-r from-seagull-600 to-seagull-400 bg-clip-text text-transparent">
             Rakaton
           </span>
         </NuxtLink>
@@ -16,8 +16,8 @@
             v-for="item in navigationItems"
             :key="item.path"
             :to="item.path"
-            class="px-4 py-2 rounded-md hover:bg-indigo-50 transition-colors duration-200 cursor-pointer font-medium"
-            :class="$route.path === item.path ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700'"
+            class="px-4 py-2 rounded-md hover:bg-seagull-100 transition-colors duration-200 cursor-pointer font-medium"
+            :class="$route.path === item.path ? 'text-seagull-600 bg-seagull-50  ' : 'text-gray-700'"
           >
             {{ item.name }}
           </NuxtLink>
@@ -51,17 +51,17 @@
                 <UButton
                   color="neutral"
                   variant="ghost"
-                  class="flex items-center gap-2"
+                  class="flex items-center gap-2 hover:bg-seagull-100"
                 >
                   <div class="flex items-center gap-2">
                     <UAvatar
                       :text="getInitials(userName)"
-                      color="indigo"
+                      color="seagull"
                       class="text-white"
                     />
                     <div class="flex flex-col text-left">
-                      <span class="font-semibold text-gray-800">{{ userName }}</span>
-                      <span class="text-xs text-gray-500">{{ userRole }}</span>
+                      <span class="font-semibold text-seagull-800">{{ userName }}</span>
+                      <span class="text-xs text-seagull-500">{{ userRole }}</span>
                     </div>
                   </div>
                 </UButton>
@@ -82,11 +82,11 @@
                   color="neutral"
                   variant="ghost"
                   icon="i-lucide-bell"
-                  class="flex items-center gap-2 relative"
+                  class="flex items-center gap-2 relative hover:bg-seagull-100"
                 >
                   <span v-if="unreadNotifications > 0" class="absolute -top-1 -right-1 flex h-4 w-4">
-                    <span class="absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75 animate-ping"></span>
-                    <span class="relative inline-flex rounded-full h-4 w-4 bg-red-500 text-[10px] text-white justify-center items-center">
+                    <span class="absolute inline-flex h-full w-full rounded-full bg-seagull-500 opacity-75 animate-ping"></span>
+                    <span class="relative inline-flex rounded-full h-4 w-4 bg-seagull-600 text-[10px] text-white justify-center items-center">
                       {{ unreadNotifications > 9 ? '9+' : unreadNotifications }}
                     </span>
                   </span>
@@ -114,8 +114,8 @@
             v-for="item in navigationItems"
             :key="item.path"
             :to="item.path"
-            class="px-4 py-3 rounded-md hover:bg-indigo-50 transition-colors duration-200 cursor-pointer font-medium"
-            :class="$route.path === item.path ? 'text-indigo-600 bg-indigo-50' : 'text-gray-700'"
+            class="px-4 py-3 rounded-md hover:bg-seagull-100 transition-colors duration-200 cursor-pointer font-medium"
+            :class="$route.path === item.path ? 'text-seagull-600 bg-seagull-50' : 'text-gray-700'"
             @click="closeMenu"
           >
             {{ item.name }}
@@ -127,12 +127,12 @@
               <div class="flex items-center gap-3">
                 <UAvatar
                   :text="getInitials(userName)"
-                  color="indigo"
+                  color="seagull"
                   class="text-white"
                 />
                 <div class="flex flex-col">
-                  <span class="font-semibold text-gray-800">{{ userName }}</span>
-                  <span class="text-xs text-gray-500">{{ userRole }}</span>
+                  <span class="font-semibold text-seagull-800">{{ userName }}</span>
+                  <span class="text-xs text-seagull-500">{{ userRole }}</span>
                 </div>
               </div>
               <UButton
@@ -140,7 +140,7 @@
                 variant="ghost" 
                 color="gray"
                 aria-label="Logout"
-                class="cursor-pointer hover:bg-red-50 hover:text-red-600 transition-colors"
+                class="cursor-pointer hover:bg-seagull-50 hover:text-seagull-600 transition-colors"
                 @click="handleLogout"
               />
             </div>
