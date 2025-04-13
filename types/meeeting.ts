@@ -26,4 +26,5 @@ export interface Meeting {
     patientRecords: PatientRecord[];
     reports?: string[];
     isTeplate: boolean;
+    isEdit: boolean;
 }

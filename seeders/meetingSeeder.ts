@@ -192,6 +192,7 @@ export const seedMeetings = () => {
       place: 'Konferenční místnost A, 3. patro',
       description: 'Pravidelné setkání onkogynekologického týmu',
       isTeplate: false,
+      isEdit: false,
       doctors: [
         {
           id: 'doc1',
@@ -228,6 +229,7 @@ export const seedMeetings = () => {
       place: 'Seminární místnost B, 2. patro',
       description: 'Konzultace plicních nálezů',
       isTeplate: false,
+      isEdit: false,
       doctors: [
         {
           id: 'doc3',
@@ -253,6 +255,7 @@ export const seedMeetings = () => {
       place: 'Online - Teams',
       description: 'Multidisciplinární tým - horní GIT',
       isTeplate: false,
+      isEdit: false,
       doctors: [
         {
           id: 'doc4',
@@ -289,6 +292,7 @@ export const seedMeetings = () => {
       place: 'Konferenční místnost C, 4. patro',
       description: 'Pravidelné setkání neurologického týmu',
       isTeplate: false,
+      isEdit: false,
       doctors: [
         {
           id: 'doc6',

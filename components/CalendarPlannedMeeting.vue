@@ -112,7 +112,12 @@
   function editMeeting() {
   if (!activeMeeting.value) return;
   // You can route to an edit page or open a modal
-  router.push((`/meeting_editor?id=${activeMeeting.value.id}`))
+  //router.push((`/meetings_editor?id=${activeMeeting.value.id}`))
+  // send the active meeting to MeetingForm with event
+  // update the active meeting by id and set isEdit to true
+    meetingStore.setActiveMeeting(activeMeeting.value.id);
+    meetingStore.setIsEdit(activeMeeting.value.id, true);
+  
 }
   
   // Get meeting status and color based on date
