@@ -113,7 +113,8 @@ async function saveTemplate() {
     description: description ?? '',
     doctors: state.teamMembers,
     isTeplate: true, // Mark this as a template
-    patientRecords: [] // Empty patient records as it's a template
+    patientRecords: [], // Empty patient records as it's a template
+    isEdit: false // Mark as not being edited
   });
 
   console.log('Template saved:', state);
@@ -139,6 +140,8 @@ const templateOptions = computed(() =>
     }))
   )
 
+
+
   const selectedTemplate = ref(null)
 
   watch(selectedTemplate, (template) => {
@@ -147,12 +150,19 @@ const templateOptions = computed(() =>
     }
   })
 
+
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Check if form data exists
+
+
+
   if (!event.data) {
     console.error('Form data is undefined');
     return;
   }
+
+
 
   
   const lastMeeting = meetingStore.meetings[meetingStore.meetings.length - 1]
@@ -160,6 +170,26 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
   // Extract data from the form
   const { startDateTime, teamName, location, notificationHours, notes, description } = event.data;
+  console.log(activeMeeting.value?.isEdit)
+  if (activeMeeting.value?.isEdit) {
+  const index = meetingStore.meetings.findIndex(m => m.id === activeMeeting.value?.id)
+  if (index !== -1) {
+    console.log('Editing existing meeting:', meetingStore.meetings[index])
+    meetingStore.meetings[index] = {
+      ...meetingStore.meetings[index],
+      date: new Date(startDateTime),
+      name: teamName ?? '',
+      place: location,
+      notification: notificationHours,
+      notes: notes ?? '',
+      description: description ?? '',
+      doctors: state.teamMembers,
+      isEdit: false
+    }
+    console.log('Meeting updated:', meetingStore.meetings[index])
+  }
+  return
+}
 
   // Ensure required fields
   if (!startDateTime || !location || notificationHours === undefined) {
@@ -178,7 +208,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     description: description ?? '',
     doctors: state.teamMembers,
     isTeplate: false, // Mark this as a scheduled meeting, not a template
-    patientRecords: [] // Provide patient records or leave it as an empty array
+    patientRecords: [], // Provide patient records or leave it as an empty array
+    isEdit: false // Mark as not being edited
   });
 
   console.log('MDT Team scheduled:', event.data);
@@ -193,6 +224,32 @@ watch(value, (newDoctor) => {
 const items = computed(() => {
   return doctorStore.doctors
 })
+
+const activeMeeting = computed(() =>
+  meetingStore.meetings.find((m) => m.isEdit)
+)
+
+
+watch(
+  () => activeMeeting.value,
+  (meeting) => {
+    if (meeting?.isEdit) {
+      state.id = meeting.id;
+      state.startDateTime = meeting.date.toISOString().slice(0, 16); // Format to datetime-local
+      state.teamName = meeting.name;
+      state.location = meeting.place;
+      state.notificationHours = meeting.notification;
+      state.notes = meeting.notes;
+      state.description = meeting.description;
+      state.teamMembers = meeting.doctors; // Prefill the team members
+      meetingStore.setIsEdit(meeting.id, false)
+      }
+    },
+  
+  { immediate: true } // optional: triggers immediately if value already set
+);
+
+
 
 </script>
 
@@ -316,25 +373,34 @@ const items = computed(() => {
 
     <!-- Submit Button -->
     <div class="flex justify-end space-x-4">
+  <UButton
+    v-if="!activeMeeting?.isEdit"
+    color="secondary"
+    size="lg"
+    @click="saveTemplate"
+  >
+    Uložit šablonu
+  </UButton>
 
-      <!-- Save Template Button -->
-      <UButton
-        color="secondary"
-        size="lg"
-        @click="saveTemplate"
-      >
-        Uložit šablonu
-      </UButton>
+  <UButton
+    v-if="!activeMeeting?.isEdit"
+    type="submit"
+    color="primary"
+    size="lg"
+  >
+    Vytvořit MDT tým
+  </UButton>
 
-      <!-- Create MDT Team Button -->
-      <UButton
-        type="submit"
-        color="primary"
-        size="lg"
-      >
-        Vytvořit MDT tým
-      </UButton>
-    </div>
+  <UButton
+    v-if="activeMeeting?.isEdit"
+    type="submit"
+    color="primary"
+    size="lg"
+  >
+    Uložit změny
+  </UButton>
+</div>
+
   </UForm>
 </template>
 

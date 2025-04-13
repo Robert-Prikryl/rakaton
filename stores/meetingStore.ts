@@ -12,7 +12,12 @@ export const useMeetingStore = defineStore("meeting", () => {
     return meetings.value.find(meeting => meeting.id === id);
   }
   
-
+  function setIsEdit(id: string, isEdit: boolean) {
+    const meeting = meetings.value.find(meeting => meeting.id === id);
+    if (meeting) {
+      meeting.isEdit = isEdit;
+    }
+  }
   /** ACTIONS - business logic, fetching, async calls, etc. */
   function setActiveMeeting(id: string) {
     activeMeeting.value = meetings.value.find(meeting => meeting.id === id) || null;
@@ -38,6 +43,7 @@ export const useMeetingStore = defineStore("meeting", () => {
     /** ACTIONS */
     setActiveMeeting,
     addMeeting,
-    addPatientRecord
+    addPatientRecord,
+    setIsEdit
   };
 });

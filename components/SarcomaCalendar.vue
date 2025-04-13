@@ -20,7 +20,7 @@ import { shallowRef, computed } from 'vue'
 import { useMeetingStore } from '~/stores/meetingStore'
 
 const today = new Date()
-const modelValue = shallowRef(new CalendarDate(today.getFullYear(), today.getMonth(), today.getDate()))
+const modelValue = shallowRef(new CalendarDate(today.getFullYear(), today.getMonth() + 1, today.getDate()))
 
 const meetingStore = useMeetingStore()
 
