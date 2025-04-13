@@ -72,7 +72,7 @@
                                         <label class="block text-sm font-medium text-gray-700">Zodpovědná osoba:</label>
                                         <USelect
                                             v-model="selectedDoctors[question.id]"
-                                            :options="doctorOptions"
+                                            :items="doctorOptions"
                                             option-attribute="fullName"
                                             placeholder="Vyberte lékaře"
                                             @update:model-value="updateResponsibleDoctor(question.id, $event)"
@@ -131,11 +131,12 @@ import { ResultType } from '~/types/patient';
 import type { Task } from '~/types/patient';
 
 const meetingStore = useMeetingStore();
+const doctorStore = useDoctorStore();
 const activeMeeting = computed(() => meetingStore.activeMeeting);
 
 // New task form state
 const newTasks = ref<Record<string, Partial<Task>>>({});
-const selectedDoctors = ref<Record<string, any>>({});
+const selectedDoctors = ref<Record<string, string>>({});
 
 // Result type options
 const resultTypeOptions = [
@@ -150,17 +151,19 @@ const resultTypeOptions = [
 
 // Doctor options for task assignment
 const doctorOptions = computed(() => {
-    if (!activeMeeting.value) return [];
-    return activeMeeting.value.doctors.map(doctor => ({
-        ...doctor,
-        fullName: `${doctor.firstname} ${doctor.surname}`
+    return doctorStore.doctors.map(doctor => ({
+        label: `${doctor.firstname} ${doctor.surname}`,
+        value: doctor.id
     }));
 });
 
 // Update responsible doctor for a task
-function updateResponsibleDoctor(questionId: string, doctor: any) {
+function updateResponsibleDoctor(questionId: string, doctorId: string) {
     if (newTasks.value[questionId]) {
-        newTasks.value[questionId].responsible = doctor;
+        const doctor = doctorStore.doctors.find(d => d.id === doctorId);
+        if (doctor) {
+            newTasks.value[questionId].responsible = doctor;
+        }
     }
 }
 
@@ -174,7 +177,7 @@ function addTask(question: any) {
         deadline: new Date(),
         notificationTime: 24
     };
-    selectedDoctors.value[question.id] = null;
+    selectedDoctors.value[question.id] = '';
 }
 
 // Cancel new task
