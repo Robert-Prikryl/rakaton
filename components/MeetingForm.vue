@@ -7,11 +7,16 @@ import type { Doctor } from '@/types/doctor'
 import { seedDoctors } from '@/seeders/doctorSeeder'
 import { useMeetingStore } from '~/stores/meetingStore'
 import { de, id, tr } from '@nuxt/ui/runtime/locale/index.js'
+import { useGoogleCalendar } from '~/composables/useGoogleCalendar'
+
 const emit = defineEmits()
 // Mock database of doctors
 const doctorStore = useDoctorStore()
 const value = ref<Doctor | null>(null)
 const meetingStore = useMeetingStore()
+
+// Update the Google Calendar initialization
+const { createEvent, initializeGoogleCalendar, isAuthenticated } = useGoogleCalendar()
 
 onMounted(() => {
   seedDoctors()
@@ -152,31 +157,62 @@ const templateOptions = computed(() =>
 
 
 
+// Add this function to handle authentication
+async function ensureGoogleCalendarAuth() {
+  if (!isAuthenticated.value) {
+    try {
+      await initializeGoogleCalendar()
+    } catch (error) {
+      console.error('Failed to initialize Google Calendar:', error)
+      throw new Error('Failed to authenticate with Google Calendar')
+    }
+  }
+}
+
+// Update the onSubmit function
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // Check if form data exists
-
-
-
   if (!event.data) {
     console.error('Form data is undefined');
     return;
   }
 
+  try {
+    // Ensure we're authenticated before proceeding
+    await ensureGoogleCalendarAuth()
 
+    const lastMeeting = meetingStore.meetings[meetingStore.meetings.length - 1]
+    const newId = lastMeeting ? String(Number(lastMeeting.id) + 1) : '1'
 
-  
-  const lastMeeting = meetingStore.meetings[meetingStore.meetings.length - 1]
-  const newId = lastMeeting ? String(Number(lastMeeting.id) + 1) : '1'
+    // Extract data from the form
+    const { startDateTime, teamName, location, notificationHours, notes, description } = event.data;
+    
+    if (activeMeeting.value?.isEdit) {
+      const index = meetingStore.meetings.findIndex(m => m.id === activeMeeting.value?.id)
+      if (index !== -1) {
+        meetingStore.meetings[index] = {
+          ...meetingStore.meetings[index],
+          date: new Date(startDateTime),
+          name: teamName ?? '',
+          place: location,
+          notification: notificationHours,
+          notes: notes ?? '',
+          description: description ?? '',
+          doctors: state.teamMembers,
+          isEdit: false
+        }
+      }
+      return
+    }
 
-  // Extract data from the form
-  const { startDateTime, teamName, location, notificationHours, notes, description } = event.data;
-  console.log(activeMeeting.value?.isEdit)
-  if (activeMeeting.value?.isEdit) {
-  const index = meetingStore.meetings.findIndex(m => m.id === activeMeeting.value?.id)
-  if (index !== -1) {
-    console.log('Editing existing meeting:', meetingStore.meetings[index])
-    meetingStore.meetings[index] = {
-      ...meetingStore.meetings[index],
+    // Ensure required fields
+    if (!startDateTime || !location || notificationHours === undefined) {
+      console.error('Missing required fields');
+      return;
+    }
+
+    // Create the meeting in the store
+    const newMeeting = {
+      id: String(newId),
       date: new Date(startDateTime),
       name: teamName ?? '',
       place: location,
@@ -184,35 +220,36 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       notes: notes ?? '',
       description: description ?? '',
       doctors: state.teamMembers,
+      isTeplate: false,
+      patientRecords: [],
       isEdit: false
+    };
+
+    meetingStore.addMeeting(newMeeting);
+
+    // Create Google Calendar event
+    try {
+      const calendarEvent = await createEvent({
+        summary: `MDT Meeting: ${teamName}`,
+        description: description || notes || 'MDT Team Meeting',
+        location: location,
+        startTime: startDateTime,
+        attendees: [
+          { email: 'peter.hubina1@gmail.com' }
+        ]
+      });
+
+      console.log('Google Calendar event created:', calendarEvent);
+    } catch (error) {
+      console.error('Error creating Google Calendar event:', error);
+      // You might want to show an error message to the user here
     }
-    console.log('Meeting updated:', meetingStore.meetings[index])
+
+    console.log('MDT Team scheduled:', event.data);
+  } catch (error) {
+    console.error('Error in form submission:', error);
+    // You might want to show an error message to the user here
   }
-  return
-}
-
-  // Ensure required fields
-  if (!startDateTime || !location || notificationHours === undefined) {
-    console.error('Missing required fields');
-    return;
-  }
-
-    // Proceed to schedule the meeting (add the actual meeting, not just a template)
-  meetingStore.addMeeting({
-    id: String(newId), // Unique ID
-    date: new Date(startDateTime),
-    name: teamName ?? '',
-    place: location,
-    notification: notificationHours,
-    notes: notes ?? '',
-    description: description ?? '',
-    doctors: state.teamMembers,
-    isTeplate: false, // Mark this as a scheduled meeting, not a template
-    patientRecords: [], // Provide patient records or leave it as an empty array
-    isEdit: false // Mark as not being edited
-  });
-
-  console.log('MDT Team scheduled:', event.data);
 }
 
 // Add watch for value changes
